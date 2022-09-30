@@ -22,7 +22,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   useHotkeys([['mod+J', () => toggleColorScheme()]]);
 
   useEffect(() => {
-    setTimeout(() => setLoading(true), 2000);
+    setTimeout(() => setLoading(true), 1200);
   }, []);
 
   return (
