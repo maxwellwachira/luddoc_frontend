@@ -1,4 +1,5 @@
 import Login from "./components/login/login";
 import Register from "./components/register/register";
+import ForgotPassword from "./components/forgotPassword/forgotPassword";
 
-export { Login, Register };
+export { ForgotPassword, Login, Register };
