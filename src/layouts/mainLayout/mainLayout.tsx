@@ -2,19 +2,22 @@ import React, { ReactNode, useState } from 'react';
 import {
   ActionIcon, 
   Anchor,
-  AppShell,
+  BackgroundImage,
+  Box,
   Burger,
   Header,
   MediaQuery,
   Navbar,
   useMantineColorScheme
 } from "@mantine/core";
-
+import { useViewportSize } from '@mantine/hooks';
 import { MoonStars, Sun } from 'tabler-icons-react';
 
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useStyles } from './mainLayout.styles';
+
+import logo from '../../assets/logo-2.png';
 
 type Props = {
   children: ReactNode;
@@ -28,33 +31,30 @@ const MainLayout = ({ children }: Props) => {
   const dark = colorScheme === 'dark';
 
   const router = useRouter();
- 
+  const { width } = useViewportSize();
 
   return (
-    <AppShell
-      className={classes.bodyBackground}
-      fixed
-      navbarOffsetBreakpoint="sm"
-      header={
-        <Header height={60} className={classes.headerBackground}>
-          <MediaQuery largerThan="sm" styles={{ display: "none" }}>
+    <Box className={classes.bodyBackground}>
+      <BackgroundImage
+        src={width >= 1096 ? "/blob-scene.svg" : ""}
+        radius="sm"
+        component="div"
+        className={classes.wrapper}
+      >
+        <Header height={width <= 992 ? 70 : 120} className={classes.headerBackground} withBorder={width <= 992 ? true : false} >
+          <MediaQuery largerThan="md" styles={{ display: "none" }}>
             <div  className={classes.burger}>
-              <Anchor href="/">
-                <Image 
-                  src="/logo.svg"
-                  width={100}
-                  height={50}
-                  alt='logo'
-                />
+              <Anchor href="/" className={classes.navitem}>
+                Luddoc Skills For Life
               </Anchor>
-                <ActionIcon
+                {/* <ActionIcon
                 variant="default"
                 color={dark ? 'gray' : 'dark'}
                 onClick={() => toggleColorScheme()}
                 title={dark ? 'Light Mode' : 'Dark Mode'}  
               >
                   {dark ? <Sun size={18} /> : <MoonStars size={18} />}
-              </ActionIcon>
+              </ActionIcon> */}
               <Burger
                 opened={opened}
                 onClick={() => setOpened((o) => !o)}
@@ -67,20 +67,22 @@ const MainLayout = ({ children }: Props) => {
             <div className={classes.logo}>
               <Anchor href="/">
                 <Image 
-                  src="/logo.svg"
-                  width={100}
-                  height={60}
+                  src={logo}
+                  width={120}
+                  height={120}
                   alt='logo'
                 />
               </Anchor>
             </div>
             <div className={classes.links}>
               <Anchor className={`${classes.navitem} ${router.pathname === "/" ? classes.active : "" }`} href="/">Home</Anchor>
+              <Anchor className={`${classes.navitem} ${router.pathname === "/about" ? classes.active : "" }`} href="/about">About</Anchor>
               <Anchor className={`${classes.navitem} ${router.pathname === "/courses" ? classes.active : "" }`} href="/courses">Courses</Anchor>
-              <Anchor className={`${classes.navitem} ${router.pathname === "/pricing" ? classes.active : "" }`} href="/pricing">Pricing</Anchor>
-              <Anchor className={`${classes.navitem} ${router.pathname === "/sign-in" ? classes.active : "" } ${classes.signin}`} href="/sign-in">Sign In</Anchor>
-              <Anchor className={`${classes.navitem} ${router.pathname === "/sign-up" ? classes.active : "" } ${classes.signup}`} href="/sign-up">Sign Up</Anchor>
-              <ActionIcon
+              <Anchor className={`${classes.navitem} ${router.pathname === "/faq" ? classes.active : "" }`} href="/faq">FAQ</Anchor>
+              <Anchor className={`${classes.navitem} ${router.pathname === "/contact" ? classes.active : "" }`} href="/contact">Contact Us</Anchor>
+              <Anchor className={`${classes.navitem} ${classes.signin} ${router.pathname === "/auth/sign-in" ? classes.activeSignIn : "" }`} href="/auth/sign-in">Sign In</Anchor>
+              <Anchor className={`${classes.navitem} ${classes.signup} ${router.pathname === "/auth/sign-up" ? classes.activeSignUp : "" }`} href="/auth/sign-up">Sign Up</Anchor>
+              {/* <ActionIcon
                 variant="default"
                 color={dark ? 'gray' : 'dark'}
                 onClick={() => toggleColorScheme()}
@@ -88,28 +90,30 @@ const MainLayout = ({ children }: Props) => {
                 sx = {{margin: "0 15px"}}
               >
                 {dark ? <Sun size={18} /> : <MoonStars size={18} />}
-              </ActionIcon>
+              </ActionIcon> */}
             </div>
           </div>
         </Header>
-      }
-      navbar={
+
         <Navbar
           className={classes.navbar}
           width={{ base: "100%", sm: 0 }}
           hidden={!opened}
         >
           <Anchor className={`${classes.navitem} ${router.pathname === "/" ? classes.active : "" }`} href="/">Home</Anchor>
+          <Anchor className={`${classes.navitem} ${router.pathname === "/about" ? classes.active : "" }`} href="/about">About</Anchor>
           <Anchor className={`${classes.navitem} ${router.pathname === "/courses" ? classes.active : "" }`} href="/courses">Courses</Anchor>
-          <Anchor className={`${classes.navitem} ${router.pathname === "/pricing" ? classes.active : "" }`} href="/pricing">Pricing</Anchor>
-          <Anchor className={`${classes.navitem} ${router.pathname === "/sign-in" ? classes.active : "" }`} href="/sign-in">Sign In</Anchor>
-          <Anchor className={`${classes.navitem} ${router.pathname === "/sign-up" ? classes.active : "" } `} href="/sign-up">sign Up</Anchor>
+          <Anchor className={`${classes.navitem} ${router.pathname === "/faq" ? classes.active : "" }`} href="/faq">FAQ</Anchor>
+          <Anchor className={`${classes.navitem} ${router.pathname === "/contact" ? classes.active : "" }`} href="/contact">Contact Us</Anchor>
+          <Anchor className={`${classes.navitem} ${classes.signin} ${router.pathname === "/auth/sign-in" ? classes.activeSignIn : "" } `} href="/auth/sign-in">Sign In</Anchor>
+          <Anchor className={`${classes.navitem} ${classes.signup} ${router.pathname === "/auth/sign-up" ? classes.activeSignUp : "" }`} href="/auth/sign-up">Sign Up</Anchor>
         </Navbar>
-      }
-    >
+      
+      
         {children}
 
-    </AppShell>
+    </BackgroundImage>
+    </Box>
   );
 }
 

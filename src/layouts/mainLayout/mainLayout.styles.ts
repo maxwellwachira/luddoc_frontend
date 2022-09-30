@@ -1,9 +1,25 @@
 import { createStyles } from '@mantine/core';
 
+import { colors } from '../../constants/colors';
+
 export const useStyles = createStyles((theme) => ({
     active: {
-        color: theme.colorScheme === 'dark' ?  theme.colors.gray[0] : theme.colors.dark[9]
+       textDecoration: 'underline',
+       textDecorationColor: `${colors.secondaryColor}`,
+       textDecorationThickness: '4px'
     },
+
+    activeSignIn: {
+        backgroundColor: `${colors.secondaryColor}`,
+        color: theme.colors.gray[0] 
+    },
+
+
+    activeSignUp: {
+        backgroundColor: `${colors.primaryColor}`,
+        color:  theme.colors.gray[0] 
+    },
+
 
     bodyBackground: {
         background: theme.colorScheme === 'light' ?  theme.colors.gray[0] : theme.colors.dark[7],
@@ -21,31 +37,33 @@ export const useStyles = createStyles((theme) => ({
         display:"flex",
         justifyContent: "space-between",
         alignItems: "center",
-        height: "60px"
+        height: "120px"
     },
 
     headerBackground: {
-        background: theme.colorScheme === 'light' ?  "white" : theme.colors.dark[7],
+        background: 'transparent'
     },
 
     links: {
         margin: "0 25px",
         display: "flex",
-        [theme.fn.smallerThan("sm")]: {
+        [theme.fn.smallerThan("md")]: {
             display: "none"
         }
     },
 
     logo: {
-        [theme.fn.smallerThan("sm")]: {
+        margin: "0 20px",
+        [theme.fn.smallerThan("md")]: {
             display: "none"
         }
     },
 
     navbar: {
-        [theme.fn.largerThan("sm")]: {
+        [theme.fn.largerThan("md")]: {
           display: "none"
-        }
+        },
+
     },
     
     navitem: {
@@ -53,24 +71,57 @@ export const useStyles = createStyles((theme) => ({
         color: theme.colorScheme === 'dark' ?  theme.colors.gray[5] : theme.colors.dark[5],
 
         '&:hover': {
-            textDecoration: 'none',
-            color: theme.colorScheme === 'dark' ?  theme.colors.gray[0] : theme.colors.dark[9],
+            textDecoration: 'underline',
+            textDecorationColor: `${colors.secondaryColor}`,
+            textDecorationThickness: '4px'
         }
     },
 
     signin: {
-        backgroundColor: theme.colors.cyan[9],
-        border: "2px solid #0B7285",
+        backgroundColor: "transaparent",
+        border: `2px solid ${colors.secondaryColor}`,
         display: "inline-block",
         padding: "1px 10px",
         textAlign: "center",
-        color:  theme.colors.gray[1] 
+        color:  `${colors.secondaryColor}`,
+
+        [theme.fn.smallerThan("md")]: {
+          width: '100px',
+          margin: '7px 7px'
+        },
+        '&:hover': {
+            backgroundColor: `${colors.secondaryColor}`,
+            color:  theme.colors.gray[0],
+            
+        }
+    
     },
 
     signup: {
-        backgroundColor: "transparent",
-        border: "2px solid #0B7285",
-        padding: "1px 10px"
+        backgroundColor: 'transaparent',
+        border: `2px solid ${colors.primaryColor}`,
+        display: "inline-block",
+        padding: "1px 10px",
+        textAlign: "center",
+        color:  theme.colorScheme === 'light' ? theme.colors.dark[7] : theme.colors.gray[0] ,
+        [theme.fn.smallerThan("md")]: {
+            width: '100px',
+            margin: '7px 7px'
+        },
+
+        '&:hover': {
+            backgroundColor: `${colors.primaryColor}`,
+            color: theme.colorScheme === 'light' ?  theme.colors.gray[0] : theme.colors.dark[7],
+            textDecoration: 'none'
+        }, 
     },
+
+    wrapper: {
+        position: 'absolute',
+        zIndex: 100,
+        top: 0,
+        left: 0,
+        height:'110%'
+    }
 
 }))
