@@ -3,7 +3,7 @@ import Head from 'next/head';
 import MainLayout from '../../layouts/mainLayout/mainLayout';
 import { ForgotPassword } from '../../features/authentication';
 
-const SignUp: NextPage = () => {
+const ForgotPass: NextPage = () => {
   return (
     <>
       <Head>
@@ -18,4 +18,4 @@ const SignUp: NextPage = () => {
   );
 }
 
-export default SignUp;
+export default ForgotPass;
