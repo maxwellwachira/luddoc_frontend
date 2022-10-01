@@ -2,11 +2,9 @@ import React from 'react';
 import { useForm } from '@mantine/form';
 import {
   TextInput,
-  
   Group,
   PaperProps,
   Button,
- 
   Anchor,
   Stack,
   Card,
@@ -31,8 +29,6 @@ const ForgotPassword = (props: PaperProps) => {
           email: (val) => /^\S+@\S+$/.test(val) && 'Invalid email'
         },
     });
-
-
 
   return (
     <Card  p="lg" radius="md" withBorder className={classes.wrapper}> 
