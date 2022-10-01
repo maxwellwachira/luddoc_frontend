@@ -121,7 +121,11 @@ export const useStyles = createStyles((theme) => ({
         zIndex: 100,
         top: 0,
         left: 0,
-        height:'110%'
+        height:950,
+        [theme.fn.largerThan(1700)]: {
+            height:1050
+        },
+        
     }
 
 }))
