@@ -96,6 +96,13 @@ const Login = (props: PaperProps) => {
               </Anchor>
               <Button type="submit" className={classes.button}>Login</Button>
             </Group>
+            <Anchor
+                href='forgot-password'
+                color="dimmed"
+                size="xs"
+              >
+                Forgot Password?
+              </Anchor>
           </form>
         </Grid.Col>
       </Grid>
