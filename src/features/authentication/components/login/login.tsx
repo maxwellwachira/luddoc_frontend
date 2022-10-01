@@ -1,5 +1,4 @@
 import React from 'react';
-import { useToggle, upperFirst } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
 import {
   TextInput,
@@ -13,7 +12,6 @@ import {
   Anchor,
   Stack,
   Grid,
-  Container,
 } from '@mantine/core';
 
 import { GoogleButton, TwitterButton } from '../../../../components/socialButtons/socialButtons';
