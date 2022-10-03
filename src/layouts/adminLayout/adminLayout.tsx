@@ -105,7 +105,7 @@ export function AdminLayout({children}: Props ) {
         </Header>
         }
         navbar = {
-          <Navbar height={800} hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 200, lg: 300 }} p="sm" className={classes.navbar} >
+          <Navbar height={`cal(100vh - 50px)`} hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 200, lg: 300 }} p="sm" className={classes.navbar} >
             <Navbar.Section grow className={classes.links} component={ScrollArea}>
                 <div className={classes.linksInner}>{links}</div>
             </Navbar.Section>
