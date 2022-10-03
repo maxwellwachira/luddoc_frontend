@@ -12,11 +12,10 @@ import {
 } from "@mantine/core";
 import { useViewportSize } from '@mantine/hooks';
 import { MoonStars, Sun } from 'tabler-icons-react';
-
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useStyles } from './mainLayout.styles';
 
+import { useStyles } from './mainLayout.styles';
 import logo from '../../assets/logo-2.png';
 
 type Props = {
