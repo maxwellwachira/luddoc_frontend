@@ -29,7 +29,7 @@ const data = [
   {
     label: 'Students',
     icon: IconUsers,
-    link: 'students',
+    link: 'admin/students',
     index: 2
   },
   { label: 'Tutors', icon: IconSchool, link: 'tutors', index: 3},
