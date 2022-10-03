@@ -9,50 +9,77 @@ import {
   IconUsers,
   IconCertificate,
 } from '@tabler/icons';
+import { useRouter } from 'next/router';
 
 import { UserButton } from '../../components/userButton/userButton';
 import { LinksGroup } from '../../components/navbarLinkGroups/navbarLinkGroups';
 import { useStyles } from './adminLayout.styles';
 import { colors } from '../../constants/colors';
 
-const data = [
-  { label: 'Dashboard', icon: IconGauge, link: '/', index: 0},
-  {
-    label: 'Courses',
-    icon: IconCertificate,
-    index:1,
-    links: [
-      { label: 'Categories', link: 'categories' },
-      { label: 'All Courses', link: 'courses' },
-    ],
-  },
-  {
-    label: 'Students',
-    icon: IconUsers,
-    link: 'admin/students',
-    index: 2
-  },
-  { label: 'Tutors', icon: IconSchool, link: 'tutors', index: 3},
-  { label: 'Payments', icon: IconCoin, link: 'payments', index: 4},
-  {
-    label: 'Messaging',
-    icon: IconMessage,
-    index: 5,
-    links: [
-      { label: 'Send SMS', link: 'send-sms' },
-      { label: 'Sent SMS', link: 'sent-sms' },
-    ],
-  },
-  { label: 'Settings', icon: IconSettings, link: 'settings',  index: 6 },
-];
+
 
 type Props = {
   children: ReactNode;
 }
 
 export function AdminLayout({children}: Props ) {
+  const router = useRouter();
   const [opened, setOpened] = useState(false);
   const { classes } = useStyles();
+
+
+  const data = [
+    { 
+      label: 'Dashboard', 
+      icon: IconGauge, 
+      link: '/admin', 
+      active: router.pathname === '/admin' ? true : false
+    },
+    {
+      label: 'Courses',
+      icon: IconCertificate,
+      index:1,
+      active: router.pathname === '/admin/courses' ? true : router.pathname === '/admin/catogories' ? true : false,
+      links: [
+        { label: 'Categories', link: '/admin/categories' },
+        { label: 'All Courses', link: '/admin/courses' },
+      ],
+    },
+    {
+      label: 'Students',
+      icon: IconUsers,
+      link: '/admin/students',
+      active: router.pathname === '/admin/students' ? true : false,
+    },
+    { 
+      label: 'Tutors', 
+      icon: IconSchool, 
+      link: 'tutors', 
+      active: router.pathname === '/admin/tutors' ? true : false,
+    },
+    { 
+      label: 'Payments', 
+      icon: IconCoin, 
+      link: 'payments', 
+      active: router.pathname === '/admin/payments' ? true : false,
+    },
+    {
+      label: 'Messaging',
+      icon: IconMessage,
+      active: router.pathname === '/admin/send-sms' ? true : router.pathname === '/admin/sent-sms' ? true : false,
+      links: [
+        { label: 'Send SMS', link: 'send-sms' },
+        { label: 'Sent SMS', link: 'sent-sms' },
+      ],
+    },
+    { 
+      label: 'Settings', 
+      icon: IconSettings, 
+      link: 'settings',  
+      active: router.pathname === '/admin/settings' ? true : false,
+    },
+  ];
+
   const links = data.map((item) => <LinksGroup {...item} key={item.label}/>);
 
   return (

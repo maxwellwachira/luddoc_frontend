@@ -11,15 +11,15 @@ interface LinksGroupProps {
   initiallyOpened?: boolean;
   link?: string;
   links?: { label: string; link: string }[];
-  index: number;
+  active?: boolean;
 }
 
 
-export function LinksGroup({ icon: Icon, label, initiallyOpened, link, links, index }: LinksGroupProps) {
+export function LinksGroup({ icon: Icon, label, initiallyOpened, link, links, active }: LinksGroupProps) {
   const { classes, theme } = useStyles();
   const hasLinks = Array.isArray(links);
   const [opened, setOpened] = useState(initiallyOpened || false);
-  const [active, setActive] = useState(0);
+  
   const ChevronIcon = theme.dir === 'ltr' ? IconChevronRight : IconChevronLeft;
   const items = (hasLinks ? links : []).map((arrlink) => (
     <Text<'a'>
@@ -35,14 +35,11 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, link, links, in
 
   const onClick = () => {
     setOpened((o) => !o);
-    if(!hasLinks){
-      setActive(index)
-    }
   }
 
   return (
     <>
-      <UnstyledButton onClick={onClick} className={`${classes.control} ${active === index ? classes.active : ""}`}>
+      <UnstyledButton onClick={onClick} className={`${classes.control} ${active ? classes.active : ""}`}>
         <Group position="apart" spacing={0}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <ThemeIcon variant="light" size={30} color={`${colors.secondaryColorLight}`}> 
