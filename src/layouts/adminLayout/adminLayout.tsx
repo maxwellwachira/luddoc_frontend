@@ -39,10 +39,11 @@ export function AdminLayout({children}: Props ) {
       label: 'Courses',
       icon: IconCertificate,
       index:1,
-      active: router.pathname === '/admin/courses' ? true : router.pathname === '/admin/catogories' ? true : false,
+      active: router.pathname === '/admin/courses' ? true : router.pathname === '/admin/categories' ? true : false,
+      initiallyOpened: router.pathname === '/admin/courses' ? true : router.pathname === '/admin/categories' ? true : false,
       links: [
-        { label: 'Categories', link: '/admin/categories' },
-        { label: 'All Courses', link: '/admin/courses' },
+        { label: 'Categories', link: '/admin/categories', active: router.pathname === '/admin/categories' ? true : false, },
+        { label: 'All Courses', link: '/admin/courses', active: router.pathname === '/admin/courses' ? true : false, },
       ],
     },
     {
@@ -54,28 +55,29 @@ export function AdminLayout({children}: Props ) {
     { 
       label: 'Tutors', 
       icon: IconSchool, 
-      link: 'tutors', 
+      link: '/admin/tutors', 
       active: router.pathname === '/admin/tutors' ? true : false,
     },
     { 
       label: 'Payments', 
       icon: IconCoin, 
-      link: 'payments', 
+      link: '/admin/payments', 
       active: router.pathname === '/admin/payments' ? true : false,
     },
     {
       label: 'Messaging',
       icon: IconMessage,
       active: router.pathname === '/admin/send-sms' ? true : router.pathname === '/admin/sent-sms' ? true : false,
+      initiallyOpened: router.pathname === '/admin/send-sms' ? true : router.pathname === '/admin/sent-sms' ? true : false,
       links: [
-        { label: 'Send SMS', link: 'send-sms' },
-        { label: 'Sent SMS', link: 'sent-sms' },
+        { label: 'Send SMS', link: '/admin/send-sms', active: router.pathname === '/admin/send-sms' ? true : false, },
+        { label: 'Sent SMS', link: '/admin/sent-sms', active: router.pathname === '/admin/sent-sms' ? true : false, },
       ],
     },
     { 
       label: 'Settings', 
       icon: IconSettings, 
-      link: 'settings',  
+      link: '/admin/settings',  
       active: router.pathname === '/admin/settings' ? true : false,
     },
   ];
