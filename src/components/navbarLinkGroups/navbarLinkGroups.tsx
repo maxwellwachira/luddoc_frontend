@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Group, Box, Collapse, ThemeIcon, Text, UnstyledButton } from '@mantine/core';
-import { TablerIcon, IconCalendarStats, IconChevronLeft, IconChevronRight } from '@tabler/icons';
+import { TablerIcon, IconChevronLeft, IconChevronRight } from '@tabler/icons';
 
 import { useStyles } from './navbarLinkGroups.styles';
 import { colors } from '../../constants/colors';
@@ -10,7 +10,7 @@ interface LinksGroupProps {
   label: string;
   initiallyOpened?: boolean;
   link?: string;
-  links?: { label: string; link: string }[];
+  links?: { label: string; link: string, active: boolean }[];
   active?: boolean;
 }
 
@@ -21,25 +21,27 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, link, links, ac
   const [opened, setOpened] = useState(initiallyOpened || false);
   
   const ChevronIcon = theme.dir === 'ltr' ? IconChevronRight : IconChevronLeft;
-  const items = (hasLinks ? links : []).map((arrlink) => (
-    <Text<'a'>
-      component="a"
-      className={classes.link}
-      href={arrlink.link}
-      key={arrlink.label}
-      onClick={(event) => event.preventDefault()}
-    >
-      {arrlink.label}
-    </Text>
-  ));
 
   const onClick = () => {
     setOpened((o) => !o);
   }
 
+  const items = (hasLinks ? links : []).map((arrlink) => (
+    <Text<'a'>
+      component="a"
+      className={`${classes.link} ${arrlink.active ? classes.activeGroupLink : ''}`}
+      href={arrlink.link}
+      key={arrlink.label}
+    >
+      {arrlink.label}
+    </Text>
+  ));
+
+  
+
   return (
     <>
-      <UnstyledButton onClick={onClick} className={`${classes.control} ${active ? classes.active : ""}`}>
+      <UnstyledButton onClick={onClick} className={`${classes.control} ${active ? classes.active : ""}`} >
         <Group position="apart" spacing={0}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <ThemeIcon variant="light" size={30} color={`${colors.secondaryColorLight}`}> 
