@@ -8,6 +8,11 @@ export const useStyles = createStyles((theme) => ({
       color: theme.colorScheme === 'dark' ? theme.white : theme.black,
     },
 
+    activeGroupLink: {
+      backgroundColor: theme.colors.gray[1],
+      color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+    },
+
     control: {
       fontWeight: 500,
       display: 'block',
@@ -52,7 +57,7 @@ export const useStyles = createStyles((theme) => ({
       }`,
   
       '&:hover': {
-        backgroundColor: `${colors.secondaryColorLight}`,
+        backgroundColor: theme.colors.gray[1],
         color: theme.colorScheme === 'dark' ? theme.white : theme.black,
       },
     },
