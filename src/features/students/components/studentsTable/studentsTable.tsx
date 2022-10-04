@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { Group, Table } from "@mantine/core";
 
 import { DeleteButton, EditButton, MoreButton } from '../actionButtons';
@@ -12,10 +13,10 @@ interface StudentData {
 
 const StudentsTable = ({data}: StudentData) => {
  
-    let count = 1;
+    let count = useRef(0);
     const rows =  data.map((element)=> (
         <tr key={element.phoneNumber}>
-            <td>{count++}</td>
+            <td>{count.current = count.current + 1}</td>
             <td>{element.firstName}</td>
             <td>{element.lastName}</td>
             <td>{element.phoneNumber}</td>
