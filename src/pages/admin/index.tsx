@@ -59,7 +59,7 @@ const Dashboard: NextPage = () => {
                                 <Badge color="dark" variant="light">
                                     10 students
                                 </Badge>
-                                <Button variant="light"className={classes.themeButton} fullWidth mt="md" radius="md" onClick={() => router.push('/contact')}>
+                                <Button variant="light"className={classes.themeButton} fullWidth mt="md" radius="md" onClick={() => router.push('/admin/students')}>
                                     <span className={classes.blackText}>See More</span>
                                 </Button>
                             </Group>
@@ -84,7 +84,7 @@ const Dashboard: NextPage = () => {
                                 <Badge color="dark" variant="light">
                                     10 courses
                                 </Badge>
-                                <Button variant="light"className={classes.themeButton} fullWidth mt="md" radius="md" onClick={() => router.push('/contact')}>
+                                <Button variant="light"className={classes.themeButton} fullWidth mt="md" radius="md" onClick={() => router.push('/admin/courses')}>
                                     <span className={classes.blackText}>See More</span>
                                 </Button>
                             </Group>
@@ -112,7 +112,7 @@ const Dashboard: NextPage = () => {
                                 <Badge color="dark" variant="light">
                                    1000 KES
                                 </Badge>
-                                <Button variant="light"className={classes.themeButton} fullWidth mt="md" radius="md" onClick={() => router.push('/contact')}>
+                                <Button variant="light"className={classes.themeButton} fullWidth mt="md" radius="md" onClick={() => router.push('/admin/payments')}>
                                     <span className={classes.blackText}>See More</span>
                                 </Button>
                             </Group>
@@ -137,7 +137,7 @@ const Dashboard: NextPage = () => {
                                 <Badge color="dark" variant="light">
                                    3 tutors
                                 </Badge>
-                                <Button variant="light"className={classes.themeButton} fullWidth mt="md" radius="md" onClick={() => router.push('/contact')}>
+                                <Button variant="light"className={classes.themeButton} fullWidth mt="md" radius="md" onClick={() => router.push('/admin/tutors')}>
                                     <span className={classes.blackText}>See More</span>
                                 </Button>
                             </Group>
