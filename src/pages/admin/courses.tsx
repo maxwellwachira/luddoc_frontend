@@ -9,7 +9,6 @@ import { AddButton, CourseTable, ExcelButton, PdfButton, PrintButton } from '../
 import { colors } from '../../constants/colors';
 
 
-
 const data = [
     {
        courseName: 'care giving' ,
@@ -40,6 +39,7 @@ const data = [
 
 const Tutors: NextPage = () => { 
     const [activePage, setPage] = useState(1);
+
     return (
         <>
             <Head>
@@ -61,7 +61,7 @@ const Tutors: NextPage = () => {
                                 </Center>
                             </Grid.Col>
                             <Grid.Col md={6} p="xl">
-                                <Text size={28} color={`${colors.secondaryColor}`} weight={600} mt="lg" >Luddoc Courses Categories</Text>
+                                <Text size={28} color={`${colors.secondaryColor}`} weight={600} mt="lg" >Luddoc Courses</Text>
                                 <Group position="apart" mt="lg"> 
                                     <Text>Total Courses</Text>
                                     <Badge color='dark' size='lg'>10 Courses</Badge>
