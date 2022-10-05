@@ -33,13 +33,13 @@ const CourseTable = ({data}: CourseData) => {
     ))
     return (
         <Table  striped highlightOnHover captionSide="bottom" mt={60}>
-            <caption>Luddoc Categories</caption>
+            <caption>Luddoc Courses</caption>
             <thead>
                 <tr>
                     <th>#</th>
                     <th>Course Name</th>
                     <th>Total Lessons</th>
-                    <th>Number Of Enrolled Students</th>
+                    <th>Number of Enrolled Students</th>
                     <th>Pricing</th>
                 </tr>
             </thead>
