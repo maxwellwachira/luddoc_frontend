@@ -22,7 +22,13 @@ const About: NextPage = () => {
         <Container>
             <Text size={35} weight={600} style={{marginTop:20, color:`${colors.secondaryColor}`}}>About Us</Text>
             <Text>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum mollis, lorem sit amet fringilla gravida, tortor felis pharetra massa, id volutpat ipsum lorem nec urna. Integer eu libero hendrerit, rhoncus sem tristique, consequat quam. In in odio convallis augue ornare euismod a eget erat. Pellentesque sit amet mi ante. Quisque condimentum libero vel tincidunt pellentesque. Vestibulum lobortis ut magna lacinia condimentum. Proin elementum sit amet erat sit amet auctor. Proin blandit feugiat tristique.
+                <span style={{ fontWeight: 550}}>Luddoc Skills For Life Technical Institute</span> is a modern training facility offering locally and internationally accredited courses. Our focus is taping the informal sector, empowering and equipping the students with refined skills and knowledge to uplift their living standards and improve the community well-being. 
+            </Text>
+            <Text>
+                We pride in bringing out the best in every student, the positive energy enhanced through our team of experts and the impact realised in our community. 
+            </Text>
+            <Text>
+                We are committed to growth and empower our student to achieve their full potential, create self awareness and promote happiness within self.
             </Text>
             <Grid my="xl">
                 <Grid.Col md={6}>
@@ -39,7 +45,7 @@ const About: NextPage = () => {
                        Our Mission
                     </Text>
                     <Text>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum mollis, lorem sit amet fringilla gravida, tortor felis pharetra massa, id volutpat ipsum lorem nec urna. Integer eu libero hendrerit, rhoncus sem tristique, consequat quam. In in odio convallis augue ornare euismod a eget erat. Pellentesque sit amet mi ante. Quisque condimentum libero vel tincidunt pellentesque. Vestibulum lobortis ut magna lacinia condimentum. Proin elementum sit amet erat sit amet auctor. Proin blandit feugiat tristique.
+                    Our Mission is to create awareness and empower the informal skills within our society that uplifts and educates the students to thrive and earn a living through services offered. This is achieved through morden approach to learning, state of the art facilities, licensed and qualified team of institution management, accredited courses and programmes. 
                     </Text>
 
                 </Grid.Col>
@@ -50,7 +56,10 @@ const About: NextPage = () => {
                        Our Vision
                     </Text>
                     <Text>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum mollis, lorem sit amet fringilla gravida, tortor felis pharetra massa, id volutpat ipsum lorem nec urna. Integer eu libero hendrerit, rhoncus sem tristique, consequat quam. In in odio convallis augue ornare euismod a eget erat. Pellentesque sit amet mi ante. Quisque condimentum libero vel tincidunt pellentesque. Vestibulum lobortis ut magna lacinia condimentum. Proin elementum sit amet erat sit amet auctor. Proin blandit feugiat tristique.
+                        Our vision is to be the pioneers of change we want to see in the community, through teaching and demonstrating skills for life that brings out happiness and well-being in the society. 
+                    </Text>
+                    <Text weight={700} mt="lg">
+                        JIJENGE, JIAMINI, JIENJOY.
                     </Text>
 
                 </Grid.Col>
