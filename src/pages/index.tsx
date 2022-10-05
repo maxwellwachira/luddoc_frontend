@@ -26,7 +26,7 @@ const useStyles = createStyles((theme) => ({
       top: 2950,
     },
     [theme.fn.smallerThan("sm")]: {
-      top: 2950,
+      top: 2650,
     }
   },
 
@@ -104,18 +104,22 @@ const Home: NextPage = () => {
       <MainLayout>
         <Box component='div'>
           <Container>
-            <Grid>
+            <Grid >
               <Grid.Col md={4}>
                 <Text className={classes.heading}><span className={classes.goldText}>L</span>uddoc <span className={classes.goldText}>S</span>kills <span className={classes.goldText}>F</span>or <span className={classes.goldText}>L</span>ife Technical Institue</Text>
-                <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id arcu dolor. Nam condimentum quis arcu vitae cursus. Ut eget quam eu arcu imperdiet venenatis. Pellentesque tempus augue est, at cursus sem finibus sed. </Text>
+                <Text mt="md">Are you interseted in Care Giving and Self Development Skills? </Text>
+                <Text mt="md">Luddoc Skills For Life Technical Institute is a modern training facility offering locally and internationally accredited courses in Care Giving, Self Development and so much more. </Text>
+                <Text mt="md">Don't wait, enrol today to better your life!</Text>
                 <Anchor href='/courses' className={classes.startButton}>Start Now</Anchor>
               </Grid.Col>
               <Grid.Col md={8}>
-                <Image 
-                  src={volunteerImage}
-                  height={520}
-                  width={650}
-                />
+                <Center>
+                  <Image 
+                    src={volunteerImage}
+                    height={520}
+                    width={650}
+                  />
+                </Center>
               </Grid.Col>
             </Grid>
           </Container>
@@ -133,24 +137,29 @@ const Home: NextPage = () => {
               <Center>
                 <Text className={`${classes.heading} ${classes.goldText}`}>Why Join Luddoc?</Text>
               </Center>
-              <Box style={{marginTop: 60}}></Box>
+              <Box style={{marginTop: 30}}></Box>
               <Grid gutter="lg">
                 <Grid.Col md={5}>
+                 <Center>
                   <Image 
-                    src={studenImage}
-                  />
+                      src={studenImage}
+                    />
+                 </Center>
                 </Grid.Col>
                 <Grid.Col md={7}>
-                  <Text style={{marginTop: 60}}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nam nunc purus, faucibus ac ligula at, interdum tincidunt
-                  risus. Sed vitae nibh a ipsum consequat accumsan. Donec
-                  at magna ipsum. Vestibulum ante ipsum primis in faucibus
-                  orci luctus et ultrices posuere cubilia curae; Nunc at enim
-                  consectetur, gravida nisl mattis, vestibulum dui. Praesent
-                  finibus quis mauris et pretium. Integer iaculis volutpat
-                  ipsum a varius. Integer interdum dui eu rutrum convallis
+                  <Text>
+                    At Luddoc Skills For Life Technical Institute,
+                    we pride in bringing out the best in every student through the positive energy enhanced through our team of experts and the impact realised in our community.
                   </Text>
+                  <Text>We offer the following courses: </Text>
+                  <ul>
+                    <li>Care Giving</li>
+                    <li>Patients Care</li>
+                    <li>Counseling Psychology</li>
+                    <li>Community Development & Social Work</li>
+                    <li>Front Office</li>
+                    <li>Computer Packages</li>
+                  </ul>
                   <Anchor href='/courses' className={classes.startButton}>Start Now</Anchor>
                 </Grid.Col>
               </Grid>
@@ -181,9 +190,7 @@ const Home: NextPage = () => {
                       <Text className={`${classes.headingTwo} ${classes.goldText}`}>Register</Text>
                     </Center>
                     <Text size="sm" color="dimmed">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Nam nunc purus, faucibus ac ligula at, interdum tincidunt
-                      risus. Sed vitae nibh a ipsum consequat accumsan. Donec
+                    Onboard to the platform then look for a course of your choice and enroll
                     </Text>
                   </Card>
                 </Center>
@@ -204,9 +211,7 @@ const Home: NextPage = () => {
                       <Text className={`${classes.headingTwo} ${classes.goldText}`}>Study</Text>
                     </Center>
                     <Text size="sm" color="dimmed">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Nam nunc purus, faucibus ac ligula at, interdum tincidunt
-                      risus. Sed vitae nibh a ipsum consequat accumsan. Donec
+                      Study at your own pace depending on your availability
                     </Text>
                   </Card>
                 </Center>
@@ -228,9 +233,7 @@ const Home: NextPage = () => {
                       <Text className={`${classes.headingTwo} ${classes.goldText}`}>Get Certified</Text>
                     </Center>
                     <Text size="sm" color="dimmed">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Nam nunc purus, faucibus ac ligula at, interdum tincidunt
-                      risus. Sed vitae nibh a ipsum consequat accumsan. Donec
+                     Upon completion of the course, you will get a digital copy of the certificate
                     </Text>
                   </Card>
                 </Center>
