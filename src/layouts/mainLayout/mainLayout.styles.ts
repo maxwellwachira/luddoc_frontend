@@ -20,7 +20,6 @@ export const useStyles = createStyles((theme) => ({
         color:  theme.colors.gray[0] 
     },
 
-
     bodyBackground: {
         background: theme.colorScheme === 'light' ?  theme.colors.gray[0] : theme.colors.dark[7],
         margin: "0"
@@ -31,6 +30,14 @@ export const useStyles = createStyles((theme) => ({
         justifyContent: "space-between",
         alignItems: "center",
         height: "60px"
+    },
+    darkBackground: {
+        background: theme.colors.dark[7],
+        color: 'white'
+    },
+
+    goldText: {
+        color: `${colors.secondaryColor}`
     },
 
     header: {

@@ -40,7 +40,7 @@ const MainLayout = ({ children }: Props) => {
         component="div"
         className={classes.wrapper}
       >
-        <Header height={width <= 992 ? 70 : 120} className={classes.headerBackground} withBorder={width <= 992 ? true : false} >
+        <Header height={width <= 992 ? 70 : 120} className={`${classes.headerBackground}`} withBorder={width <= 992 ? true : false} >
           <MediaQuery largerThan="md" styles={{ display: "none" }}>
             <div  className={classes.burger}>
               <Anchor href="/" className={classes.navitem}>
@@ -58,7 +58,7 @@ const MainLayout = ({ children }: Props) => {
                 opened={opened}
                 onClick={() => setOpened((o) => !o)}
                 size="sm"
-                mr="xl"              
+                mr="xl"        
               />
             </div>
           </MediaQuery>
@@ -79,6 +79,7 @@ const MainLayout = ({ children }: Props) => {
               <Anchor className={`${classes.navitem} ${router.pathname === "/courses" ? classes.active : "" }`} href="/courses">Courses</Anchor>
               <Anchor className={`${classes.navitem} ${router.pathname === "/faq" ? classes.active : "" }`} href="/faq">FAQ</Anchor>
               <Anchor className={`${classes.navitem} ${router.pathname === "/contact" ? classes.active : "" }`} href="/contact">Contact Us</Anchor>
+              <Anchor className={`${classes.navitem}`} href="https://mygrannyslove.com/" target="_blank">Granny's Love</Anchor>
               <Anchor className={`${classes.navitem} ${classes.signin} ${router.pathname === "/auth/sign-in" ? classes.activeSignIn : "" }`} href="/auth/sign-in">Sign In</Anchor>
               <Anchor className={`${classes.navitem} ${classes.signup} ${router.pathname === "/auth/sign-up" ? classes.activeSignUp : "" }`} href="/auth/sign-up">Sign Up</Anchor>
               {/* <ActionIcon
@@ -104,6 +105,7 @@ const MainLayout = ({ children }: Props) => {
           <Anchor className={`${classes.navitem} ${router.pathname === "/courses" ? classes.active : "" }`} href="/courses">Courses</Anchor>
           <Anchor className={`${classes.navitem} ${router.pathname === "/faq" ? classes.active : "" }`} href="/faq">FAQ</Anchor>
           <Anchor className={`${classes.navitem} ${router.pathname === "/contact" ? classes.active : "" }`} href="/contact">Contact Us</Anchor>
+          <Anchor className={`${classes.navitem}`} href="https://mygrannyslove.com/" target="_blank">Granny's Love</Anchor>
           <Anchor className={`${classes.navitem} ${classes.signin} ${router.pathname === "/auth/sign-in" ? classes.activeSignIn : "" } `} href="/auth/sign-in">Sign In</Anchor>
           <Anchor className={`${classes.navitem} ${classes.signup} ${router.pathname === "/auth/sign-up" ? classes.activeSignUp : "" }`} href="/auth/sign-up">Sign Up</Anchor>
         </Navbar>
@@ -117,3 +119,4 @@ const MainLayout = ({ children }: Props) => {
 }
 
 export default MainLayout;
+
