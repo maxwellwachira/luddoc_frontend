@@ -15,8 +15,6 @@ import {
   Grid,
 } from '@mantine/core';
 
-import { GoogleButton, TwitterButton } from '../../../../components/socialButtons/socialButtons';
-
 import { useStyles } from './register.styles';
 import Image from 'next/image';
 
