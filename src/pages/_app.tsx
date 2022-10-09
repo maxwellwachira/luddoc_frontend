@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import type { AppProps } from 'next/app'
+import type { AppProps } from 'next/app';
 import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core';
 import { useColorScheme, useHotkeys, useLocalStorage  } from '@mantine/hooks';
 
 import PageLoader from '../components/pageLoader/pageLoader';
+import { AuthContextProvider } from '../features/authentication/context/authContextProvider';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [loading, setLoading] = useState(false);
@@ -26,15 +27,18 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-      <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
-        { !loading ?
-          (<PageLoader />) :
-          (<Component {...pageProps} />)
-        }
-        
-      </MantineProvider>
-    </ColorSchemeProvider>
+    <AuthContextProvider>
+        <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+          <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
+            { !loading ?
+              (<PageLoader />) :
+              (<Component {...pageProps} />)
+            }
+            
+          </MantineProvider>
+      </ColorSchemeProvider>
+    </AuthContextProvider>
+    
   );
   
 }
