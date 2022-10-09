@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Badge, Button, Card, Center, Container, createStyles, Grid, Group, Text } from '@mantine/core';
 import type { NextPage } from 'next';
 import Head from 'next/head';
@@ -8,6 +9,8 @@ import { AdminLayout } from '../../layouts/adminLayout/adminLayout';
 import { colors } from '../../constants/colors';
 import moneyImage from '../../assets/money.jpg';
 import tutorImage from '../../assets/tutor.jpg';
+import { useAuthContext } from '../../features/authentication/context/authContextProvider';
+
 
 
 const useStyles = createStyles((theme) => ({
@@ -27,6 +30,15 @@ const useStyles = createStyles((theme) => ({
 const Dashboard: NextPage = () => { 
     const router = useRouter();
     const { classes } = useStyles();
+    const { auth } = useAuthContext();
+
+    useEffect(() =>{
+        if (!auth) {
+            router.push('/auth/sign-in');
+        }
+    }, []);
+
+    if (!auth) return <></>
     return (
         <>
             <Head>
