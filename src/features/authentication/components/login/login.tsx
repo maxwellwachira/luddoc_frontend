@@ -1,5 +1,5 @@
 import React from 'react';
-import { useForm } from '@mantine/form';
+import { useRouter } from 'next/router';
 import {
   TextInput,
   PasswordInput,
@@ -12,39 +12,42 @@ import {
   Anchor,
   Stack,
   Grid,
+  Notification
 } from '@mantine/core';
-
+import { IconX } from '@tabler/icons';
 import { GoogleButton, TwitterButton } from '../../../../components/socialButtons/socialButtons';
-
 import { useStyles } from './login.styles';
 import Image from 'next/image';
+import { useLoginUser } from '../../hooks/useLoginUser';
 
 
 const Login = (props: PaperProps) => {
+  const { classes } = useStyles();
+  const router = useRouter()
+  const { form, handleSubmit, clearResponse, response, userMeData } = useLoginUser();
 
-    const { classes } = useStyles();
-
-    const form = useForm({
-        initialValues: {
-          email: '',
-          password: '',
-          terms: true,
-        },
-    
-        validate: {
-          email: (val) => /^\S+@\S+$/.test(val) && 'Invalid email',
-          password: (val) => val.length >= 6 && 'Password should include at least 6 characters',
-        },
-    });
-
-
+  if (response === "success") {
+    switch (userMeData?.role) {
+      case 'student':
+        router.push('/student')
+        break;
+      case 'admin':
+        router.push('/admin')
+        break;
+      case 'tutor':
+        router.push('/tutor')
+        break;
+      default:
+        break;
+    }
+  }
 
   return (
     <Paper radius="md" p="xl" withBorder {...props} className={classes.wrapper} >
       <Grid>
         <Grid.Col md={6}>
           <Image 
-            src="/Login.gif"
+            src="/login.svg"
             height={450}
             width={400}
           />
@@ -61,7 +64,13 @@ const Login = (props: PaperProps) => {
 
           <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
-          <form onSubmit={form.onSubmit(() => {})}>
+          {response ? (
+            <Notification icon={<IconX size={18} />} color="red" title="Error" onClose={clearResponse}>
+            {response}
+          </Notification>
+          ): ""}  
+
+          <form onSubmit={form.onSubmit(() => handleSubmit())}>
             <Stack>
               
               <TextInput

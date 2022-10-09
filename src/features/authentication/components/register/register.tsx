@@ -1,5 +1,4 @@
 import React from 'react';
-import { useForm } from '@mantine/form';
 import {
   TextInput,
   PasswordInput,
@@ -13,61 +12,65 @@ import {
   Anchor,
   Stack,
   Grid,
+  Notification
 } from '@mantine/core';
-
 import { useStyles } from './register.styles';
 import Image from 'next/image';
+import { IconCheck, IconX } from '@tabler/icons';
 
+import  { useRegisterUser } from '../../hooks/useRegisterUser';
 
 const Register = (props: PaperProps) => {
-
-    const { classes } = useStyles();
-    
-    const form = useForm({
-        initialValues: {
-          email: '',
-          name: '',
-          phoneNumber: '',
-          password: '',
-          terms: true,
-        },
-    
-        validate: {
-          email: (val) => /^\S+@\S+$/.test(val) && 'Invalid email',
-          password: (val) => val.length >= 6 && 'Password should include at least 6 characters',
-        },
-    });
-
-
+  const { classes } = useStyles();
+  const { form, response, handleSubmit, clearResponse } = useRegisterUser();
 
   return (
     <Paper radius="md" p="xl" withBorder {...props} className={classes.wrapper}>
       <Grid>
         <Grid.Col md={6}>
           <Image
-            src="/Register.gif"
-            height={450}
-            width={400}
+            src="/register1.svg"
+            height={550}
+            width={450}
           />
           </Grid.Col>
           <Grid.Col md={6}>
             <Text size="lg" weight={500}>
-              Welcome to Luddoc,
+              Register to Luddoc,
             </Text>
+            {response === 'success' ? (
+                <Notification icon={<IconCheck size={18} />} color="teal" title="Registration Successful" onClose={clearResponse}>
+                  Check email to activate your account
+                </Notification>
+            ): response ? (
+              <Notification icon={<IconX size={18} />} color="red" title="Error" onClose={clearResponse}>
+                {response}
+              </Notification>
+            ): ''}
+            <Divider label="register" labelPosition="center" my="lg" />
 
-            <Divider label="register with email" labelPosition="center" my="lg" />
-
-            <form onSubmit={form.onSubmit(() => {})}>
+            <form onSubmit={form.onSubmit(() => handleSubmit())}>
               <Stack>
-
-                  <TextInput
-                    required
-                    label="Name"
-                    placeholder="Your name"
-                    value={form.values.name}
-                    onChange={(event) => form.setFieldValue('name', event.currentTarget.value)}
-                  />
-                
+                  <Grid>
+                    <Grid.Col md = {6}>
+                      <TextInput
+                        required
+                        label="First Name"
+                        placeholder="Your first name"
+                        value={form.values.firstName}
+                        onChange={(event) => form.setFieldValue('firstName', event.currentTarget.value)}
+                      />
+                    </Grid.Col>
+                    <Grid.Col md={6}>
+                      <TextInput
+                        required
+                        label="Last Name"
+                        placeholder="Your last name"
+                        value={form.values.lastName}
+                        onChange={(event) => form.setFieldValue('lastName', event.currentTarget.value)}
+                      />
+                    </Grid.Col>
+                  </Grid>
 
                 <TextInput
                   required
@@ -84,7 +87,6 @@ const Register = (props: PaperProps) => {
                   placeholder="254703519593"
                   value={form.values.phoneNumber}
                   onChange={(event) => form.setFieldValue('phoneNumber', event.currentTarget.value)}
-                  error={form.errors.email && 'Invalid email'}
                 />
 
                 <PasswordInput
@@ -100,6 +102,7 @@ const Register = (props: PaperProps) => {
                   <Checkbox
                     label="I accept terms and conditions"
                     checked={form.values.terms}
+                    disabled
                     onChange={(event) => form.setFieldValue('terms', event.currentTarget.checked)}
                   />
               </Stack>

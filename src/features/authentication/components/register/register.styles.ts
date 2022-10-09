@@ -15,7 +15,7 @@ export const useStyles = createStyles((theme) => ({
         marginLeft: "auto",
         marginRight: "auto",
         marginTop: "30px",
-        width: "800px",
+        width: "850px",
         backgroundColor:  theme.colorScheme === 'light' ?  "white" : theme.colors.dark[8],
 
         [theme.fn.smallerThan("md")]: {

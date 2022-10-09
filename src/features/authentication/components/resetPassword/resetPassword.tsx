@@ -1,5 +1,5 @@
 import React from 'react';
-import { useForm } from '@mantine/form';
+import Image from 'next/image';
 import {
   PasswordInput,
   Text,
@@ -10,28 +10,17 @@ import {
   Divider,
   Stack,
   Grid,
+  Notification
 } from '@mantine/core';
-
+import { IconCheck, IconX } from '@tabler/icons';
 
 import { useStyles } from './resetPassword.styles';
-import Image from 'next/image';
-
+import { usePasswordReset } from '../../hooks/usePasswordReset';
 
 const ResetPassword = (props: PaperProps) => {
-
-    const { classes } = useStyles();
+  const { classes } = useStyles();
+  const { response, form, handleSubmit, clearResponse  } = usePasswordReset();
     
-    const form = useForm({
-        initialValues: {
-          password: '',
-          confirmPassword: ''
-        },
-    
-        validate: {
-          password: (val) => val.length >= 6 && 'Password should include at least 6 characters',
-        },
-    });
-
   return (
     <Paper radius="md" p="xl" withBorder {...props} className={classes.wrapper}>
       <Grid>
@@ -41,26 +30,31 @@ const ResetPassword = (props: PaperProps) => {
             </Text>
 
             <Divider my="xl" />
-
-            <form onSubmit={form.onSubmit(() => {})}>
+            {response === 'success' ? (
+                <Notification icon={<IconCheck size={18} />} color="teal" title="Password Reset Successful" onClose={clearResponse} my="lg">
+                 You can now log in with your new password
+                </Notification>
+              ): response ? (
+                <Notification icon={<IconX size={18} />} color="red" title="Error" onClose={clearResponse} my="lg">
+                  {response}
+                </Notification>
+              ): ''
+            }
+            <form onSubmit={form.onSubmit(() => handleSubmit())}>
               <Stack my="xl">
 
                 <PasswordInput
                   required
                   label="Password"
                   placeholder="Your password"
-                  value={form.values.password}
-                  onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
-                  error={form.errors.password && 'Password should include at least 6 characters'}
+                  {...form.getInputProps('password')}
                 />
 
                 <PasswordInput
                   required
                   label="Confirm Password"
                   placeholder="Confirm password"
-                  value={form.values.confirmPassword}
-                  onChange={(event) => form.setFieldValue('confirmPassword', event.currentTarget.value)}
-                  error={form.errors.password && 'Password should include at least 6 characters'}
+                  {...form.getInputProps('confirmPassword')}
                 />
 
               </Stack>

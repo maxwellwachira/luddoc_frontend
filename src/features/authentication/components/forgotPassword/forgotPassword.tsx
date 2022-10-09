@@ -1,5 +1,4 @@
 import React from 'react';
-import { useForm } from '@mantine/form';
 import {
   TextInput,
   Group,
@@ -9,26 +8,17 @@ import {
   Stack,
   Card,
   Center,
- 
+  Notification
 } from '@mantine/core';
+import Image from 'next/image';
+import { IconCheck, IconX } from '@tabler/icons';
 
 import { useStyles } from './forgotPassword.styles';
-import Image from 'next/image';
-
+import { useForgetPassword } from '../../hooks/useForgetPassword';
 
 const ForgotPassword = (props: PaperProps) => {
-
-    const { classes } = useStyles();
-    
-    const form = useForm({
-        initialValues: {
-          email: '',
-        },
-    
-        validate: {
-          email: (val) => /^\S+@\S+$/.test(val) && 'Invalid email'
-        },
-    });
+  const { classes } = useStyles();
+  const { response, form, handleSubmit, clearResponse } = useForgetPassword();
 
   return (
     <Card  p="lg" radius="md" withBorder className={classes.wrapper}> 
@@ -41,8 +31,17 @@ const ForgotPassword = (props: PaperProps) => {
                 />
             </Center>
         </Card.Section>
-
-        <form onSubmit={form.onSubmit(() => {})}>
+        {response === 'success' ? (
+            <Notification icon={<IconCheck size={18} />} color="teal" title="Password Reset Link" onClose={clearResponse} my="lg">
+              Check email to reset password
+            </Notification>
+          ): response ? (
+            <Notification icon={<IconX size={18} />} color="red" title="Error" onClose={clearResponse} my="lg">
+              {response}
+            </Notification>
+          ): ''
+        }
+        <form onSubmit={form.onSubmit(() => handleSubmit())}>
             <Stack>
 
             <TextInput
