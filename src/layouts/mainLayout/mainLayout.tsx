@@ -18,6 +18,7 @@ import { useRouter } from 'next/router';
 import { useStyles } from './mainLayout.styles';
 import logo from '../../assets/logo-2.png';
 
+
 type Props = {
   children: ReactNode;
 }
@@ -64,19 +65,20 @@ const MainLayout = ({ children }: Props) => {
           </MediaQuery>
           <div className={classes.header}>
             <div className={classes.logo}>
-              <Anchor href="/">
+              <Anchor href="/" className={classes.navitem}>
                 <Image 
                   src={logo}
                   width={120}
                   height={120}
                   alt='logo'
                 />
+               
               </Anchor>
             </div>
             <div className={classes.links}>
               <Anchor className={`${classes.navitem} ${router.pathname === "/" ? classes.active : "" }`} href="/">Home</Anchor>
               <Anchor className={`${classes.navitem} ${router.pathname === "/about" ? classes.active : "" }`} href="/about">About</Anchor>
-              <Anchor className={`${classes.navitem} ${router.pathname === "/courses" ? classes.active : "" }`} href="/courses">Courses</Anchor>
+              <Anchor className={`${classes.navitem} ${router.pathname.includes("/courses") ? classes.active : "" }`} href="/courses">Courses</Anchor>
               <Anchor className={`${classes.navitem} ${router.pathname === "/faq" ? classes.active : "" }`} href="/faq">FAQ</Anchor>
               <Anchor className={`${classes.navitem} ${router.pathname === "/contact" ? classes.active : "" }`} href="/contact">Contact Us</Anchor>
               <Anchor className={`${classes.navitem}`} href="https://mygrannyslove.com/" target="_blank">Granny's Love</Anchor>
@@ -102,7 +104,7 @@ const MainLayout = ({ children }: Props) => {
         >
           <Anchor className={`${classes.navitem} ${router.pathname === "/" ? classes.active : "" }`} href="/">Home</Anchor>
           <Anchor className={`${classes.navitem} ${router.pathname === "/about" ? classes.active : "" }`} href="/about">About</Anchor>
-          <Anchor className={`${classes.navitem} ${router.pathname === "/courses" ? classes.active : "" }`} href="/courses">Courses</Anchor>
+          <Anchor className={`${classes.navitem} ${router.pathname.includes("/courses") ? classes.active : "" }`} href="/courses">Courses</Anchor>
           <Anchor className={`${classes.navitem} ${router.pathname === "/faq" ? classes.active : "" }`} href="/faq">FAQ</Anchor>
           <Anchor className={`${classes.navitem} ${router.pathname === "/contact" ? classes.active : "" }`} href="/contact">Contact Us</Anchor>
           <Anchor className={`${classes.navitem}`} href="https://mygrannyslove.com/" target="_blank">Granny's Love</Anchor>

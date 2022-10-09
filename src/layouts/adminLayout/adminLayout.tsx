@@ -16,8 +16,6 @@ import { LinksGroup } from '../../components/navbarLinkGroups/navbarLinkGroups';
 import { useStyles } from './adminLayout.styles';
 import { colors } from '../../constants/colors';
 
-
-
 type Props = {
   children: ReactNode;
 }
