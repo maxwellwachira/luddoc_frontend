@@ -115,8 +115,8 @@ const Home: NextPage = () => {
               <Grid.Col md={8}>
                 <Center>
                   <Image 
-                    src={volunteerImage}
-                    height={520}
+                    src="/hero2.svg"
+                    height={530}
                     width={650}
                   />
                 </Center>
