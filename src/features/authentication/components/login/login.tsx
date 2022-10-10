@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import {
   TextInput,
@@ -19,23 +19,29 @@ import { GoogleButton, TwitterButton } from '../../../../components/socialButton
 import { useStyles } from './login.styles';
 import Image from 'next/image';
 import { useLoginUser } from '../../hooks/useLoginUser';
+import { useAuthContext } from '../../context/authContextProvider';
 
 
 const Login = (props: PaperProps) => {
   const { classes } = useStyles();
   const router = useRouter()
-  const { form, handleSubmit, clearResponse, response, userMeData } = useLoginUser();
+  const { form, handleSubmit, clearResponse, response, userMeData, loading } = useLoginUser();
+  const { logout } =  useAuthContext();
+
+  useEffect(() => {
+    logout();
+  }, []);
 
   if (response === "success") {
     switch (userMeData?.role) {
       case 'student':
-        router.push('/student')
+        router.push('/courses').then(() => router.reload());
         break;
       case 'admin':
-        router.push('/admin')
+        router.push('/admin').then(() => router.reload());
         break;
       case 'tutor':
-        router.push('/tutor')
+        router.push('/tutor').then(() => router.reload());
         break;
       default:
         break;
@@ -54,17 +60,17 @@ const Login = (props: PaperProps) => {
         </Grid.Col>
         <Grid.Col md={6}>
           <Text size="lg" weight={500} style={{marginTop:20}}>
-            Welcome to Luddoc, Login with
+            Welcome to Luddoc
           </Text>
 
-          <Group grow mb="md" mt="md">
+          {/* <Group grow mb="md" mt="md">
             <GoogleButton radius="xl">Google</GoogleButton>
             <TwitterButton radius="xl">Twitter</TwitterButton>
-          </Group>
+          </Group> */}
 
-          <Divider label="Or continue with email" labelPosition="center" my="lg" />
+          <Divider label="Login with email" labelPosition="center" my="lg" />
 
-          {response ? (
+          {response === "success" ? "" : response ? (
             <Notification icon={<IconX size={18} />} color="red" title="Error" onClose={clearResponse}>
             {response}
           </Notification>
@@ -101,7 +107,7 @@ const Login = (props: PaperProps) => {
               >
                 Don't have an account? Register
               </Anchor>
-              <Button type="submit" className={classes.button}>Login</Button>
+              <Button type="submit" className={classes.button} loading={loading}>Login</Button>
             </Group>
             <Anchor
                 href='forgot-password'

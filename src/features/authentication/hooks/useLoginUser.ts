@@ -7,8 +7,11 @@ import { urls } from "../../../constants/urls";
 
 export const useLoginUser = () => {
     const [response, setResponse] = useState('');
+    const [loading, setLoading] = useState(false);
     const [userMeData, setUserMeData] = useState({
-        role: ''
+        role: '',
+        firstName: '',
+        lastName:''
     });
 
     const initialValues =  {
@@ -28,6 +31,7 @@ export const useLoginUser = () => {
         try {
             const { data } = await axios.get(`${urls.baseUrl}/user/me`, {headers: {Authorization: `Bear ${token}`}});
             setUserMeData(data);
+            return data;
         } catch (error) {
             console.log(error)
         }
@@ -35,6 +39,7 @@ export const useLoginUser = () => {
 
     const handleSubmit = async() => {
         if(JSON.stringify(form.errors) === "{}"){
+            setLoading(true);
             try {
                 const { data } = await axios.post(`${urls.baseUrl}/auth/sign-in`, form.values);
                 if(data.message === 'success') {
@@ -43,6 +48,7 @@ export const useLoginUser = () => {
                     setCookie('accessToken', data.accessToken);
                     setCookie('refreshToken', data.refreshToken);
                     userMe(data.accessToken);
+                    setLoading(false);
                     console.log(userMeData)
 
                 }
@@ -58,5 +64,5 @@ export const useLoginUser = () => {
         setResponse('');
     }
 
-    return { response, userMeData,form, handleSubmit, userMe, clearResponse }
+    return { response, userMeData,form, loading, handleSubmit, userMe, clearResponse }
 }

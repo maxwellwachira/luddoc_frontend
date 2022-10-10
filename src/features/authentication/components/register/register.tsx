@@ -22,7 +22,7 @@ import  { useRegisterUser } from '../../hooks/useRegisterUser';
 
 const Register = (props: PaperProps) => {
   const { classes } = useStyles();
-  const { form, response, handleSubmit, clearResponse } = useRegisterUser();
+  const { form, response, loading, handleSubmit, clearResponse } = useRegisterUser();
 
   return (
     <Paper radius="md" p="xl" withBorder {...props} className={classes.wrapper}>
@@ -115,7 +115,7 @@ const Register = (props: PaperProps) => {
                 >        
                     Already have an account? Login
                 </Anchor>
-                <Button type="submit" className={classes.button}>Register</Button>
+                <Button type="submit" className={classes.button} loading={loading}>Register</Button>
               </Group>
             </form>
           </Grid.Col>

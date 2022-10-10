@@ -6,6 +6,7 @@ import { urls } from "../../../constants/urls";
 
 export const useRegisterUser = () => {
     const [response, setResponse ] = useState('');
+    const [loading, setLoading] = useState(false);
     const initialValues = {
         email: '',
         firstName: '',
@@ -27,11 +28,13 @@ export const useRegisterUser = () => {
 
     const handleSubmit = async() => {
         if(JSON.stringify(form.errors) === "{}"){
+            setLoading(true);
             try {
                 const { data } = await axios.post(`${urls.baseUrl}/user`, form.values);
                 if(data.message === 'success') {
                     form.setValues(initialValues);
                     setResponse(data.message);
+                    setLoading(false);
                 }
             } catch (error: any) {
                 console.log(error);
@@ -45,5 +48,5 @@ export const useRegisterUser = () => {
         setResponse('');
     }
 
-    return {form, response, handleSubmit, clearResponse};
+    return {form, response,loading, handleSubmit, clearResponse};
 }
