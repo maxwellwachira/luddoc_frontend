@@ -30,7 +30,19 @@ const useStyles = createStyles((theme) => ({
 const Dashboard: NextPage = () => { 
     const router = useRouter();
     const { classes } = useStyles();
-    const { auth } = useAuthContext();
+    const { auth, userMe } = useAuthContext();
+
+    const getGreetings = () => {
+        const date = new Date();
+        const hourString = date.getHours();
+        let greetings = '';
+
+        if (hourString <  12) greetings = "Good Morning";
+        if (hourString >=  12 && hourString < 17) greetings = "Good Afternoon";
+        if (hourString >=  17 && hourString <= 24) greetings = "Good Evening";
+
+        return greetings;
+    }
 
     useEffect(() =>{
         if (!auth) {
@@ -49,7 +61,7 @@ const Dashboard: NextPage = () => {
             <AdminLayout>
                <Container>
                 <Center>
-                    <Text my="xl" size={25}  weight={700}>Good Afternoon John Doe, Welcome to Admin's Dashboard</Text>
+                    <Text my="xl" size={25}  weight={700}>{`${getGreetings()} ${userMe.firstName} ${userMe.lastName}`}, Welcome to Admin's Dashboard</Text>
                 </Center>
                 <Grid gutter="xl">
                     <Grid.Col md={6}>

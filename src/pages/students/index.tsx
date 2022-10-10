@@ -10,9 +10,10 @@ import { colors } from '../../constants/colors';
 import moneyImage from '../../assets/money.jpg';
 import tutorImage from '../../assets/tutor.jpg';
 import { IconBook, IconSchool, IconTrophy } from '@tabler/icons';
+import { useAuthContext } from '../../features/authentication';
 
 const StudentDashboard: NextPage = () => {
-    
+    const { userMe } = useAuthContext();
 
     const getGreetings = () => {
         const date = new Date();
@@ -30,7 +31,7 @@ const StudentDashboard: NextPage = () => {
         <StudentLayout>
             <Container>
                 <Center>
-                    <Text mt="xl" weight={600} size={25} color={`${colors.secondaryColor}`}>{getGreetings()} John Doe!</Text>
+                    <Text mt="xl" weight={600} size={25} color={`${colors.secondaryColor}`}>{`${getGreetings()} ${userMe.firstName} ${userMe.lastName}`}</Text>
                 </Center>
                 <Grid mt="xl">
                     <Grid.Col sm={6} md={4}>
