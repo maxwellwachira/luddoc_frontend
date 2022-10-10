@@ -125,7 +125,7 @@ const Contact: NextPage = (props: any) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <MainLayout>
-        <Container >
+        <Container mt="md">
             <Button
                 component='a'
                 href='/courses'

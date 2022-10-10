@@ -178,7 +178,7 @@ const Contact: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <MainLayout>
-        <Container>
+        <Container mt="md">
             
            {loading ? (
             <Stack justify="center" className={classes.loaderHeight} align="center">
