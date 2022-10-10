@@ -17,13 +17,16 @@ import { useRouter } from 'next/router';
 
 import { useStyles } from './mainLayout.styles';
 import logo from '../../assets/logo-2.png';
-
+import { useAuthContext } from '../../features/authentication';
 
 type Props = {
   children: ReactNode;
 }
 
 const MainLayout = ({ children }: Props) => {
+  const { auth, userMe } = useAuthContext();
+  console.log("auth", auth)
+  console.log(userMe)
   const { classes } = useStyles();
   const [opened, setOpened] = useState(false);
 
@@ -82,8 +85,12 @@ const MainLayout = ({ children }: Props) => {
               <Anchor className={`${classes.navitem} ${router.pathname === "/faq" ? classes.active : "" }`} href="/faq">FAQ</Anchor>
               <Anchor className={`${classes.navitem} ${router.pathname === "/contact" ? classes.active : "" }`} href="/contact">Contact Us</Anchor>
               <Anchor className={`${classes.navitem}`} href="https://mygrannyslove.com/" target="_blank">Granny's Love</Anchor>
-              <Anchor className={`${classes.navitem} ${classes.signin} ${router.pathname === "/auth/sign-in" ? classes.activeSignIn : "" }`} href="/auth/sign-in">Sign In</Anchor>
-              <Anchor className={`${classes.navitem} ${classes.signup} ${router.pathname === "/auth/sign-up" ? classes.activeSignUp : "" }`} href="/auth/sign-up">Sign Up</Anchor>
+              {auth ? <Anchor  className={classes.navitem} href={userMe.role === "student" ? "/students" : "/admin"}>Dashboard</Anchor> :
+                <>
+                   <Anchor className={`${classes.navitem} ${classes.signin} ${router.pathname === "/auth/sign-in" ? classes.activeSignIn : "" }`} href="/auth/sign-in">Sign In</Anchor>
+                   <Anchor className={`${classes.navitem} ${classes.signup} ${router.pathname === "/auth/sign-up" ? classes.activeSignUp : "" }`} href="/auth/sign-up">Sign Up</Anchor>
+                </>
+              }
               {/* <ActionIcon
                 variant="default"
                 color={dark ? 'gray' : 'dark'}
