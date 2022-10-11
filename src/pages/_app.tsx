@@ -20,11 +20,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
 
-  useHotkeys([['mod+J', () => toggleColorScheme()]]);
+    useHotkeys([['mod+J', () => toggleColorScheme()]]);
 
-  useEffect(() => {
-    setTimeout(() => setLoading(true), 700);
-  }, []);
+    useEffect(() => {
+      setTimeout(() => setLoading(true), 700);
+    }, []);
 
   return (
     <AuthContextProvider>
