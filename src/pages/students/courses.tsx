@@ -52,44 +52,46 @@ const Certificates: NextPage = () => {
     const item = apiData.map((element: ApiData) => (
   
         <Grid.Col sm={6} md={4} key={element.ID}>
-            <Card shadow="md" p="lg" radius="lg" withBorder>
-                <Card.Section>
-                   <Center>
-                        <Image 
-                            src={courseThumbnail(element.ID)}
-                            width="400"
-                            height="250"
+            <Center>
+                <Card shadow="md" p="lg" radius="lg" withBorder style={{maxWidth: 300}}>
+                    <Card.Section>
+                    <Center>
+                            <Image 
+                                src={courseThumbnail(element.ID)}
+                                width="400"
+                                height="250"
+                            />
+                    </Center>
+                    </Card.Section>
+
+                    <Stack justify="space-between" className={classes.cardHeight} align="center">
+                        <Text mt="md">
+                            {element.title}
+                        </Text>
+                        <RingProgress 
+                            sections={[{ value: Number(`${element.progress}`), color: 'green' }]}
+                            label={
+                            <Text color="green" weight={700} align="center" size="xl">
+                                {element.progress}%
+                            </Text>
+                            }
                         />
-                   </Center>
-                </Card.Section>
 
-                <Stack justify="space-between" className={classes.cardHeight} align="center">
-                    <Text mt="md">
-                        {element.title}
-                    </Text>
-                    <RingProgress 
-                         sections={[{ value: Number(`${element.progress}`), color: 'green' }]}
-                         label={
-                           <Text color="green" weight={700} align="center" size="xl">
-                            {element.progress}%
-                           </Text>
-                         }
-                    />
-
-                    <Button 
-                        variant="light" 
-                        fullWidth  
-                        radius="md" 
-                        className={classes.button}
-                        component='a'
-                        href={`/learn/${element.ID}`}
-                        onClick ={() => onClick(element.ID)}
-                        loading = {buttonLoading === element.ID ? true : false}
-                    >
-                        continue
-                    </Button>
-                </Stack>
-            </Card>
+                        <Button 
+                            variant="light" 
+                            fullWidth  
+                            radius="md" 
+                            className={classes.button}
+                            component='a'
+                            href={`/learn/${element.ID}`}
+                            onClick ={() => onClick(element.ID)}
+                            loading = {buttonLoading === element.ID ? true : false}
+                        >
+                            continue
+                        </Button>
+                    </Stack>
+                </Card>
+            </Center>
         </Grid.Col>
     
   ))

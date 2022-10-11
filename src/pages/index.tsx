@@ -83,10 +83,10 @@ const useStyles = createStyles((theme) => ({
     right:0,
     zIndex:-1,
     [theme.fn.smallerThan("md")]: {
-      top: 450,
+      top: 470,
     },
     [theme.fn.smallerThan("sm")]: {
-      top: 400,
+      top: 450,
     }
   }
  

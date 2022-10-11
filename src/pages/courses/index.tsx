@@ -131,39 +131,41 @@ const Contact: NextPage = () => {
   const item = apiData.map((element: any) => (
   
         <Grid.Col sm={6} md={4} key={element.ID}>
-            <Card shadow="md" p="lg" radius="lg" withBorder>
-                <Card.Section>
-                   <Center>
-                        <Image 
-                            src={courseThumbnail(element.ID)}
-                            width="400"
-                            height="250"
-                        />
-                   </Center>
-                </Card.Section>
+            <Center>
+                <Card shadow="md" p="lg" radius="lg" withBorder style={{maxWidth: 300}}>
+                    <Card.Section>
+                    <Center>
+                            <Image 
+                                src={courseThumbnail(element.ID)}
+                                width="400"
+                                height="250"
+                            />
+                    </Center>
+                    </Card.Section>
 
-                <Stack justify="space-between" className={classes.cardHeight}>
-                    <Group position="apart" mt="sm" >
-                        <Text weight={500}>{element.post_title}</Text>
-                        <Badge color="dark" variant="light">
-                            Price: 10,000 KES
-                        </Badge>
-                    </Group>
+                    <Stack justify="space-between" className={classes.cardHeight}>
+                        <Group position="apart" mt="sm" >
+                            <Text weight={500}>{element.post_title}</Text>
+                            <Badge color="dark" variant="light">
+                                Price: 10,000 KES
+                            </Badge>
+                        </Group>
 
-                    <Button 
-                        variant="light" 
-                        fullWidth  
-                        radius="md" 
-                        className={classes.button}
-                        component='a'
-                        href={`/courses/${element.ID}`}
-                        onClick ={() => onClick(element.ID)}
-                        loading = {buttonLoading === element.ID ? true : false}
-                    >
-                        See more
-                    </Button>
-                </Stack>
-            </Card>
+                        <Button 
+                            variant="light" 
+                            fullWidth  
+                            radius="md" 
+                            className={classes.button}
+                            component='a'
+                            href={`/courses/${element.ID}`}
+                            onClick ={() => onClick(element.ID)}
+                            loading = {buttonLoading === element.ID ? true : false}
+                        >
+                            See more
+                        </Button>
+                    </Stack>
+                </Card>
+            </Center>
         </Grid.Col>
     
   ))
