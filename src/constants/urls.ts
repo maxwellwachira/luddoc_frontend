@@ -1,6 +1,6 @@
 import { getCookie } from "cookies-next"
 export const urls = {
-    baseUrl: 'http://185.3.95.64:5000',
+    baseUrl: 'https://maxwellwachira.com',
     tutorLms: 'https://mygrannyslove.com/wp-json/tutor/v1',
     zoomBaseUrl: 'https://api.zoom.us/v2'
 }
