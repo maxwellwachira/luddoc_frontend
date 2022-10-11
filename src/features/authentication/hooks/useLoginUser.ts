@@ -55,6 +55,7 @@ export const useLoginUser = () => {
             } catch (error: any) {
                 console.log(error);
                 setResponse(error.response.data.message);
+                setLoading(false);
                
             }
         }

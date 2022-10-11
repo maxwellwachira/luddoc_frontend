@@ -38,6 +38,7 @@ export const useRegisterUser = () => {
                 }
             } catch (error: any) {
                 console.log(error);
+                setLoading(false);
                 setResponse(error.response.data.message);
                
             }
