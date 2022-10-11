@@ -82,7 +82,7 @@ const Certificates: NextPage = () => {
                         radius="md" 
                         className={classes.button}
                         component='a'
-                        href={`/courses/${element.ID}`}
+                        href={`/learn/${element.ID}`}
                         onClick ={() => onClick(element.ID)}
                         loading = {buttonLoading === element.ID ? true : false}
                     >

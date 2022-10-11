@@ -45,16 +45,15 @@ const LiveSession: NextPage = () => {
                     </Grid.Col>
                     <Grid.Col md={5}>
                         <Stack justify="center" p="xl">    
-                            <Text mt={40}>Joining a live session is very easy at Luddoc</Text>
+                            <Text mt={40}>Click the button to join a live session</Text>
                             <Button
                                 component='a'
-                                href='/meeting'
+                                href='/meeting/live-session'
                                 variant='outline'
                                 color='dark'
                                 mt="xl"
                                 radius="xl"
                                 fullWidth
-
                             >
                                 Join Now
                             </Button>
