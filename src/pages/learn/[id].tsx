@@ -9,14 +9,12 @@ import axios from 'axios';
 
 
 import { CourseLayout } from '../../layouts/courseLayout/courseLayout';
-import FooterLinks from '../../components/footer/footer';
-import { footerData } from '../../constants/footer';
 import { colors } from '../../constants/colors';
 import { urls } from '../../constants/urls';
 import { IconArrowLeft, IconBook, IconCheck, IconClipboard, IconDashboard, IconPlus, IconQuestionMark } from '@tabler/icons';
 
-
-const courseId = [ 59260, 58949, 60012, 60097, 58871, 59343, 59060, 59655, 59032, 59683, 60199, 59971, 59996, 59380, 58879, 60179, 59174 ];
+//with error = 59655, 60199, 58871, 59032, 59060, 59343,  59683, 60012, 60097,
+const courseId = [ 59260, 58949,  59971, 59996, 59380, 58879, 60179, 59174 ];
 
 interface CourseData {
     topicId: string;
@@ -24,7 +22,7 @@ interface CourseData {
     data: {
         ID: string;
         post_title: string;
-        post_content: string;
+        post_content: string | null;
         post_name: string;
         course_id: string;
         attachment: Array<any>;
@@ -67,9 +65,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   
     const courseData = await getCourseTopics();
-    const data = courseData?.sort((a, b) => {
+    let data = courseData?.sort((a, b) => {
         return Number(a.topicId) - Number(b.topicId)
-    })
+    });
+
 
     return {
         props: {
@@ -90,16 +89,16 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 
 const Learn: NextPage = (props: any) => {
+    console.log(props.data)
     const router = useRouter();
     const [content, setContent] = useState({
         post_content: '',
         post_title: '',
         ID: ''
     });
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const postContentFilter = (id: string) => {
-        setLoading(true);
         const postContent = props.data.map((element: any) => {
            return element.data.filter((el: any) => {
                 return el.ID === id
@@ -108,18 +107,21 @@ const Learn: NextPage = (props: any) => {
         const data = postContent.filter((element: any) => {
             return element.length > 0;
         });
-        setLoading(false);
         return data[0];
     }
 
     const getContent = () => {
         const route = router.asPath;
-        const idArr = route.split("#");
-        const id = idArr[idArr.length - 1];
-        console.log(route)
-        return postContentFilter(id);
-
+        if(route.includes("#")) {
+            const idArr = route.split("#");
+            const id = idArr[idArr.length - 1];
+            return postContentFilter(id);
+        } else {
+            return [props.data[0].data[0]];
+        }      
+      
     }
+
     const layoutLinks = () => {
         const navlinks = props.data.map((element: any)=> ({
             label: element.topicTitle,
