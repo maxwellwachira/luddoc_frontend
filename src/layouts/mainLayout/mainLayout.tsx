@@ -25,8 +25,7 @@ type Props = {
 
 const MainLayout = ({ children }: Props) => {
   const { auth, userMe } = useAuthContext();
-  console.log("auth", auth)
-  console.log(userMe)
+
   const { classes } = useStyles();
   const [opened, setOpened] = useState(false);
 
