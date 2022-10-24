@@ -87,7 +87,7 @@ const ClientMeeting: NextPage = () => {
             router.push('/auth/sign-in');
         }
     }, []);
-
+    if(!auth) return <></>;
     return (
         <div>
             <h1>Luddoc Live Session meeting loading ...</h1>
