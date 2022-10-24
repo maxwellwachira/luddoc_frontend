@@ -3,12 +3,12 @@ import { Burger, Header, Navbar, Group, Code, MediaQuery, ScrollArea, Text, AppS
 import {
   IconGauge,
   IconMessage,
-  IconSettings,
   IconCoin,
   IconSchool,
   IconUsers,
   IconCertificate,
   IconLogout,
+  IconVideo,
 } from '@tabler/icons';
 import { useRouter } from 'next/router';
 
@@ -69,6 +69,12 @@ export function AdminLayout({children}: Props ) {
       icon: IconCoin, 
       link: '/admin/payments', 
       active: router.pathname === '/admin/payments' ? true : false,
+    },
+    { 
+      label: 'Live Session', 
+      icon: IconVideo, 
+      link: '/admin/live-session', 
+      active: router.pathname === '/admin/live-session' ? true : false,
     },
     {
       label: 'Messaging',
