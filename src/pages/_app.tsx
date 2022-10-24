@@ -5,6 +5,7 @@ import { useColorScheme, useHotkeys, useLocalStorage  } from '@mantine/hooks';
 
 import PageLoader from '../components/pageLoader/pageLoader';
 import { AuthContextProvider } from '../features/authentication/context/authContextProvider';
+import { RefreshContextProvider } from '../features/courses/contexts/refreshDataContexProvider';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [loading, setLoading] = useState(false);
@@ -30,11 +31,12 @@ function MyApp({ Component, pageProps }: AppProps) {
     <AuthContextProvider>
         <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
           <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
-            { !loading ?
-              (<PageLoader />) :
-              (<Component {...pageProps} />)
-            }
-            
+            <RefreshContextProvider>
+              { !loading ?
+                (<PageLoader />) :
+                (<Component {...pageProps} />)
+              }
+            </RefreshContextProvider>
           </MantineProvider>
       </ColorSchemeProvider>
     </AuthContextProvider>
