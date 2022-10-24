@@ -96,11 +96,11 @@ const Tutors: NextPage = () => {
                                 </Group>
                                 <Group position="apart" mt="lg"> 
                                     <Text>Categories Added this month</Text>
-                                    <Badge color='dark' size='lg'>2 categories</Badge>
+                                    <Badge color='dark' size='lg'>Loading ...</Badge>
                                 </Group>
                                 <Group position="apart" mt="lg"> 
                                     <Text>Category with highest enrollment</Text>
-                                    <Badge color='dark' size='lg'>eldery</Badge>
+                                    <Badge color='dark' size='lg'>Loading ...</Badge>
                                 </Group>
                                
                             </Grid.Col>
