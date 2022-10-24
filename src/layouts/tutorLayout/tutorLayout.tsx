@@ -1,15 +1,9 @@
 import { useState, ReactNode } from 'react';
 import { Burger, Header, Navbar, Group, Code, MediaQuery, ScrollArea, Text, AppShell } from '@mantine/core';
 import {
-  IconGauge,
-  IconMessage,
-  IconSettings,
-  IconCoin,
-  IconSchool,
-  IconUsers,
-  IconCertificate,
   IconLogout,
   IconUpload,
+  IconVideo,
 } from '@tabler/icons';
 import { useRouter } from 'next/router';
 
@@ -39,15 +33,15 @@ export function TutorLayout({children}: Props ) {
   const data = [
     {
       label: 'Live Session',
-      icon: IconUsers,
+      icon: IconVideo,
       link: '/tutors/live-session',
       active: router.pathname === '/tutors/live-session' ? true : false,
     },
     { 
       label: 'Uploads', 
       icon: IconUpload, 
-      link: '/tutors/certificates', 
-      active: router.pathname === '/tutors/certificates' ? true : false,
+      link: '/tutors/uploads', 
+      active: router.pathname === '/tutors/uploads' ? true : false,
     },
   
     { 
