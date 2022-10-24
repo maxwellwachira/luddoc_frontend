@@ -1,15 +1,10 @@
-import { useEffect } from 'react';
-import { ActionIcon, Badge, Button, Card, Center, Container, createStyles, Grid, Group, Stack, Text } from '@mantine/core';
+import { Button, Center, Container, Grid, Stack, Text } from '@mantine/core';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
-import { useRouter } from 'next/router'
 
 import { TutorLayout } from '../../layouts/tutorLayout/tutorLayout';
 import { colors } from '../../constants/colors';
-import moneyImage from '../../assets/money.jpg';
-import tutorImage from '../../assets/tutor.jpg';
-import { IconBook, IconSchool, IconTrophy } from '@tabler/icons';
 import { useAuthContext } from '../../features/authentication';
 
 const LiveSession: NextPage = () => {
@@ -28,6 +23,12 @@ const LiveSession: NextPage = () => {
     }
 
     return (
+        <>
+         <Head>
+            <title>Luddoc | Live session</title>
+            <meta name="description" content="Live session" />
+            <link rel="icon" href="/favicon.ico" />
+        </Head>
         <TutorLayout>
             <Container>
                 <Center>
@@ -48,7 +49,7 @@ const LiveSession: NextPage = () => {
                             <Text mt={40}>Click the button to start a live session</Text>
                             <Button
                                 component='a'
-                                href='/meeting'
+                                href='/meeting/live-session'
                                 variant='outline'
                                 color='dark'
                                 mt="xl"
@@ -63,6 +64,7 @@ const LiveSession: NextPage = () => {
                 </Grid>
             </Container>
         </TutorLayout>
+        </>
     )
 }
 
