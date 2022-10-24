@@ -1,36 +1,36 @@
-import { useRef } from "react";
 import { Group, Table } from "@mantine/core";
 
 import { DeleteButton, EditButton, MoreButton } from '../actionButtons';
 
 interface CourseData {
    data: {
-    courseName: string;
-    totalLessons: number;
-    numberOfEnrolledStudents: number
-    pricing: string
+    id: string;
+    count: number;
+    courseTitle: string;
+    categoryName: string;
+    enrolledStudents: string;
+    pricing: string;
    }[]
 };
 
 const CourseTable = ({data}: CourseData) => {
  
-    let count = useRef(0);
     const rows =  data.map((element)=> (
-        <tr key={element.courseName}>
-            <td>{count.current = count.current + 1}</td>
-            <td>{element.courseName}</td>
-            <td>{element.totalLessons}</td>
-            <td>{element.numberOfEnrolledStudents}</td>
+        <tr key={element.courseTitle}>
+            <td>{element.count}</td>
+            <td>{element.courseTitle}</td>
+            <td>{element.categoryName}</td>
+            <td>{element.enrolledStudents}</td>
             <td>{element.pricing}</td>
             <td>
                 <Group>
-                    <EditButton id={1} />
-                    <MoreButton id={1} />
-                    <DeleteButton id={1} />
+                    <EditButton id={element.id} type="course"/>
+                    <MoreButton  id={element.id} type="course"/>
+                    <DeleteButton  id={element.id} type="course"/>
                 </Group>
             </td>
         </tr>
-    ))
+    ));
     return (
         <Table  striped highlightOnHover captionSide="bottom" mt={60}>
             <caption>Luddoc Courses</caption>
@@ -38,7 +38,7 @@ const CourseTable = ({data}: CourseData) => {
                 <tr>
                     <th>#</th>
                     <th>Course Name</th>
-                    <th>Total Lessons</th>
+                    <th>Category</th>
                     <th>Number of Enrolled Students</th>
                     <th>Pricing</th>
                 </tr>

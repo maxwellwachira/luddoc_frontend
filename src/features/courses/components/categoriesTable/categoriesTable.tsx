@@ -5,24 +5,24 @@ import { DeleteButton, EditButton, MoreButton } from '../actionButtons';
 
 interface CategoryData {
    data: {
+    id: string;
+    count: number;
     categoryName: string;
     numberOfCourses: number;
    }[]
 };
 
 const CategoriesTable = ({data}: CategoryData) => {
- 
-    let count = useRef(0);
     const rows =  data.map((element)=> (
         <tr key={element.categoryName}>
-            <td>{count.current = count.current + 1}</td>
+            <td>{element.count}</td>
             <td>{element.categoryName}</td>
             <td>{element.numberOfCourses}</td>
             <td>
                 <Group>
-                    <EditButton id={1} />
-                    <MoreButton id={1} />
-                    <DeleteButton id={1} />
+                    <EditButton id={element.id} type="category" />
+                    <MoreButton id={element.id} type="category" />
+                    <DeleteButton id={element.id} type="category" />
                 </Group>
             </td>
         </tr>
