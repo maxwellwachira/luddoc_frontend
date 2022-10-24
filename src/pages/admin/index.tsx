@@ -12,7 +12,6 @@ import tutorImage from '../../assets/tutor.jpg';
 import { useAuthContext } from '../../features/authentication/context/authContextProvider';
 
 
-
 const useStyles = createStyles((theme) => ({
     themeButton: {
         background: `${colors.secondaryColorLight}`,
@@ -44,13 +43,11 @@ const Dashboard: NextPage = () => {
         return greetings;
     }
 
-    useEffect(() =>{
-        if (!auth) {
-            router.push('/auth/sign-in');
-        }
-    }, []);
+    // useEffect(() =>{
+    //     if(!auth || userMe.role !== "admin") router.push('/auth/sign-in');
+    // }, []);
 
-    if (!auth) return <></>
+    // if (!auth || userMe.role !== "admin") return <></>
     return (
         <>
             <Head>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -9,41 +9,75 @@ import { AdminLayout } from '../../layouts/adminLayout/adminLayout';
 import { StudentsTable, ExcelButton, PdfButton, PrintButton, SearchBar  } from '../../features/students';
 import { colors } from '../../constants/colors';
 import tutorImage from '../../assets/tutor.jpg';
+import axios from 'axios';
+import { urls } from '../../constants/urls';
+import { useRefreshContext } from '../../features/courses/contexts/refreshDataContexProvider';
 
+interface TutorData {
+    totalTutors: number;
+    totalPages: number;
+    currentPage: number;
+    tutors: {
+        id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+        password: string;
+        phoneNumber: string;
+        role: string;
+        active: boolean;
+        disabled: boolean;
+        createdAt: string;
+        updatedAt: string;
+    }[]
+};
 
-const data = [
-    {
-        firstName: 'John',
-        lastName: 'Kamau',
-        phoneNumber: '254703519593'
-    },
-    {
-        firstName: 'Mary',
-        lastName: 'Otieno',
-        phoneNumber: '214703519593'
-    },
-    {
-        firstName: 'Dennis',
-        lastName: 'Okumu',
-        phoneNumber: '224703519593'
-    },
-    {
-        firstName: 'Martha',
-        lastName: 'Wachira',
-        phoneNumber: '244703519593'
-    },
-    {
-        firstName: 'Teresa',
-        lastName: 'Omiko',
-        phoneNumber: '234703519593'
-    }
-
-];
-
+interface TableData {
+    id: string;
+    count: number;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    email: string;
+};
 
 const Tutors: NextPage = () => { 
     const [activePage, setPage] = useState(1);
+    const [tutorData, setTutorData] = useState<TutorData | null>(null);
+    const { refreshData } = useRefreshContext();
     const router = useRouter();
+
+    const limit = 10;
+    const getAllTutors = async() => {
+        try {
+            const { data } = await axios.get(`${urls.baseUrl}/user/tutors?page=${activePage}&limit=${limit}`);
+            setTutorData(data);
+            console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const tableData = () => {
+        let data: TableData[] = [];
+        tutorData?.tutors.map(async (el, index) => {
+            let studentData = {
+              id: el.id,
+              count: (activePage - 1) * limit + ++index,
+              firstName: el.firstName,
+              lastName: el.lastName,
+              phoneNumber: el.phoneNumber,
+              email: el.email
+            }
+            data.push(studentData);
+        });
+        
+        return data;
+    }
+
+    useEffect(() => {
+        getAllTutors();
+    }, [activePage, refreshData]);
  
     return (
         <>
@@ -69,15 +103,15 @@ const Tutors: NextPage = () => {
                                 <Text mt={60} size={28} color={`${colors.secondaryColor}`} weight={600}>Luddoc Tutors</Text>
                                 <Group mt="lg">
                                     <Text>Total Tutors</Text>
-                                    <Badge color='dark'>5 Tutors</Badge>
+                                    <Badge color='dark'>{tutorData?.totalTutors} Tutors</Badge>
                                 </Group>
                                 <Group mt="lg">
                                     <Text>Tutors who Enrolled this month</Text>
-                                    <Badge color='dark'>1 Tutor</Badge>
+                                    <Badge color='dark'>Loading ...</Badge>
                                 </Group>
                                 <Group mt="lg">
                                     <Text>Comparison with previous month</Text>
-                                    <Badge color='green'>2 % rise</Badge>
+                                    <Badge color='green'>Loading ...</Badge>
                                 </Group>
                             </Grid.Col>
                         </Grid>
@@ -98,9 +132,9 @@ const Tutors: NextPage = () => {
                             </Grid.Col>
                         </Grid>
                     </Paper>
-                    <StudentsTable data={data} />
+                    <StudentsTable data={tableData()} type="tutor"/>
                     <Center mt="xl"> 
-                        <Pagination total={4} color='gray' page={activePage} onChange={setPage}/>
+                        <Pagination total={tutorData ? tutorData.totalPages : 1} color='gray' page={activePage} onChange={setPage}/>
                     </Center>
                 </Container>
             </AdminLayout>

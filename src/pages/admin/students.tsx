@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -8,40 +8,77 @@ import { Badge, Center, Container, Grid, Group, Pagination, Paper, Text } from '
 import { AdminLayout } from '../../layouts/adminLayout/adminLayout';
 import { StudentsTable, ExcelButton, PdfButton, PrintButton, SearchBar  } from '../../features/students';
 import { colors } from '../../constants/colors';
+import axios from 'axios';
+import { urls } from '../../constants/urls';
+import { useRefreshContext } from '../../features/courses/contexts/refreshDataContexProvider';
 
-const data = [
-    {
-        firstName: 'John',
-        lastName: 'Kamau',
-        phoneNumber: '254703519593'
-    },
-    {
-        firstName: 'Mary',
-        lastName: 'Otieno',
-        phoneNumber: '214703519593'
-    },
-    {
-        firstName: 'Dennis',
-        lastName: 'Okumu',
-        phoneNumber: '224703519593'
-    },
-    {
-        firstName: 'Martha',
-        lastName: 'Wachira',
-        phoneNumber: '244703519593'
-    },
-    {
-        firstName: 'Teresa',
-        lastName: 'Omiko',
-        phoneNumber: '234703519593'
-    }
 
-];
+interface StudentData {
+    totalStudents: number;
+    totalPages: number;
+    currentPage: number;
+    students: {
+        id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+        password: string;
+        phoneNumber: string;
+        role: string;
+        active: boolean;
+        disabled: boolean;
+        createdAt: string;
+        updatedAt: string;
+    }[]
+};
+
+interface TableData {
+    id: string;
+    count: number;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    email: string;
+};
 
 
 const Students: NextPage = () => { 
     const [activePage, setPage] = useState(1);
+    const [studentData, setStudentData] = useState<StudentData | null>(null);
+    const { refreshData } = useRefreshContext();
     const router = useRouter();
+
+    const limit = 10;
+    const getAllStudents = async() => {
+        try {
+            const { data } = await axios.get(`${urls.baseUrl}/user/students?page=${activePage}&limit=${limit}`);
+            setStudentData(data);
+            console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const tableData = () => {
+        let data: TableData[] = [];
+        studentData?.students.map(async (el, index) => {
+            let studentData = {
+              id: el.id,
+              count: (activePage - 1) * limit + ++index,
+              firstName: el.firstName,
+              lastName: el.lastName,
+              phoneNumber: el.phoneNumber,
+              email: el.email
+            }
+            data.push(studentData);
+        });
+        
+        return data;
+    }
+
+    useEffect(() => {
+        getAllStudents();
+    }, [activePage, refreshData]);
  
     return (
         <>
@@ -67,15 +104,15 @@ const Students: NextPage = () => {
                                 <Text mt={60} size={28} color={`${colors.secondaryColor}`} weight={600}>Luddoc Students</Text>
                                 <Group mt="lg">
                                     <Text>Total Students</Text>
-                                    <Badge color='dark'>20 students</Badge>
+                                    <Badge color='dark'>{studentData?.totalStudents} students</Badge>
                                 </Group>
                                 <Group mt="lg">
                                     <Text>Students who Enrolled this month</Text>
-                                    <Badge color='dark'>5 students</Badge>
+                                    <Badge color='dark'>Loading ...</Badge>
                                 </Group>
                                 <Group mt="lg">
                                     <Text>Comparison with previous month</Text>
-                                    <Badge color='green'>20 % rise</Badge>
+                                    <Badge color='green'>loading ...</Badge>
                                 </Group>
                             </Grid.Col>
                         </Grid>
@@ -96,9 +133,9 @@ const Students: NextPage = () => {
                             </Grid.Col>
                         </Grid>
                     </Paper>
-                    <StudentsTable data={data} />
+                    <StudentsTable data={tableData()} type="student"/>
                     <Center mt="xl"> 
-                        <Pagination total={4} color='gray' page={activePage} onChange={setPage}/>
+                        <Pagination total={studentData ? studentData.totalPages : 1} color='gray' page={activePage} onChange={setPage}/>
                     </Center>
                 </Container>
             </AdminLayout>

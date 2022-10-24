@@ -1,37 +1,73 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
+import axios from 'axios';
 import { Badge, Center, Container, Grid, Group, Pagination, Paper, Text } from '@mantine/core';
 
 import { AdminLayout } from '../../layouts/adminLayout/adminLayout';
 import { AddButton, CategoriesTable, ExcelButton, PdfButton, PrintButton } from '../../features/courses';
 import { colors } from '../../constants/colors';
+import { urls } from '../../constants/urls';
+import { useRefreshContext } from '../../features/courses/contexts/refreshDataContexProvider';
 
+interface CategoryData {
+    totalCategories: number;
+    totalPages: number;
+    currentPage: number;
+    categories: {
+        id: string;
+        categoryName: string;
+        createdAt: string;
+        updatedAt: string;
+    }[]
+};
 
-
-const data = [
-    {
-       categoryName: 'care giving' ,
-       numberOfCourses: 5
-    },
-    {
-        categoryName: 'first aid' ,
-        numberOfCourses: 2
-    },
-    {
-        categoryName: 'self development' ,
-        numberOfCourses: 3
-    },
-    {
-        categoryName: 'communication' ,
-        numberOfCourses: 1
-    },
-];
+interface TableData {
+    id: string;
+    count: number;
+    categoryName: string;
+    numberOfCourses: number;
+};
 
 
 const Tutors: NextPage = () => { 
     const [activePage, setPage] = useState(1);
+    const [categoryData, setCategoryData] = useState<CategoryData | null>(null);
+    const { refreshData} = useRefreshContext();
+    const limit = 5;
+
+
+    const getAllCategories = async() => {
+        try {
+            const { data } = await axios.get(`${urls.baseUrl}/category?page=${activePage}&limit=${limit}`);
+            setCategoryData(data);
+            console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const tableData = () => {
+        let data: TableData[] = [];
+        categoryData?.categories.map((el, index) => {
+            let categoryData = {
+                id: el.id,
+                count: (activePage - 1) * limit + ++index,
+                categoryName: el.categoryName,
+                numberOfCourses: 2
+            }
+            data.push(categoryData);
+        });
+
+        return data;
+    }
+    
+
+    useEffect(() => {
+        getAllCategories();
+    }, [activePage, refreshData]);
+
     return (
         <>
             <Head>
@@ -56,7 +92,7 @@ const Tutors: NextPage = () => {
                                 <Text size={28} color={`${colors.secondaryColor}`} weight={600} mt="lg" >Luddoc Courses Categories</Text>
                                 <Group position="apart" mt="lg"> 
                                     <Text>Total Categories</Text>
-                                    <Badge color='dark' size='lg'>4 categories</Badge>
+                                    <Badge color='dark' size='lg'>{categoryData?.totalCategories} categories</Badge>
                                 </Group>
                                 <Group position="apart" mt="lg"> 
                                     <Text>Categories Added this month</Text>
@@ -88,9 +124,9 @@ const Tutors: NextPage = () => {
                     </Paper>
 
                     <Paper>
-                        <CategoriesTable data={data} />
+                        <CategoriesTable data={tableData()} />
                         <Center mt="xl"> 
-                            <Pagination total={4} color='gray' page={activePage} onChange={setPage}/>
+                            <Pagination total={categoryData ? categoryData.totalPages : 2} color='gray' page={activePage} onChange={setPage}/>
                         </Center>
                     </Paper>
 
