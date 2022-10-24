@@ -7,6 +7,7 @@ import { urls } from '../../../constants/urls';
 type AuthContextType = {
     auth: boolean;
     userMe: {
+        id: string;
         role: string;
         firstName?: string;
         lastName?: string;
@@ -29,7 +30,8 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthContextProvider = ({children}: Props) => {
     const [auth, setAuth] = useState(false);
     const [userMe, setUserMe] = useState({
-        role:''
+        role:'',
+        id: ''
     });
 
     const readTokenCookie = () => {
