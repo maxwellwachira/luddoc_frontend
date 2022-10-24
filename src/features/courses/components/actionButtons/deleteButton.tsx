@@ -1,16 +1,33 @@
 import { Text, UnstyledButton } from "@mantine/core";
+import axios from "axios";
 
+import { urls } from "../../../../constants/urls";
 import { useStyles } from './actionButtons.styles';
+import { useRefreshContext } from "../../contexts/refreshDataContexProvider";
 
-interface UserID {
-    id: number
+interface ID {
+    id: string;
+    type: string;
 }
 
-const DeleteButton = ({id}: UserID) => {
+const DeleteButton = ({id, type}: ID) => {
     const { classes } = useStyles();
-    const onClick = () => {
-        console.log(id);
+    const { toggleRefreshData } = useRefreshContext();
+
+    const onClick = async() => {
+        const confirmMessage = type === "category" ? "Are you sure you want to delete this category? This will delete all courses in this category" : "Are you sure you want to delete this course?";
+        const confirmation = confirm(confirmMessage);
+        if(confirmation){
+            const urlPath = type === "category" ? "category" : "course";
+            try {
+                await axios.delete(`${urls.baseUrl}/${urlPath}/${id}`);
+                toggleRefreshData();
+            } catch (error) {
+                console.log(error);
+            }
+        }
     }
+    
     return (
         <UnstyledButton onClick={onClick} className={`${classes.button} ${classes.deleteButton}`}>
             <Text size="sm">Delete</Text>

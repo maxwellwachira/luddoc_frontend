@@ -4,6 +4,7 @@ import { IconPlus } from "@tabler/icons";
 
 import { useStyles } from './actionButtons.styles';
 import  AddCourseModal from '../addCourseModal/addCourseModal';
+import AddCategoryModal from '../addCategoryModal/addCategoryModal';
 
 interface UserID {
     id: number;
@@ -39,7 +40,7 @@ const AddButton = ({id, type}: UserID) => {
                 <Text size="xl">Add {type}</Text>
             </Button>
             <AddCourseModal open={openAddCourse}  selectData={selectData} onClose={onClose}/>
-        
+            <AddCategoryModal  open={openAddCategory} onClose={onClose}/>
         </>
     )
 }
