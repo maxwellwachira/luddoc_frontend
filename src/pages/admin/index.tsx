@@ -1,15 +1,16 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Badge, Button, Card, Center, Container, createStyles, Grid, Group, Text } from '@mantine/core';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
+import axios from 'axios';
 
 import { AdminLayout } from '../../layouts/adminLayout/adminLayout';
 import { colors } from '../../constants/colors';
-import moneyImage from '../../assets/money.jpg';
 import tutorImage from '../../assets/tutor.jpg';
 import { useAuthContext } from '../../features/authentication/context/authContextProvider';
+import { urls } from '../../constants/urls';
 
 
 const useStyles = createStyles((theme) => ({
@@ -26,9 +27,85 @@ const useStyles = createStyles((theme) => ({
     }
 }))
 
+interface CategoryData {
+    totalCategories: number;
+    totalPages: number;
+    currentPage: number;
+    categories: {
+        id: string;
+        categoryName: string;
+        createdAt: string;
+        updatedAt: string;
+    }[]
+};
+
+interface CourseData {
+    totalCourses: number;
+    totalPages: number;
+    currentPage: number;
+    courses: {
+        id: string;
+        courseTitle: string;
+        CategoryId: string;
+        coursePricing: string;
+        courseDescriptionTitle: string;
+        courseDescriptionContent: string;
+        courseThumbnailUrl: string;
+        hasVideo: boolean;
+        videoSource: string;
+        videoUrl: string;
+        grannysId: string;
+        createdAt: string;
+        updatedAt: string;
+    }[]
+};
+
+interface StudentData {
+    totalStudents: number;
+    totalPages: number;
+    currentPage: number;
+    students: {
+        id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+        password: string;
+        phoneNumber: string;
+        role: string;
+        active: boolean;
+        disabled: boolean;
+        createdAt: string;
+        updatedAt: string;
+    }[]
+};
+
+interface TutorData {
+    totalTutors: number;
+    totalPages: number;
+    currentPage: number;
+    tutors: {
+        id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+        password: string;
+        phoneNumber: string;
+        role: string;
+        active: boolean;
+        disabled: boolean;
+        createdAt: string;
+        updatedAt: string;
+    }[]
+};
+
+
 const Dashboard: NextPage = () => { 
     const router = useRouter();
     const { classes } = useStyles();
+    const [courseData, setCourseData] = useState<CourseData | null>(null);
+    const [categoryData, setCategoryData] = useState<CategoryData | null>(null);
+    const [studentData, setStudentData] = useState<StudentData | null>(null);
+    const [tutorData, setTutorData] = useState<TutorData | null>(null);
     const { auth, userMe } = useAuthContext();
 
     const getGreetings = () => {
@@ -43,9 +120,52 @@ const Dashboard: NextPage = () => {
         return greetings;
     }
 
-    // useEffect(() =>{
-    //     if(!auth || userMe.role !== "admin") router.push('/auth/sign-in');
-    // }, []);
+    const getAllCourses = async() => {
+        try {
+            const { data } = await axios.get(`${urls.baseUrl}/course?page=${1}&limit=${1000}`);
+            setCourseData(data);
+            console.log(data);
+        } catch (error) {
+            
+        }
+    }
+
+    const getAllCategories = async() => {
+        try {
+            const { data } = await axios.get(`${urls.baseUrl}/category?page=${1}&limit=${1000}`);
+            setCategoryData(data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const getAllStudents = async() => {
+        try {
+            const { data } = await axios.get(`${urls.baseUrl}/user/students?page=${1}&limit=${1000}`);
+            setStudentData(data);
+            console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const getAllTutors = async() => {
+        try {
+            const { data } = await axios.get(`${urls.baseUrl}/user/tutors?page=${1}&limit=${1000}`);
+            setTutorData(data);
+            console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() =>{
+        //if(!auth || userMe.role !== "admin") router.push('/auth/sign-in');
+        getAllCourses();
+        getAllCategories();
+        getAllStudents();
+        getAllTutors();
+    }, []);
 
     // if (!auth || userMe.role !== "admin") return <></>
     return (
@@ -78,7 +198,7 @@ const Dashboard: NextPage = () => {
                             <Group position="apart" mt="md" mb="xs">
                                 <Text weight={500}>Total Students</Text>
                                 <Badge color="dark" variant="light">
-                                    10 students
+                                    {studentData?.totalStudents} students
                                 </Badge>
                                 <Button variant="light"className={classes.themeButton} fullWidth mt="md" radius="md" onClick={() => router.push('/admin/students')}>
                                     <span className={classes.blackText}>See More</span>
@@ -103,7 +223,7 @@ const Dashboard: NextPage = () => {
                             <Group position="apart" mt="md" mb="xs">
                                 <Text weight={500}>Total Courses</Text>
                                 <Badge color="dark" variant="light">
-                                    10 courses
+                                    {courseData?.totalCourses} courses
                                 </Badge>
                                 <Button variant="light"className={classes.themeButton} fullWidth mt="md" radius="md" onClick={() => router.push('/admin/courses')}>
                                     <span className={classes.blackText}>See More</span>
@@ -117,23 +237,23 @@ const Dashboard: NextPage = () => {
                     <Grid.Col md={6}>
                         <Card shadow="sm" p="lg" radius="md" withBorder>
                             <Center>
-                                <Text weight={700} color={`${colors.secondaryColor}`} size={23}>Luddoc Payments Summary</Text>
+                                <Text weight={700} color={`${colors.secondaryColor}`} size={23}>Luddoc Categories Summary</Text>
                             </Center>
                             <Card.Section>
                                <Center>
                                     <Image 
-                                        src={moneyImage}
+                                        src='/categories.svg'
                                         height={200}
                                         width={300}
                                     />
                                </Center>
                             </Card.Section>
                             <Group position="apart" mt="md" mb="xs">
-                                <Text weight={500}>Total Money Paid</Text>
+                                <Text weight={500}>Total Categories</Text>
                                 <Badge color="dark" variant="light">
-                                   1000 KES
+                                   {categoryData?.totalCategories} Categories
                                 </Badge>
-                                <Button variant="light"className={classes.themeButton} fullWidth mt="md" radius="md" onClick={() => router.push('/admin/payments')}>
+                                <Button variant="light"className={classes.themeButton} fullWidth mt="md" radius="md" onClick={() => router.push('/admin/categories')}>
                                     <span className={classes.blackText}>See More</span>
                                 </Button>
                             </Group>
@@ -156,7 +276,7 @@ const Dashboard: NextPage = () => {
                             <Group position="apart" mt="md" mb="xs">
                                 <Text weight={500}>Total Tutors</Text>
                                 <Badge color="dark" variant="light">
-                                   3 tutors
+                                   {tutorData?.totalTutors} tutors
                                 </Badge>
                                 <Button variant="light"className={classes.themeButton} fullWidth mt="md" radius="md" onClick={() => router.push('/admin/tutors')}>
                                     <span className={classes.blackText}>See More</span>
