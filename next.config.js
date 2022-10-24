@@ -15,6 +15,6 @@ module.exports = {
     ignoreDuringBuilds: true,
   },
   images: {
-    domains: ['mygrannyslove.com'],
+    domains: ['mygrannyslove.com', 'localhost'],
   }
 }
