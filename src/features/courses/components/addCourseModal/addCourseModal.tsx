@@ -1,12 +1,9 @@
 import { useState } from 'react';
-import { Modal,TextInput, Stack, Select, Radio, NumberInput, Button, Container, Grid, Center, Text } from '@mantine/core';
-import { useForm } from '@mantine/form';
-import Image from 'next/image';
+import { Modal,TextInput, Stack, Select, Radio, NumberInput, Button, Container, Text, Stepper, Group, Box, Textarea, FileInput, Notification } from '@mantine/core';
+import { IconArrowLeft, IconArrowRight, IconCheck, IconUpload, IconX } from '@tabler/icons';
 
-import DropZone from '../dropZone/dropZone';
 import { colors } from '../../../../constants/colors';
-import { useStyles } from './addCourseModal.styles';
-
+import { useAddCourse } from '../../hooks/useAddCourse';
 
 
 interface AddCourseData {
@@ -18,111 +15,176 @@ interface AddCourseData {
     onClose: () => void;
 };
 
-const AddCourseModal = ({open, selectData, onClose}: AddCourseData) => {
-    const { classes } = useStyles();
-  const [opened, setOpened] = useState(false);
+const videoSourceSelect = [
+    { value: 'youtube', label: 'YouTube' },
+    { value: 'vimeo', label: 'Vimeo' },
+    { value: 'other', label: 'Other' },
+];
 
-  const form = useForm({
-    initialValues: {
-      courseName: '',
-      category: '',
-      pricing: 'free',
-      amount: 0.00,
-      thumbnail: '',
-    },
-});
-
-const confirmNext = () => {
-    const correct = confirm("Are the details correct?");
-    if (correct){
-        console.log("correct")
-    }
-
-}
-
-
+const AddCourseModal = ({open, onClose}: AddCourseData) => {
+    const [file, setFile] = useState<File | null>(null);
+    const { active, form, nextText, nextClick, handleSubmit, prevStep, setActive, categorySelectData } = useAddCourse();
+   
   return (
     <>
       <Modal
         opened={open}
         onClose={onClose}
-        size="100%"
+        size="600"
       >
 
         <Container>
-            <Grid>
-                <Grid.Col md={6}>
-                    <Center>
-                        <Image 
-                             src='/course.svg'
-                             height={500}
-                             width={500}
+            <Text weight={600} color={`${colors.secondaryColor}`} size={28} mb="lg">Add New Course</Text>
+            <Stepper active={active} onStepClick={setActive} breakpoint="sm" color="dark">
+                <Stepper.Step label="First step" description="Course Basic Info" allowStepSelect={active > 0}>
+                    <Text color={`${colors.secondaryColor}`} size={20}>Step 1 content: Basic Infomartion</Text>
+                </Stepper.Step>
+                <Stepper.Step label="Second step" description="Course Description" allowStepSelect={active > 1}>
+                    <Text color={`${colors.secondaryColor}`} size={20}>Step 2 content: Course Description</Text>
+                </Stepper.Step>
+                <Stepper.Step label="Third step" description="Description Video" allowStepSelect={active > 2}>
+                    <Text color={`${colors.secondaryColor}`} size={20}>Step 3 content: Description Video</Text>
+                </Stepper.Step>
+                <Stepper.Completed>
+                        <Text color={`${colors.secondaryColor}`} size={20}> Click Submit to add course </Text>
+                        {JSON.stringify(form.errors) === "{}" ? "" :(
+                             <Notification icon={<IconX size={18} />} color="red" title="Error">
+                                <Text>{form.errors?.courseName}</Text>
+                                <Text>{form.errors?.CategoryId}</Text>
+                                <Text>{form.errors?.descriptionTitle}</Text>
+                                <Text>{form.errors?.descriptionContent}</Text>
+                           </Notification>
+                        )}
+                </Stepper.Completed>
+            </Stepper>        
+            <form onSubmit={form.onSubmit(() => handleSubmit(file))}>
+                <Stack>
+                    <Box hidden={active !== 0 ? true : false}>
+                        <TextInput 
+                            label="Course Name"
+                            placeholder="Enter the name of the course"
+                            value={form.values.courseName}
+                            onChange={(event) => form.setFieldValue('courseName', event.currentTarget.value)}
+                            mt="lg"
+                            error={form.errors.courseName}
                         />
-                    </Center>
-                </Grid.Col>
-                <Grid.Col md={6}>
-                    <Text weight={600} color={`${colors.secondaryColor}`} size={28}>Add Course</Text>
-                    <form>
-                        <Stack>
-                            <TextInput 
-                                required
-                                label="Course Name"
-                                placeholder="Enter the name of the course"
-                                value={form.values.courseName}
-                                onChange={(event) => form.setFieldValue('courseName', event.currentTarget.value)}
-                                mt="lg"
-                            />
-                            <Select 
-                                label="Category"
-                                placeholder='Select Course Category'
-                                withAsterisk
-                                searchable
-                                nothingFound="No options"
-                                {...form.getInputProps('category', { type: 'input' })}
-                                data={selectData}
-                                mt="md"
-                            />
-                            <Radio.Group
-                                label="Pricing"
-                                description="Is this a free or paid course?"
-                                withAsterisk
-                                {...form.getInputProps('pricing', { type: 'input' })}
-                                mt="md"
-                            >
-                                <Radio value="free" label="Free" />
-                                <Radio value="paid" label="Paid" />
-                            </Radio.Group>
+                        <Select 
+                            label="Category"
+                            placeholder='Select Course Category'
+                            withAsterisk
+                            searchable
+                            nothingFound="No options"
+                            {...form.getInputProps('CategoryId', { type: 'input' })}
+                            data={categorySelectData()}
+                            mt="md"
+                            error={form.errors.CategoryId}
+                        />
+                        <Radio.Group
+                            label="Pricing"
+                            description="Is this a free or paid course?"
+                            withAsterisk
+                            {...form.getInputProps('pricing', { type: 'input' })}
+                            mt="md"
+                            
+                        >
+                            <Radio value="free" label="Free" color='dark' />
+                            <Radio value="paid" label="Paid" color='dark' />
+                        </Radio.Group>
 
-                            {form.values.pricing != "free" && 
-                                <NumberInput 
-                                    decimalSeparator="."
-                                    label="Amount"
-                                    placeholder='Enter pricing amount'
-                                    {...form.getInputProps('amount', { type: 'input' })}
-                                    mt="md"
-                                    withAsterisk
-                                />
-                            }
-                            <DropZone />
-                            <Button
-                                onClick={confirmNext}
-                                className={`${classes.button} ${classes.nextButton}`}
-                                size="md"
+                        {form.values.pricing != "free" && 
+                            <NumberInput 
+                                decimalSeparator="."
+                                label="Amount"
+                                placeholder='Enter pricing amount'
+                                {...form.getInputProps('amount', { type: 'input' })}
                                 mt="md"
-                            >
-                                Add Course
-                            </Button>
+                                withAsterisk
+                            />
+                        }
+                    </Box>
+                    <Box hidden={active !== 1 ? true : false}>
+                        <TextInput 
+                            label="Description Title"
+                            placeholder="Enter Course Description Title"
+                            value={form.values.descriptionTitle}
+                            onChange={(event) => form.setFieldValue('descriptionTitle', event.currentTarget.value)}
+                            mt="lg"
+                        />
+                        <Textarea 
+                            label="Description Content"
+                            placeholder="Enter Course Description content"
+                            value={form.values.descriptionContent}
+                            onChange={(event) => form.setFieldValue('descriptionContent', event.currentTarget.value)}
+                            mt="lg"
+                        />  
+                        <FileInput 
+                            required
+                            label="Course Thumbnail" 
+                            placeholder="upload thumbnail image" 
+                            icon={<IconUpload size={14} />}
+                            mt="lg"
+                            value={file}
+                            onChange={setFile}  
+                        />
+                    </Box>
+                    <Box hidden={active !== 2 ? true : false}>
+                        <Radio.Group
+                            label="Description video"
+                            description="is there a description video?"
+                            withAsterisk
+                            mt="md"
+                            {...form.getInputProps('hasVideo', { type: 'input' })}
+                                
+                        >
+                            <Radio value="true" label="Has video" color='dark' />
+                            <Radio value="false" label="No video" color='dark' />
+                        </Radio.Group>
+
+                        <Select 
+                            label="Video Source"
+                            placeholder='Select Video Source'
+                            withAsterisk
+                            searchable
+                            nothingFound="No options"
+                            data={videoSourceSelect}
+                            mt="lg"
+                            disabled={form.values.hasVideo === "false" ? true : false}
+                            {...form.getInputProps('videoSource', { type: 'input' })}
+                        />
+                        <TextInput 
+                            required
+                            label="Video Link"
+                            placeholder="Enter Video Link"                   
+                            mt="lg"
+                            disabled={form.values.hasVideo === "false" ? true : false}
+                            {...form.getInputProps('videoUrl', { type: 'input' })}
+                        />
+                    </Box>
                     
-
-                        </Stack>
-                    </form>
-                </Grid.Col>
-            </Grid>
-        </Container>
-       
-       
+                    <Group position="center" my="xl">
+                        <Button 
+                            variant="outline" 
+                            onClick={prevStep} 
+                            type="button"
+                            leftIcon={<IconArrowLeft />} 
+                            color="dark"   
+                            disabled={active === 0 ? true : false}      
+                        >
+                            Back
+                        </Button>
+                        <Button 
+                            onClick={nextClick}
+                            rightIcon={active >= 3 ? <IconCheck /> : <IconArrowRight />}
+                            color="dark"
+                            type={active === 4 ? 'submit': 'button'}
+                        >
+                           {nextText}
+                        </Button>
+                    </Group>
+                </Stack>
+            </form>             
+        </Container>   
       </Modal>
-      {console.log(form.values)}
     </>
   );
 }
