@@ -4,14 +4,53 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router'
+import { getCookie } from 'cookies-next';
 
 import { StudentLayout } from '../../layouts/studentLayout/studentLayout';
 import { colors } from '../../constants/colors';
-import moneyImage from '../../assets/money.jpg';
-import tutorImage from '../../assets/tutor.jpg';
-import { IconBook, IconSchool, IconTrophy } from '@tabler/icons';
 import { courseThumbnail } from '../courses';
+import axios from 'axios';
+import { urls } from '../../constants/urls';
 
+interface ApiData {
+    ID: number;
+    progress: number;
+    title: string;
+}
+
+interface Enrolments {
+    totalEnrolments: number;
+    totalPages: number;
+    currentPage: number,
+    enrolments: {
+        id: string;
+        UserId: string;
+        CourseId: string;
+        progress: number;
+        createdAt: string;
+        updatedAt:string;
+    }[];
+};
+
+interface CourseData {
+    id: string;
+    courseTitle: string;
+    CategoryId: string;
+    coursePricing: string;
+    courseDescriptionTitle: string;
+    courseDescriptionContent: string;
+    courseThumbnailUrl: string;
+    hasVideo: boolean;
+    videoSource: string;
+    videoUrl: string;
+    grannysId: string;
+    createdAt: string;
+    updatedAt:string;
+};
+
+interface CompleteData extends CourseData {
+    progress: number;
+}
 
 const useStyles = createStyles((theme) => ({
     cardHeight: {
@@ -30,34 +69,57 @@ const useStyles = createStyles((theme) => ({
     }
 }));
 
-const apiData = [
-    {ID: 59260, progress: 40, title: 'Caregiving Skills - Dementia Care'}, {ID: 58949, progress: 10, title: 'CRP,AED and First Aid'}
-]
-
-interface ApiData {
-    ID: number;
-    progress: number;
-    title: string;
-}
 
 const Certificates: NextPage = () => {
     const { classes } = useStyles();
     const [buttonLoading, setButtonLoading] = useState(0);
+    const [enrolments, setEnrolments] = useState<CompleteData[] | null>(null);
+    const [courseData, setCourseData] = useState<CourseData | null>(null);
+
+    let token = getCookie('accessToken');
 
     const onClick = (id: number) => {
         setButtonLoading(id);
-    
     }
 
-    const item = apiData.map((element: ApiData) => (
-  
-        <Grid.Col sm={6} md={4} key={element.ID}>
+    const getEnrolmentAndCourseData =  async (enrols: Enrolments) => {
+        let data: CompleteData[] = [];
+        enrols.enrolments.map(async(el) => {
+            const courseInfo: CourseData = await getCourseById(el.CourseId);
+            const completeData = {...courseInfo, ...{progress: el.progress}};
+            data.push(completeData);
+        })
+        return data;
+    }
+
+    const getEnrolments = async () => {
+        try {
+            const { data } = await axios.get(`${urls.baseUrl}/enrolment/me`, {headers: {Authorization: `Bear ${token}`}});
+            const enrolmentData =  await getEnrolmentAndCourseData(data);
+            setEnrolments(enrolmentData);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const getCourseById = async (courseId: string) => {
+        try {
+            const { data } = await axios.get(`${urls.baseUrl}/course/${courseId}`);
+            setCourseData(data);
+            return data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const item = enrolments?.map((element: CompleteData) => (
+        <Grid.Col sm={6} md={4} key={element.id}>
             <Center>
                 <Card shadow="md" p="lg" radius="lg" withBorder style={{maxWidth: 300}}>
                     <Card.Section>
                     <Center>
                             <Image 
-                                src={courseThumbnail(element.ID)}
+                                 src={`${urls.baseUrl}/image?filePath=public${element?.courseThumbnailUrl}`}
                                 width="400"
                                 height="250"
                             />
@@ -66,7 +128,7 @@ const Certificates: NextPage = () => {
 
                     <Stack justify="space-between" className={classes.cardHeight} align="center">
                         <Text mt="md">
-                            {element.title}
+                            {element.courseTitle}
                         </Text>
                         <RingProgress 
                             sections={[{ value: Number(`${element.progress}`), color: 'green' }]}
@@ -83,21 +145,30 @@ const Certificates: NextPage = () => {
                             radius="md" 
                             className={classes.button}
                             component='a'
-                            href={`/learn/${element.ID}`}
-                            onClick ={() => onClick(element.ID)}
-                            loading = {buttonLoading === element.ID ? true : false}
+                            href={`/learn/${element.id}`}
+                            onClick ={() => onClick(Number(element.id))}
+                            loading = {buttonLoading === Number(element.id) ? true : false}
                         >
-                            continue
+                            {element.progress === 0 ? "Start" : "continue"} Learning      
                         </Button>
                     </Stack>
                 </Card>
             </Center>
         </Grid.Col>
-    
-  ))
+  ));
+
+  useEffect(() => {
+    getEnrolments();
+  }, []);
 
 
     return (
+        <>
+         <Head>
+            <title>Luddoc Skills For Life</title>
+            <meta name="description" content="Luddoc Skills For Life" />
+            <link rel="icon" href="/favicon.ico" />
+        </Head>
         <StudentLayout>
             <Container>
                 <Text
@@ -113,6 +184,7 @@ const Certificates: NextPage = () => {
                 </Grid>
             </Container>
         </StudentLayout>
+        </>
     )
 }
 
