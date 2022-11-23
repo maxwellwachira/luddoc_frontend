@@ -1,6 +1,9 @@
-import { getCookie } from "cookies-next"
+import { getCookie } from "cookies-next";
+
+const env = process.env.ENV as string;
+
 export const urls = {
-    baseUrl: 'https://maxwellwachira.com',
+    baseUrl: env === 'test' ? 'http://localhost:5000' : 'https://backend.luddoc-institute.com',
     tutorLms: 'https://mygrannyslove.com/wp-json/tutor/v1',
     zoomBaseUrl: 'https://api.zoom.us/v2'
 }
