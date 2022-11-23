@@ -29,7 +29,7 @@ const Login = (props: PaperProps) => {
   const { logout } =  useAuthContext();
 
   useEffect(() => {
-    logout();
+    //logout();
   }, []);
 
   if (response === "success") {
@@ -41,7 +41,7 @@ const Login = (props: PaperProps) => {
         router.push('/admin').then(() => router.reload());
         break;
       case 'tutor':
-        router.push('/tutor').then(() => router.reload());
+        router.push('/tutor/uploads').then(() => router.reload());
         break;
       default:
         break;
