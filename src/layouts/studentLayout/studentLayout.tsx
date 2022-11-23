@@ -2,9 +2,6 @@ import { useState, ReactNode } from 'react';
 import { Burger, Header, Navbar, Group, Code, MediaQuery, ScrollArea, Text, AppShell } from '@mantine/core';
 import {
   IconGauge,
-  IconMessage,
-  IconSettings,
-  IconCoin,
   IconSchool,
   IconUsers,
   IconCertificate,
@@ -42,9 +39,15 @@ export function StudentLayout({children}: Props ) {
       link: '/students', 
       active: router.pathname === '/students' ? true : false
     },
+    { 
+      label: 'All Courses', 
+      icon: IconSchool, 
+      link: '/courses', 
+      active: router.pathname === '/courses' ? true : false
+    },
     {
       label: 'My Courses',
-      icon: IconCertificate,
+      icon: IconSchool,
       index:1,
       link: '/students/courses',
       active: router.pathname === '/students/courses' ? true : false,
@@ -58,7 +61,7 @@ export function StudentLayout({children}: Props ) {
     },
     { 
       label: 'Certificates', 
-      icon: IconSchool, 
+      icon: IconCertificate, 
       link: '/students/certificates', 
       active: router.pathname === '/students/certificates' ? true : false,
     },
