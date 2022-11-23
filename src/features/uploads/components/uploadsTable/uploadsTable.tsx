@@ -7,6 +7,7 @@ interface CategoryData {
     id: string;
     count: number;
     fileName: string;
+    fileExtension: string;
     type: string;
     size: number;
     createdAt: string;
@@ -23,7 +24,7 @@ const UploadsTable = ({data}: CategoryData) => {
             <td>{element.createdAt}</td>
             <td>
                 <Group>
-                    <DownloadButton id={element.id} type="category"/>
+                    <DownloadButton id={element.id} type="category" fileName={element.fileName} fileExtension={element.fileExtension} />
                     <EditButton id={element.id} type="category" />
                     <DeleteButton id={element.id} type="category" />
                 </Group>

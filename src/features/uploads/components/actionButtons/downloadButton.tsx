@@ -6,23 +6,33 @@ import { urls } from "../../../../constants/urls";
 interface ID {
     id: string;
     type: string;
+    fileName: string;
+    fileExtension: string;
 }
 
-const DownloadButton = ({id, type}: ID) => {
+const DownloadButton = ({id, type, fileName, fileExtension}: ID) => {
 
     const onClick = async() => {
+        let downloadName = '';
         try {
-            const { data } = await axios.get(`${urls.baseUrl}/upload/download/${id}`);
-            const blob =  new Blob([data]);
-           console.log(blob.type)
+            const { data } = await axios.get(`${urls.baseUrl}/upload/download/${id}`, {responseType: 'blob'});
+            
             const url = window.URL.createObjectURL(
-                new Blob([data]),
+                new Blob([data])
             );
             const link = document.createElement('a');
             link.href = url;
+            const fileNameArr = fileName.split(".");
+            if (fileNameArr.length > 1){
+                fileNameArr.pop();
+                downloadName = fileNameArr.join('');
+            }else{
+                downloadName = fileName;
+            }
+
             link.setAttribute(
             'download',
-            ``,
+            `${downloadName}.${fileExtension}`,
             );
 
             // Append to html link element page
