@@ -7,7 +7,7 @@ import { Anchor, BackgroundImage, Box, Card, Center, Container, createStyles, Fo
 import MainLayout from '../layouts/mainLayout/mainLayout';
 import volunteerImage from '../assets/volunteer.jpg';
 import studenImage from '../assets/learn.png';
-import { colors } from '../constants/colors'
+import { colors } from '../constants/colors';
 import FooterLinks from '../components/footer/footer';
 import { footerData } from '../constants/footer';
 
