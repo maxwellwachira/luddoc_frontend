@@ -1,19 +1,33 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ActionIcon, Badge, Button, Card, Center, Container, createStyles, Grid, Group, Stack, Text } from '@mantine/core';
 import type { NextPage } from 'next';
+import axios from 'axios';
+import { getCookie } from 'cookies-next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router'
 
 import { StudentLayout } from '../../layouts/studentLayout/studentLayout';
 import { colors } from '../../constants/colors';
-import moneyImage from '../../assets/money.jpg';
-import tutorImage from '../../assets/tutor.jpg';
 import { IconBook, IconSchool, IconTrophy } from '@tabler/icons';
 import { useAuthContext } from '../../features/authentication';
+import { urls } from '../../constants/urls';
+
+interface EnrolmentData {
+    totalEnrolments: number;
+    totalPages: number;
+    currentPage: number;
+    enrolments: {
+        id: string;
+        CourseId: string;
+        progress: string;
+    }[]
+};
 
 const StudentDashboard: NextPage = () => {
+    const [enrolmentData, setEnrolmentData] = useState<EnrolmentData | null>(null);
     const { userMe } = useAuthContext();
+    let token = getCookie('accessToken');
 
     const getGreetings = () => {
         const date = new Date();
@@ -27,7 +41,30 @@ const StudentDashboard: NextPage = () => {
         return greetings;
     }
 
+    const getEnrolments = async() => {
+        try {
+            const { data } = await axios.get(`${urls.baseUrl}/enrolment/me`, {headers: {Authorization: `Bear ${token}`}});
+            setEnrolmentData(data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const completedCourses = () => {
+        return enrolmentData?.enrolments.filter((el) => Number(el.progress) === 100 );
+    }
+
+    useEffect(() => {
+        getEnrolments();
+    }, [])
+
     return (
+        <>
+        <Head>
+            <title>Luddoc SStudent Dashboard</title>
+            <meta name="description" content="Luddoc Skills For Life" />
+            <link rel="icon" href="/favicon.ico" />
+        </Head>
         <StudentLayout>
             <Container>
                 <Center>
@@ -39,7 +76,7 @@ const StudentDashboard: NextPage = () => {
                             <Stack justify="center" align="center">
                                 <IconBook color='green' size={45}/>
                                 <Text size={20}>Enrolled Courses</Text>
-                                <Text size={23}>2</Text>
+                                <Text size={23}>{enrolmentData?.totalEnrolments}</Text>
                             </Stack>
                         </Card>
                     </Grid.Col>
@@ -48,7 +85,7 @@ const StudentDashboard: NextPage = () => {
                             <Stack justify="center" align="center">
                                 <IconSchool color='green' size={45}/>
                                 <Text size={20}>Active Courses</Text>
-                                <Text size={23}>2</Text>
+                                <Text size={23}>{Number(enrolmentData?.totalEnrolments) - (completedCourses() ? completedCourses.length : 0)}</Text>
                             </Stack>
                         </Card>
                     </Grid.Col>
@@ -57,7 +94,7 @@ const StudentDashboard: NextPage = () => {
                             <Stack justify="center" align="center">
                                 <IconTrophy color='green' size={45}/>
                                 <Text size={20}>Courses Completed</Text>
-                                <Text size={23}>0</Text>
+                                <Text size={23}>{completedCourses()?.length}</Text>
                             </Stack>
                         </Card>
                     </Grid.Col>
@@ -65,6 +102,7 @@ const StudentDashboard: NextPage = () => {
                 </Grid>
             </Container>
         </StudentLayout>
+        </>
     )
 }
 
