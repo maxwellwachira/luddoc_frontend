@@ -94,8 +94,8 @@ const useStyles = createStyles((theme) => ({
 }));
 
 
-const Contact: NextPage = () => {
- const [apiData, setApiData] = useState([]);
+const Courses: NextPage = () => {
+ const [courseData, setCourseData] = useState([]);
  const [loading, setLoading] = useState(true);
  const [activePage, setPage] = useState(1);
  const [totalPages, setTotalPages] = useState(1);
@@ -107,11 +107,12 @@ const Contact: NextPage = () => {
   const getCourses = async () => {
     setLoading(true);
     try {
-        const { data } = await axios.get(`${urls.tutorLms}/courses?paged=${activePage}`);
-        if (data.status_code === "success"){
-            setApiData(data.data.posts);
-            setTotalPages(data.data.total_page);
-            setCourses(data.data.total_course);
+        const { data, status } = await axios.get(`${urls.baseUrl}/course?page=${activePage}`);
+        //console.log(data)
+        if (status === 200){
+            setCourseData(data.courses);
+            setTotalPages(data.totalPages);
+            setCourses(data.totalCourses);
             setLoading(false);
         }
     } catch (error) {
@@ -128,15 +129,15 @@ const Contact: NextPage = () => {
     getCourses();
   }, [activePage]);
   
-  const item = apiData.map((element: any) => (
+  const item = courseData.map((element: any) => (
   
-        <Grid.Col sm={6} md={4} key={element.ID}>
+        <Grid.Col sm={6} md={4} key={element.id}>
             <Center>
                 <Card shadow="md" p="lg" radius="lg" withBorder style={{maxWidth: 300}}>
                     <Card.Section>
                     <Center>
                             <Image 
-                                src={courseThumbnail(element.ID)}
+                                src={`${urls.baseUrl}/image?filePath=public${element?.courseThumbnailUrl}`}
                                 width="400"
                                 height="250"
                             />
@@ -145,9 +146,9 @@ const Contact: NextPage = () => {
 
                     <Stack justify="space-between" className={classes.cardHeight}>
                         <Group position="apart" mt="sm" >
-                            <Text weight={500}>{element.post_title}</Text>
+                            <Text weight={500}>{element.courseTitle}</Text>
                             <Badge color="dark" variant="light">
-                                Price: 10,000 KES
+                                Price: {element.coursePricing == 0 ? "FREE" : `${element.coursePricing} KES`} 
                             </Badge>
                         </Group>
 
@@ -157,9 +158,9 @@ const Contact: NextPage = () => {
                             radius="md" 
                             className={classes.button}
                             component='a'
-                            href={`/courses/${element.ID}`}
-                            onClick ={() => onClick(element.ID)}
-                            loading = {buttonLoading === element.ID ? true : false}
+                            href={`/courses/${element.id}`}
+                            onClick ={() => onClick(element.id)}
+                            loading = {buttonLoading === element.id ? true : false}
                         >
                             See more
                         </Button>
@@ -209,4 +210,4 @@ const Contact: NextPage = () => {
   );
 }
 
-export default Contact;
+export default Courses;
