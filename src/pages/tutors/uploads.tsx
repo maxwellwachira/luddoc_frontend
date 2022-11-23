@@ -33,6 +33,7 @@ interface UploadData {
     uploads: {
         id: string;
         fileName: string;
+        fileExtension: string;
         CategoryId: string;
         fileType: string;
         fileSize: number;
@@ -47,6 +48,7 @@ interface TableData {
     id: string;
     count: number;
     fileName: string;
+    fileExtension: string;
     type: string;
     size: number;
     createdAt: string;
@@ -110,6 +112,7 @@ const Uploads: NextPage = () => {
                 id: el.id,
                 count: (activePage - 1) * limit + ++index,
                 fileName: el.fileName,
+                fileExtension: el.fileExtension,
                 type: el.fileType,
                 size: Number((el.fileSize / (10**6)).toFixed(2)),
                 createdAt: (new Date(el.createdAt)).toLocaleString()
