@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Badge, Box, Button, Card, Center, Container, Accordion, Grid, Group, Text, Tabs } from '@mantine/core';
+import { Badge, Box, Button, Card, Center, Container, Accordion, Grid, Group, Text, Tabs, Modal, TextInput, Stack, Divider } from '@mantine/core';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -13,8 +13,9 @@ import FooterLinks from '../../components/footer/footer';
 import { footerData } from '../../constants/footer';
 import { colors } from '../../constants/colors';
 import { urls } from '../../constants/urls';
-import { IconArrowLeft, IconBook, IconClipboard, IconPlus } from '@tabler/icons';
+import { IconArrowLeft, IconBook, IconCheck, IconClipboard, IconCurrency, IconCurrencyDollar, IconMoneybag, IconPlus } from '@tabler/icons';
 import { useAuthContext } from '../../features/authentication';
+import { useForm } from '@mantine/form';
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
 
@@ -90,10 +91,22 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 
 const SingleCourse: NextPage = (props: any) => {
-    const { userMe } = useAuthContext();
+    const { auth, userMe } = useAuthContext();
     const [response, setResponse] = useState('');
     const [enrolled, setEnrolled] = useState(false);
+    const [ loading, setLoading ] = useState(false);
+    const [open, setOpen] = useState(false);
     const router = useRouter();
+
+    const form = useForm({
+        initialValues: {
+            phoneNumber: ''
+        }
+    });
+
+    const onClose = () => {
+        setOpen(false);
+    }
 
     const embedUrl =  (url: string) => {
         const splitUrl = url.split("=");
@@ -146,6 +159,8 @@ const SingleCourse: NextPage = (props: any) => {
     }
 
     const onClick = async() => {
+        //check if user is authenticated
+        if (!auth) return router.push('/auth/sign-in');
         //Check if role is admin or tutor or course pricing is free
         if (userMe.role === "admin" || userMe.role === "tutor" || Number(props.courseContent[0].coursePricing) === 0){
             const enrolment = await enroll(userMe.id, props.courseContent[0].id);
@@ -153,31 +168,36 @@ const SingleCourse: NextPage = (props: any) => {
                 router.push("/students/courses");
             }
         }else {
-            try {
-                const darajaData = {
-                    amount : Number(props.courseContent[0].coursePricing),
-                    phoneNumber: "254703519593",
-                    accountNumber: `Payment for ${props.courseContent[0].courseTitle}`
-                };
-                const { data } = await axios.post(`${urls.baseUrl}/daraja/lipa-na-mpesa`, darajaData);
-                if(data.transaction.ResponseCode == 0){
-                    setCookie('checkoutRequestID', data.transaction.CheckoutRequestID);
-                    setTimeout(async() => {
-                        const query = await axios.post(`${urls.baseUrl}/daraja/lipa-na-mpesa-query`, {checkoutRequestID: getCookie('checkoutRequestID')});
+            setOpen(true);
+        }
+    }
     
-                        if(Number(query.data.transaction.ResultCode) === 0){
-                            const enrolment = await enroll(userMe.id, props.courseContent[0].id);
-                            if (enrolment?.message === "success"){
-                                deleteCookie("checkoutRequestID");
-                                router.push("/students/courses");
-                            }
+    const handleSubmit = async () => {
+        setLoading(true);
+        try {
+            const darajaData = {
+                amount : Number(props.courseContent[0].coursePricing),
+                phoneNumber: form.values.phoneNumber,
+                accountNumber: `Payment for ${props.courseContent[0].courseTitle}`
+            };
+            const { data } = await axios.post(`${urls.baseUrl}/daraja/lipa-na-mpesa`, darajaData);
+            if(data.transaction.ResponseCode == 0){
+                setCookie('checkoutRequestID', data.transaction.CheckoutRequestID);
+                setTimeout(async() => {
+                    const query = await axios.post(`${urls.baseUrl}/daraja/lipa-na-mpesa-query`, {checkoutRequestID: getCookie('checkoutRequestID')});
+    
+                    if(Number(query.data.transaction.ResultCode) === 0){
+                        const enrolment = await enroll(userMe.id, props.courseContent[0].id);
+                        if (enrolment?.message === "success"){
+                            deleteCookie("checkoutRequestID");
+                            router.push("/students/courses");
                         }
-                    }, 15000);
-                    
-                }
-            } catch (error) {
-                console.log(error)
+                    }
+                }, 15000);
+                
             }
+        } catch (error) {
+            console.log(error)
         }
     }
 
@@ -208,15 +228,15 @@ const SingleCourse: NextPage = (props: any) => {
             </Button>
            <Grid gutter="xl">
                 <Grid.Col md={8}>
-                    <Text weight={600} size={28} mb="lg" color={`${colors.secondaryColor}`}>    {props?.courseContent[0].courseTitle}
+                    <Text weight={600} size={28} mb="lg" color={`${colors.secondaryColor}`}>    {props?.        courseContent[0].courseTitle}
                     </Text>
                     <Center>
                         {props.courseContent[0].hasVideo ? 
                             (
                             <iframe
-                                    src={`https://youtube.com/embed/${getVideoUrl(props.courseContent[0].videoSource, props.courseContent[0].videoUrl)}`}
-                                    width="100%"
-                                    height={400}
+                                src={`https://youtube.com/embed/${getVideoUrl(props.courseContent[0].videoSource, props.courseContent[0].videoUrl)}`}
+                                width="100%"
+                                height={400}
                             >
                             </iframe> 
                             ) :
@@ -266,7 +286,7 @@ const SingleCourse: NextPage = (props: any) => {
                    
                 </Grid.Col>
                 <Grid.Col md={4}>
-                    <Card  withBorder mt={60} radius="lg">
+                    <Card  withBorder mt={60} radius="lg" p={25}>
                         
                         {
                             enrolled ? 
@@ -283,9 +303,11 @@ const SingleCourse: NextPage = (props: any) => {
                             :
                                 <>
                                     <Group mt="lg">
-                                        <Text>Price:</Text>
-                                        <Badge color="dark" variant='filled'>{props.courseContent[0].coursePricing == 0 ? 'FREE' : `${props.courseContent[0].coursePricing} KES`}</Badge>
+                                        <Text size="lg">Price:</Text>
+                                        <Badge color="dark" variant='filled' size='lg'>{props.courseContent[0].coursePricing == 0 ? 'FREE' : `${props.courseContent[0].coursePricing} KES`}</Badge>
                                     </Group>
+                                    <Text my="sm">Don't be left out, enrol today</Text>
+                                    <Text my="sm" weight={600} size={20}>Jijenge, Jiamini, Jienjoy</Text> 
                                     <Button 
                                         fullWidth 
                                         my="lg"
@@ -302,6 +324,43 @@ const SingleCourse: NextPage = (props: any) => {
                 </Grid.Col>
            </Grid>
         </Container>
+        <Modal
+            opened={open}
+            onClose={onClose}
+            size={500}
+            title={ 
+            <Text weight={600} color={`${colors.secondaryColor}`} size={28}>Mpesa number to pay</Text>
+        }
+        >
+            <Divider mb="xl"/>
+            <Container>
+                <Text color="dimmed" size="sm">Important! -  Phone number should start with (254) without "+". <br />Example 254703519598</Text>
+                <form onSubmit={form.onSubmit(() => handleSubmit())}>
+                    <Stack>
+                        <TextInput 
+                            placeholder='Enter phonenumber'
+                            label='Phone Number '
+                            my='xl'
+                            withAsterisk
+                            radius={15}
+                            value={form.values.phoneNumber}
+                            onChange={(event) => form.setFieldValue('phoneNumber', event.currentTarget.value)}
+                        />
+                        <Button 
+                            leftIcon={<IconCurrencyDollar />}
+                            color="dark"
+                            type='submit'
+                            loading={loading}
+                            loaderPosition="left"
+                            radius={15}
+                            mb="xl"
+                        >
+                            Pay Now
+                        </Button>
+                    </Stack>
+                </form>
+            </Container>
+        </Modal>
         <Box>
             <FooterLinks data={footerData}/>
         </Box>
