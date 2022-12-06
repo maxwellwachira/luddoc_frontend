@@ -18,6 +18,18 @@ import { IconArrowLeft, IconBook, IconCheck, IconClipboard, IconCurrency, IconCu
 import { useAuthContext } from '../../features/authentication';
 import LipaNaMpesa from '../../assets/lipanampesa.png';
 
+interface TopicData {
+    totalTopics: number;
+    totalPages: number;
+    currentPage: number;
+    topics: {
+        id: string;
+        topicName: string;
+        createdAt: string;
+        updatedAt: string;
+    }[]
+};
+
 export const getStaticProps: GetStaticProps = async ({ params }) => {
 
     const getAllCourseInfo = async (activePage: number) => {
@@ -39,20 +51,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         });
     }
 
-    // const getCourseTopics = async() => {
-    //     try {
-    //         const { data } = await axios.get(`${urls.tutorLms}/course-topic/${params?.id}`);
-    //         if (data.status_code === "get_topic"){
-    //             return data.data;
-    //         }
-    //     } catch (error) {
-    //         console.log("error", error)
-    //     }
-    // }
-
     const courseContent = await getCourseInfo();
-    //console.log(courseContent)
-    //const topics = await getCourseTopics();
 
     return {
         props: {
@@ -98,7 +97,10 @@ const SingleCourse: NextPage = (props: any) => {
     const [enrolled, setEnrolled] = useState(false);
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
+    const [topicData, setTopicData] = useState<TopicData | null>(null);
     const router = useRouter();
+    const pathNameArr = router.asPath.split('/');
+    const courseId = pathNameArr[pathNameArr.length - 1];
 
     const form = useForm({
         initialValues: {
@@ -108,15 +110,15 @@ const SingleCourse: NextPage = (props: any) => {
             phoneNumber: (val) => {
                 const length = val.length;
                 const numArr = val.split('');
-                if(length === 10){
-                    if(Number(numArr[0]) === 0 && (Number(numArr[1]) === 7 || Number(numArr[1]) === 1)) return null;
+                if (length === 10) {
+                    if (Number(numArr[0]) === 0 && (Number(numArr[1]) === 7 || Number(numArr[1]) === 1)) return null;
                     return 'Enter a valid Safaricom Number';
                 }
-                if(length === 12){
-                    if(
-                        Number(numArr[0]) === 2 && 
-                        Number(numArr[1]) === 5 && 
-                        Number(numArr[2]) === 4 && 
+                if (length === 12) {
+                    if (
+                        Number(numArr[0]) === 2 &&
+                        Number(numArr[1]) === 5 &&
+                        Number(numArr[2]) === 4 &&
                         (Number(numArr[3]) === 7 || Number(numArr[3]) === 1)
                     ) return null;
                     return 'Enter a valid Safaricom Number';
@@ -254,8 +256,18 @@ const SingleCourse: NextPage = (props: any) => {
         }
     }
 
+    const getCourseTopics = async () => {
+        try {
+            const { data } = await axios.get(`${urls.baseUrl}/topic/${courseId}`);
+            setTopicData(data);
+        } catch (error) {
+            console.log("error", error);
+        }
+    }
+
     useEffect(() => {
         isEnrolled();
+        getCourseTopics();
     }, []);
 
     return (
@@ -345,13 +357,13 @@ const SingleCourse: NextPage = (props: any) => {
                                             },
                                         }}
                                     >
-                                        {/* {props?.topics.map((element: any) => (
-                                     <Accordion.Item value={element.ID} key={element.ID}>
-                                        <Accordion.Control>
-                                            {element.post_title}
-                                        </Accordion.Control>
-                                     </Accordion.Item>  
-                                ))} */}
+                                        {topicData?.topics.map((element: any) => (
+                                            <Accordion.Item value={element.id} key={element.id}>
+                                                <Accordion.Control>
+                                                    {element.topicName}
+                                                </Accordion.Control>
+                                            </Accordion.Item>
+                                        ))}
 
                                     </Accordion>
                                 </Tabs.Panel>
@@ -408,7 +420,7 @@ const SingleCourse: NextPage = (props: any) => {
                     <Divider mb="xl" />
                     <Container>
                         <Center mb="xl">
-                            <Image 
+                            <Image
                                 src={LipaNaMpesa}
                                 height={50}
                                 width={200}
