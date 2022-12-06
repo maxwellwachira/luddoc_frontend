@@ -3,7 +3,10 @@ import { getCookie } from "cookies-next";
 const env = process.env.ENV as string;
 
 export const urls = {
-    baseUrl: env === 'test' ? 'http://localhost:5000' : 'https://backend.luddoc-institute.com',
+    baseUrl: 'https://backend.luddoc-institute.com',
+    //baseUrl: 'http://localhost:5000',
+    frontEnd: 'https://luddoc-institute.com',
+    //frontEnd: 'http://localhost:3000',
     tutorLms: 'https://mygrannyslove.com/wp-json/tutor/v1',
     zoomBaseUrl: 'https://api.zoom.us/v2'
 }
