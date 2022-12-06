@@ -1,6 +1,6 @@
 import { Group, Table } from "@mantine/core";
 
-import { DeleteButton, EditButton, MoreButton } from '../actionButtons';
+import { DeleteButton, EditButton, TopicButton, MoreButton } from '../actionButtons';
 
 interface CourseData {
    data: {
@@ -8,7 +8,6 @@ interface CourseData {
     count: number;
     courseTitle: string;
     categoryName: string;
-    enrolledStudents: string;
     pricing: string;
    }[]
 };
@@ -20,8 +19,8 @@ const CourseTable = ({data}: CourseData) => {
             <td>{element.count}</td>
             <td>{element.courseTitle}</td>
             <td>{element.categoryName}</td>
-            <td>{element.enrolledStudents}</td>
             <td>{element.pricing}</td>
+            <td><TopicButton id={element.id} type="Topics" /></td>
             <td>
                 <Group>
                     <EditButton id={element.id} type="course"/>
@@ -39,8 +38,9 @@ const CourseTable = ({data}: CourseData) => {
                     <th>#</th>
                     <th>Course Name</th>
                     <th>Category</th>
-                    <th>Number of Enrolled Students</th>
                     <th>Pricing</th>
+                    <th>Topics</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
