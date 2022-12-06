@@ -15,10 +15,14 @@ const DeleteButton = ({id, type}: ID) => {
     const { toggleRefreshData } = useRefreshContext();
 
     const onClick = async() => {
-        const confirmMessage = type === "category" ? "Are you sure you want to delete this category? This will delete all courses in this category" : "Are you sure you want to delete this course?";
+        const confirmMessage = type === "category" ? 
+            "Are you sure you want to delete this category? This will delete all courses in this category" : 
+            type === "course" ?
+            "Are you sure you want to delete this course?" :
+            "Are you sure you want to delete this topic?";
         const confirmation = confirm(confirmMessage);
         if(confirmation){
-            const urlPath = type === "category" ? "category" : "course";
+            const urlPath = type === "category" ? "category" : type === "course" ? "course" : "topic";
             try {
                 await axios.delete(`${urls.baseUrl}/${urlPath}/${id}`);
                 toggleRefreshData();

@@ -36,26 +36,36 @@ interface CourseData {
     updatedAt: string;
 }
 
+interface TopicData {
+    id: string;
+    topicName: string;
+    createdAt: string;
+    updatedAt: string;
+};
+
 const MoreButton = ({id, type}: ID) => {
     const { classes } = useStyles();
     const [openCourseModal, setOpenCourseModal] = useState(false);
     const [openCategoryModal, setOpenCategoryModal] = useState(false);
+    const [openAddTopic, setOpenAddTopic] = useState(false);
     const [categoryData, setCategoryData] = useState<CategoryData | null>(null);
     const [courseData, setCourseData] = useState<CourseData | null>(null);
+    const [topicData, setTopicData] = useState<TopicData | null>(null);
 
     const onClick = async() => {
-        type === 'category' ? setOpenCategoryModal(true) : setOpenCourseModal(true);
+        type === 'course' ? setOpenCourseModal(true) :type === 'category' ?  setOpenCategoryModal(true) : setOpenAddTopic(true);
         try {
-            const urlPath =  type === "category" ? "category" : "course";
+            const urlPath =  type === "category" ? "category" : type === "course" ? "course" : "topic/single-topic";
             const { data } = await axios.get(`${urls.baseUrl}/${urlPath}/${id}`);
-            type === "category" ? setCategoryData(data) :  setCourseData(data);
+            type === "category" ? setCategoryData(data) : type === "course" ? setCourseData(data) : setTopicData(data);
             console.log(data)
         } catch (error) {
             console.log(error);
         }
     } 
+
     const onClose = () => {
-        type === 'category' ? setOpenCategoryModal(false) : setOpenCourseModal(false);
+        type === 'course' ? setOpenCourseModal(false) :type === 'category' ?  setOpenCategoryModal(false) : setOpenAddTopic(false);
     }
 
     const parseDate = (input: string) => {
@@ -178,6 +188,34 @@ const MoreButton = ({id, type}: ID) => {
                             }
                         </Tabs.Panel>
                     </Tabs>
+                </Container>
+            </Modal>
+            <Modal
+                opened={openAddTopic}
+                onClose={onClose}
+                size="500px"
+                title={<Text weight={600} color={`${colors.secondaryColor}`} size={28} >{categoryData?.categoryName} Topic Details</Text>}
+            >    
+                <Divider />
+                <Container>
+                    <Group mt="lg" position="apart">
+                        <Text><IconId size={16} color={`${colors.secondaryColor}`}/> Topic Id: </Text>
+                        <Badge color="dark" size="lg">{topicData?.id}</Badge>
+                    </Group>
+                    <Group mt="lg" position="apart">
+                        <Text><IconReceipt size={16} color={`${colors.secondaryColor}`}/> Topic Title: </Text>
+                        <Badge color="dark" size="lg">{topicData?.topicName}</Badge>
+                    </Group>
+
+                    <Group mt="lg" position="apart">
+                        <Text><IconCalendar size={16} color={`${colors.secondaryColor}`}/> Created At:  </Text>
+                        <Badge color="dark" size="lg">{topicData ? parseDate(topicData.createdAt): ""}</Badge>
+                    </Group>
+
+                    <Group mt="lg" mb="xl" position="apart">
+                        <Text><IconCalendar size={16} color={`${colors.secondaryColor}`}/> Updated At:  </Text>
+                        <Badge color="dark" size="lg">{topicData ? parseDate(topicData.updatedAt): ""}</Badge>
+                    </Group>
                 </Container>
             </Modal>
         </>

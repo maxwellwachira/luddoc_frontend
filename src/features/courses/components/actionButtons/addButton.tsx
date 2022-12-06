@@ -5,6 +5,7 @@ import { IconPlus } from "@tabler/icons";
 import { useStyles } from './actionButtons.styles';
 import  AddCourseModal from '../addCourseModal/addCourseModal';
 import AddCategoryModal from '../addCategoryModal/addCategoryModal';
+import AddTopicModal from '../addTopicModal/addTopicModal';
 
 interface UserID {
     id: number;
@@ -22,14 +23,17 @@ const selectData = [
 const AddButton = ({id, type}: UserID) => {
     const [openAddCourse, setOpenAddCourse] = useState(false);
     const [openAddCategory, setOpenAddCategory] = useState(false);
+    const [openAddTopic, setOpenAddTopic] = useState(false);
     const { classes } = useStyles();
 
     const onClick = () => {
-        type === 'Course' ? setOpenAddCourse(true) : setOpenAddCategory(true);
+        type === 'Course' ? setOpenAddCourse(true) : type === 'Category' ?  setOpenAddCategory(true) : setOpenAddTopic(true);
     } 
+
     const onClose = () => {
-        type === 'Course' ? setOpenAddCourse(false) : setOpenAddCategory(false);
+        type === 'Course' ? setOpenAddCourse(false) :type === 'Category' ?  setOpenAddCategory(false) : setOpenAddTopic(false);
     }
+    
     return (
        <>
             <Button 
@@ -41,6 +45,7 @@ const AddButton = ({id, type}: UserID) => {
             </Button>
             <AddCourseModal open={openAddCourse}  selectData={selectData} onClose={onClose}/>
             <AddCategoryModal  open={openAddCategory} onClose={onClose}/>
+            <AddTopicModal  open={openAddTopic} onClose={onClose} id={id} />
         </>
     )
 }

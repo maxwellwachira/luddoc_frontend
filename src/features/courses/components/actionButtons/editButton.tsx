@@ -6,6 +6,7 @@ import { useStyles } from './actionButtons.styles';
 import { colors } from "../../../../constants/colors";
 import { useEditCategory } from "../../hooks/useEditCategory";
 import { useEditCourse } from "../../hooks/useEditCourse";
+import { useEditTopic } from "../../hooks/useEditTopic";
 
 interface ID {
     id: string;
@@ -22,15 +23,17 @@ const EditButton = ({id, type}: ID) => {
     const { classes } = useStyles();
     const [openEditCourse, setOpenEditCourse] = useState(false);
     const [openEditCategory, setOpenEditCategory] = useState(false);
+    const [openEditTopic, setOpenEditTopic] = useState(false);
     const [file, setFile] = useState<File | null>(null);
     const {form, loading, response, handleSubmit } = useEditCategory(id, type);
     const { active, courseForm, nextText, courseResponse, nextClick, handleCourseSubmit, prevStep, setActive, categorySelectData} = useEditCourse(id, type);
+    const {topicForm, topicLoading, topicResponse, topicHandleSubmit } = useEditTopic(id, type);
 
     const onClick = async() => {
-        type === 'category' ? setOpenEditCategory(true) : setOpenEditCourse(true);
+        type === 'category' ? setOpenEditCategory(true) : type === "course" ? setOpenEditCourse(true) : setOpenEditTopic(true);
     } 
     const onClose = () => {
-        type === 'category' ? setOpenEditCategory(false) : setOpenEditCourse(false);
+        type === 'category' ? setOpenEditCategory(false) : type === "course" ? setOpenEditCourse(false) : setOpenEditTopic(false);
     }
     const pricingChange = () => {
         if(courseForm.values.pricing === 'free') courseForm.setFieldValue('amount', 0);
@@ -271,8 +274,53 @@ const EditButton = ({id, type}: ID) => {
                 </Container>   
 
             </Modal>
+            <Modal
+                opened={openEditTopic}
+                onClose={onClose}
+                size="600px"
+                title={<Text weight={600} color={`${colors.secondaryColor}`} size={28}>Edit Topic</Text>}
+            >
+                <Divider my="xl"/>
+                <Container>
+                    {topicResponse === 'success' ? (   
+                        <Alert icon={<IconCheck size={16} />} title="Success" color="green">
+                           Topic Edited Successfully
+                        </Alert>           
+                    ): topicResponse ? (
+                        <Alert icon={<IconAlertCircle size={16} />} title="Error!" color="red">
+                            Reason: {topicResponse} <br />
+                        </Alert>
+                    ): ''}
+                    <form onSubmit={topicForm.onSubmit(() => topicHandleSubmit())}>
+                       
+                        <Stack>
+                            <TextInput
+                                withAsterisk
+                                label="Topic Title"
+                                placeholder="Enter the title of the topic"
+                                value={topicForm.values.topicName}
+                                onChange={(event) => topicForm.setFieldValue('topicName', event.currentTarget.value)}
+                                mt="md"
+                                error={topicForm.errors.topicName}
+                            />
+
+                            <Button 
+                                rightIcon={<IconCheck />}
+                                color="dark"
+                                my="lg"
+                                type='submit'
+                                loading={topicLoading}
+                                loaderPosition="left"
+                            >
+                                Edit Topic
+                            </Button>
+                        </Stack>
+                    </form>
+                </Container>
+            </Modal>
         </>
     )
 }
 
 export default EditButton;
+

@@ -47,5 +47,15 @@ export const useStyles = createStyles((theme) => ({
             background: `${theme.colors.dark[7]}`,
             color: 'white'
         }
+    },
+
+    topicButton: {
+        background: 'transparent',
+        color: '#1877F2',
+        border: '2px solid #1877F2',
+        '&:hover': { 
+            background: '#1877F2',
+            color: 'white',
+        }
     }
 }));
