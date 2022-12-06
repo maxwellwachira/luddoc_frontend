@@ -118,7 +118,7 @@ const Topics: NextPage = (props: any) => {
 
     const getCourseTopics = async () => {
         try {
-            const { data } = await axios.get(`${urls.baseUrl}/topic/${courseId}?page=${activePage}&limit=1000`);
+            const { data } = await axios.get(`${urls.baseUrl}/topic/${courseId}?page=${activePage}&limit=${limit}`);
             setTopicData(data);
         } catch (error) {
             console.log("error", error);
