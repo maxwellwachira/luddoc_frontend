@@ -7,6 +7,7 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 import { useRouter } from 'next/router';
 import { getCookie, setCookie, deleteCookie } from 'cookies-next';
 import axios from 'axios';
+import { useForm } from '@mantine/form';
 
 import MainLayout from '../../layouts/mainLayout/mainLayout';
 import FooterLinks from '../../components/footer/footer';
@@ -15,7 +16,7 @@ import { colors } from '../../constants/colors';
 import { urls } from '../../constants/urls';
 import { IconArrowLeft, IconBook, IconCheck, IconClipboard, IconCurrency, IconCurrencyDollar, IconMoneybag, IconPlus, IconX } from '@tabler/icons';
 import { useAuthContext } from '../../features/authentication';
-import { useForm } from '@mantine/form';
+import LipaNaMpesa from '../../assets/lipanampesa.png';
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
 
@@ -406,13 +407,23 @@ const SingleCourse: NextPage = (props: any) => {
                 >
                     <Divider mb="xl" />
                     <Container>
+                        <Center mb="xl">
+                            <Image 
+                                src={LipaNaMpesa}
+                                height={50}
+                                width={200}
+                                alt="Lipa na mpesa"
+                            />
+                        </Center>
+
                         <Text color="dimmed" size="sm"> Phone number format should be as shown: <br />Example 0702519598</Text>
                         <form onSubmit={form.onSubmit(() => handleSubmit())}>
                             <Stack>
                                 <TextInput
                                     placeholder='Enter phonenumber'
                                     label='Phone Number '
-                                    my='xl'
+                                    mb='xl'
+                                    mt='lg'
                                     withAsterisk
                                     radius={15}
                                     value={form.values.phoneNumber}
