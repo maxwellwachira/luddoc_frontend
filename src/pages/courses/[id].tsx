@@ -258,7 +258,7 @@ const SingleCourse: NextPage = (props: any) => {
 
     const getCourseTopics = async () => {
         try {
-            const { data } = await axios.get(`${urls.baseUrl}/topic/${courseId}`);
+            const { data } = await axios.get(`${urls.baseUrl}/topic/${courseId}?page=1&limit=1000`);
             setTopicData(data);
         } catch (error) {
             console.log("error", error);

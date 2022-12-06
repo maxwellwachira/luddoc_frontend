@@ -95,7 +95,7 @@ const Topics: NextPage = (props: any) => {
     const router = useRouter();
     const pathNameArr = router.asPath.split('/');
     const courseId = pathNameArr[pathNameArr.length - 1];
-    const limit = 5;
+    const limit = 10;
     
     const embedUrl = (url: string) => {
         const splitUrl = url.split("=");
@@ -118,7 +118,7 @@ const Topics: NextPage = (props: any) => {
 
     const getCourseTopics = async () => {
         try {
-            const { data } = await axios.get(`${urls.baseUrl}/topic/${courseId}`);
+            const { data } = await axios.get(`${urls.baseUrl}/topic/${courseId}?page=${activePage}&limit=1000`);
             setTopicData(data);
         } catch (error) {
             console.log("error", error);
