@@ -6,7 +6,7 @@ import axios from "axios";
 
 import { useStyles } from './actionButtons.styles';
 import { urls } from "../../../../constants/urls";
-import { useRefreshContext } from "../../../courses/contexts/refreshDataContexProvider";
+import { useRefreshContext } from "../../../lms/contexts/refreshDataContexProvider";
 import { colors } from "../../../../constants/colors";
 
 interface ID {
