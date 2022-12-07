@@ -14,7 +14,7 @@ const TopicButton = ({id, type}: ID) => {
     const router = useRouter();
     
     const onClick = () => {
-        router.push(`${urls.frontEnd}/${type === "Topics" ? "topics" : "lessons"}/${id}`).then(() => router.reload());
+        router.push(`${urls.frontEnd}/topics/${id}${type === "lessons" ? "/lessons/1" : ''}`).then(() => router.reload());
     }
     
     return (
