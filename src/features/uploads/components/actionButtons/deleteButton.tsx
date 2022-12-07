@@ -3,7 +3,7 @@ import axios from "axios";
 
 import { urls } from "../../../../constants/urls";
 import { useStyles } from './actionButtons.styles';
-import { useRefreshContext } from "../../../courses/contexts/refreshDataContexProvider";
+import { useRefreshContext } from "../../../lms/contexts/refreshDataContexProvider";
 
 interface ID {
     id: string;

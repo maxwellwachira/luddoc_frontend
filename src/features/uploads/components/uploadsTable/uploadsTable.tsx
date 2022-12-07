@@ -1,8 +1,9 @@
-import { Group, Table } from "@mantine/core";
+import { Box, Group, Table } from "@mantine/core";
 
 import { DeleteButton, DownloadButton, EditButton } from '../actionButtons';
 
 interface CategoryData {
+   type?: string;
    data: {
     id: string;
     count: number;
@@ -14,7 +15,7 @@ interface CategoryData {
    }[]
 };
 
-const UploadsTable = ({data}: CategoryData) => {
+const UploadsTable = ({data, type}: CategoryData) => {
     const rows =  data.map((element)=> (
         <tr key={element.fileName}>
             <td>{element.count}</td>
@@ -25,8 +26,12 @@ const UploadsTable = ({data}: CategoryData) => {
             <td>
                 <Group>
                     <DownloadButton id={element.id} type="category" fileName={element.fileName} fileExtension={element.fileExtension} />
-                    <EditButton id={element.id} type="category" />
-                    <DeleteButton id={element.id} type="category" />
+                    <Box style={{display: type === 'student' ? 'none' : ''}}>
+                        <EditButton id={element.id} type="category"/>
+                    </Box>
+                    <Box style={{display: type === 'student' ? 'none' : ''}}>
+                        <DeleteButton id={element.id} type="category" />
+                    </Box>
                 </Group>
             </td>
         </tr>
