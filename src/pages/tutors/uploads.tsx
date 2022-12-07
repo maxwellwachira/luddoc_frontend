@@ -12,7 +12,7 @@ import { colors } from '../../constants/colors';
 import { useAuthContext } from '../../features/authentication';
 import { urls } from '../../constants/urls';
 import UploadsTable from '../../features/uploads/components/uploadsTable/uploadsTable';
-import { useRefreshContext } from '../../features/courses/contexts/refreshDataContexProvider';
+import { useRefreshContext } from '../../features/lms/contexts/refreshDataContexProvider';
 
 interface CategoryData {
     totalCategories: number;
