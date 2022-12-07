@@ -6,6 +6,7 @@ import {
   IconUsers,
   IconCertificate,
   IconLogout,
+  IconUpload,
 } from '@tabler/icons';
 import { useRouter } from 'next/router';
 
@@ -58,6 +59,12 @@ export function StudentLayout({children}: Props ) {
       icon: IconUsers,
       link: '/students/live-session',
       active: router.pathname === '/students/live-session' ? true : false,
+    },
+    {
+      label: 'Uploads',
+      icon: IconUpload,
+      link: '/students/uploads',
+      active: router.pathname === '/students/uploads' ? true : false,
     },
     { 
       label: 'Certificates', 

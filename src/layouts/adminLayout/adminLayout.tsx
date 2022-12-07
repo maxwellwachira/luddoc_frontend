@@ -9,6 +9,7 @@ import {
   IconCertificate,
   IconLogout,
   IconVideo,
+  IconUpload,
 } from '@tabler/icons';
 import { useRouter } from 'next/router';
 
@@ -64,17 +65,23 @@ export function AdminLayout({children}: Props ) {
       link: '/admin/tutors', 
       active: router.pathname === '/admin/tutors' ? true : false,
     },
-    { 
-      label: 'Payments', 
-      icon: IconCoin, 
-      link: '/admin/payments', 
-      active: router.pathname === '/admin/payments' ? true : false,
-    },
+    // { 
+    //   label: 'Payments', 
+    //   icon: IconCoin, 
+    //   link: '/admin/payments', 
+    //   active: router.pathname === '/admin/payments' ? true : false,
+    // },
     { 
       label: 'Live Session', 
       icon: IconVideo, 
       link: '/admin/live-session', 
       active: router.pathname === '/admin/live-session' ? true : false,
+    },
+    {
+      label: 'Uploads',
+      icon: IconUpload,
+      link: '/admin/uploads',
+      active: router.pathname === '/admin/uploads' ? true : false,
     },
     {
       label: 'Messaging',
