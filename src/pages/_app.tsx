@@ -5,7 +5,7 @@ import { useColorScheme, useHotkeys, useLocalStorage  } from '@mantine/hooks';
 
 import PageLoader from '../components/pageLoader/pageLoader';
 import { AuthContextProvider } from '../features/authentication/context/authContextProvider';
-import { RefreshContextProvider } from '../features/courses/contexts/refreshDataContexProvider';
+import { RefreshContextProvider } from '../features/lms/contexts/refreshDataContexProvider';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [loading, setLoading] = useState(false);
