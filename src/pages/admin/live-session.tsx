@@ -1,4 +1,4 @@
-import { Button, Center, Container, Grid, Stack, Text } from '@mantine/core';
+import { Button, Center, Container, Grid, Paper, Stack, Text } from '@mantine/core';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -34,34 +34,36 @@ const LiveSession: NextPage = () => {
                 <Center>
                     <Text mt="xl" weight={600} size={25} color={`${colors.secondaryColor}`}>{`${getGreetings()} ${userMe.firstName} ${userMe.lastName}`}</Text>
                 </Center>
-                <Grid gutter={40}>
-                    <Grid.Col md={7}>
-                        <Center>
-                            <Image 
-                                src="/live.svg"
-                                height={400}
-                                width={400}
-                            />
-                        </Center>
-                    </Grid.Col>
-                    <Grid.Col md={5}>
-                        <Stack justify="center" p="xl">    
-                            <Text mt={40}>Click the button to start a live session</Text>
-                            <Button
-                                component='a'
-                                href='/meeting/live-session'
-                                variant='outline'
-                                color='dark'
-                                mt="xl"
-                                radius="xl"
-                                fullWidth
+                <Paper withBorder p="xl" radius={15} mt={25}>
+                    <Grid gutter={40}>
+                        <Grid.Col md={7}>
+                            <Center>
+                                <Image 
+                                    src="/live.svg"
+                                    height={400}
+                                    width={400}
+                                />
+                            </Center>
+                        </Grid.Col>
+                        <Grid.Col md={5}>
+                            <Stack justify="center" p="xl" style={{minHeight: 400}}>    
+                                <Text mt={40}>Click the button to start a live session</Text>
+                                <Button
+                                    component='a'
+                                    href='/meeting/live-session'
+                                    variant='outline'
+                                    color='dark'
+                                    mt="xl"
+                                    radius="xl"
+                                    fullWidth
 
-                            >
-                                Start Live Session
-                            </Button>
-                        </Stack>
-                    </Grid.Col>
-                </Grid>
+                                >
+                                    Start Live Session
+                                </Button>
+                            </Stack>
+                        </Grid.Col>
+                    </Grid>
+                </Paper>
             </Container>
         </AdminLayout>
         </>

@@ -11,7 +11,7 @@ import { colors } from '../../constants/colors';
 import tutorImage from '../../assets/tutor.jpg';
 import axios from 'axios';
 import { urls } from '../../constants/urls';
-import { useRefreshContext } from '../../features/courses/contexts/refreshDataContexProvider';
+import { useRefreshContext } from '../../features/lms/contexts/refreshDataContexProvider';
 
 interface TutorData {
     totalTutors: number;

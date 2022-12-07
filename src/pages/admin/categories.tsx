@@ -6,10 +6,10 @@ import axios from 'axios';
 import { Badge, Center, Container, Grid, Group, Pagination, Paper, Text } from '@mantine/core';
 
 import { AdminLayout } from '../../layouts/adminLayout/adminLayout';
-import { AddButton, CategoriesTable, ExcelButton, PdfButton, PrintButton } from '../../features/courses';
+import { AddButton, CategoriesTable, ExcelButton, PdfButton, PrintButton } from '../../features/lms';
 import { colors } from '../../constants/colors';
 import { urls } from '../../constants/urls';
-import { useRefreshContext } from '../../features/courses/contexts/refreshDataContexProvider';
+import { useRefreshContext } from '../../features/lms/contexts/refreshDataContexProvider';
 
 interface CategoryData {
     totalCategories: number;

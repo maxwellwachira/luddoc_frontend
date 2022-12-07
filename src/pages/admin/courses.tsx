@@ -6,9 +6,9 @@ import Image from 'next/image';
 import { Badge, Center, Container, Grid, Group, Pagination, Paper, Text } from '@mantine/core';
 
 import { AdminLayout } from '../../layouts/adminLayout/adminLayout';
-import { AddButton, CourseTable, ExcelButton, PdfButton, PrintButton } from '../../features/courses';
+import { AddButton, CourseTable, ExcelButton, PdfButton, PrintButton } from '../../features/lms';
 import { colors } from '../../constants/colors';
-import { useRefreshContext } from '../../features/courses/contexts/refreshDataContexProvider';
+import { useRefreshContext } from '../../features/lms/contexts/refreshDataContexProvider';
 import { urls } from '../../constants/urls';
 
 

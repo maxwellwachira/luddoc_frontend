@@ -10,7 +10,7 @@ import { StudentsTable, ExcelButton, PdfButton, PrintButton, SearchBar  } from '
 import { colors } from '../../constants/colors';
 import axios from 'axios';
 import { urls } from '../../constants/urls';
-import { useRefreshContext } from '../../features/courses/contexts/refreshDataContexProvider';
+import { useRefreshContext } from '../../features/lms/contexts/refreshDataContexProvider';
 
 
 interface StudentData {
