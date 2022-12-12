@@ -20,6 +20,7 @@ interface TopicData {
     topics: {
         id: string;
         topicName: string;
+        CourseId: string;
         createdAt: string;
         updatedAt: string;
     }[]
@@ -29,6 +30,7 @@ interface TableData {
     id: string;
     count: number;
     topicName: string;
+    courseId: string;
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
@@ -52,7 +54,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
 
     const courseContent = await getCourseInfo();
-
+    console.log(courseContent)
     return {
         props: {
             courseContent
@@ -132,7 +134,7 @@ const Topics: NextPage = (props: any) => {
                 id: el.id,
                 count: (activePage - 1) * limit + ++index,
                 topicName: el.topicName,
-                numberOfCourses: 2
+                courseId
             }
             data.push(topicData);
         });

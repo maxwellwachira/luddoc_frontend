@@ -20,6 +20,7 @@ interface TopicData {
     topics: {
         id: string;
         topicName: string;
+        CourseId: string;
         createdAt: string;
         updatedAt: string;
     }[]
@@ -217,7 +218,7 @@ const Lessons: NextPage = (props: any) => {
                         <Center>
                             <Group>
                                 <Text>Total Lessons:</Text>
-                                <Badge color="dark">2 Lessons</Badge>
+                                <Badge color="dark">{lessonData?.totalLessons} Lessons</Badge>
                             </Group>
                         </Center>
                     </Grid.Col>
@@ -266,7 +267,7 @@ const Lessons: NextPage = (props: any) => {
                         </Grid.Col>
                         <Grid.Col md={4}>
                             <Center>
-                                <AddButton id={Number(courseId)} type="Lesson" />
+                                <AddButton id={Number(courseId)} type="Lesson" courseId={courseId} topicId={topicId} />
                             </Center>
                         </Grid.Col>
                     </Grid>
