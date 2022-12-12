@@ -3,6 +3,7 @@ import { useForm } from "@mantine/form";
 import axios from "axios";
 
 import { urls } from "../../../constants/urls";
+import { useRefreshContext } from "../contexts/refreshDataContexProvider";
 
 interface CategoryData {
     totalCategories: number;
@@ -24,7 +25,10 @@ interface SelectData {
 export const useAddCourse = () => {
     const [active, setActive] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [response, setResponse] = useState('');
     const [categoryData, setCategoryData] = useState<CategoryData | null>(null);
+
+    const { toggleRefreshData } = useRefreshContext();
 
     const nextText = active >= 3 ? "Submit" : "Next";
     const nextStep = () => setActive((current) => (current <= 4 ? current + 1 : current));
@@ -58,8 +62,8 @@ export const useAddCourse = () => {
         try {
             const { data } = await axios.get(`${urls.baseUrl}/category?page=${1}&limit=${1000}`);
             setCategoryData(data);
-            console.log(data);
-        } catch (error) {
+            //console.log(data);
+        } catch (error: any) {
             console.log(error);
         }
     }
@@ -96,9 +100,19 @@ export const useAddCourse = () => {
                 const { data } = await axios.post(`${urls.baseUrl}/course`, courseData, {headers: {
                     'Content-Type': 'multipart/form-data'
                   }});
-                console.log(data);
-            } catch (error) {
+                setResponse(data.message);
+                toggleRefreshData();
+                setLoading(false);
+                setTimeout(() => {
+                    setResponse('');
+                    setActive(0);
+                }, 6000);
+                form.setValues(initialValues);
+                //console.log(data);
+            } catch (error: any) {
                 console.log(error);
+                setLoading(false);
+                setResponse(error.response.data.message);
             }
             
         }
@@ -108,5 +122,5 @@ export const useAddCourse = () => {
         getAllCategories();
     }, []);
 
-    return { active, form, nextText, nextClick, handleSubmit, prevStep, setActive, categorySelectData };
+    return { active, form, nextText, response, loading, nextClick, handleSubmit, prevStep, setActive, categorySelectData };
 }
