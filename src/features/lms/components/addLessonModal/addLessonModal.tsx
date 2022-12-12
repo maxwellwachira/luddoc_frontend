@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import dynamic from 'next/dynamic'
-import { Modal, TextInput, Stack, Button, Container, Text, Stepper, Group, Box, Notification, Divider, Paper } from '@mantine/core';
-import { IconArrowLeft, IconArrowRight, IconCheck, IconUpload, IconX } from '@tabler/icons';
+import dynamic from 'next/dynamic';
+import { Modal, TextInput, Stack, Button, Container, Text, Stepper, Group, Box, Notification, Divider, Paper, Alert } from '@mantine/core';
+import { IconAlertCircle, IconArrowLeft, IconArrowRight, IconCheck, IconUpload, IconX } from '@tabler/icons';
 import { EditorProps } from 'react-draft-wysiwyg'
 const Editor = dynamic<EditorProps>(
     () => import('react-draft-wysiwyg').then((mod) => mod.Editor),
@@ -12,27 +12,22 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { convertToHTML } from 'draft-convert';
 
 import { colors } from '../../../../constants/colors';
-import { useAddCourse } from '../../hooks/useAddCourse';
+import { useAddLesson } from '../../hooks/useAddLesson';
 
 
 interface AddCourseData {
     open: boolean;
     onClose: () => void;
+    courseId?: string;
+    topicId?: string;
 };
 
-const videoSourceSelect = [
-    { value: 'youtube', label: 'YouTube' },
-    { value: 'vimeo', label: 'Vimeo' },
-    { value: 'other', label: 'Other' },
-];
-
-const AddLessonModal = ({ open, onClose }: AddCourseData) => {
-    const [file, setFile] = useState<File | null>(null);
+const AddLessonModal = ({ open, onClose, courseId, topicId }: AddCourseData) => {
     const [editorState, setEditorState] = useState(() =>
         EditorState.createEmpty()
     );
-    const [ convertedContent, setConvertedContent] = useState('');
-    const { active, form, nextText, nextClick, handleSubmit, prevStep, setActive, categorySelectData } = useAddCourse();
+    const [convertedContent, setConvertedContent] = useState('');
+    const { active, form, loading, nextText, response, nextStep, handleSubmit, prevStep, setActive } = useAddLesson();
 
     const handleEditorChange = (state: any) => {
         setEditorState(state);
@@ -42,8 +37,6 @@ const AddLessonModal = ({ open, onClose }: AddCourseData) => {
         let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
         setConvertedContent(currentContentAsHTML);
     }
-
-    console.log(convertedContent)
 
     return (
         <>
@@ -68,27 +61,33 @@ const AddLessonModal = ({ open, onClose }: AddCourseData) => {
                             <Text color={`${colors.secondaryColor}`} size={20}> Click Submit to add lesson </Text>
                             {JSON.stringify(form.errors) === "{}" ? "" : (
                                 <Notification icon={<IconX size={18} />} color="red" title="Error">
-                                    <Text>{form.errors?.courseName}</Text>
-                                    <Text>{form.errors?.CategoryId}</Text>
-                                    <Text>{form.errors?.descriptionTitle}</Text>
-                                    <Text>{form.errors?.descriptionContent}</Text>
+                                    <Text>{form.errors?.lessonTitle}</Text>
                                 </Notification>
                             )}
+                            {response === 'success' ? (
+                                <Alert icon={<IconCheck size={16} />} title="Success" color="green">
+                                    Lesson added Successfully
+                                </Alert>
+                            ) : response ? (
+                                <Alert icon={<IconAlertCircle size={16} />} title="Error!" color="red">
+                                    Reason: {response} <br />
+                                </Alert>
+                            ) : ''}
                         </Stepper.Completed>
                     </Stepper>
-                    <form onSubmit={form.onSubmit(() => handleSubmit(file))}>
+                    <form onSubmit={form.onSubmit(() => handleSubmit(convertedContent, courseId ? courseId : '1', topicId ? topicId : '1'))}>
                         <Stack>
                             <Box hidden={active !== 0 ? true : false}>
                                 <TextInput
                                     label="Lesson Title"
                                     placeholder="Enter the title of the lesson"
-                                    value={form.values.courseName}
-                                    onChange={(event) => form.setFieldValue('courseName', event.currentTarget.value)}
+                                    value={form.values.lessonTitle}
+                                    onChange={(event) => form.setFieldValue('lessonTitle', event.currentTarget.value)}
                                     mt="lg"
-                                    error={form.errors.courseName}
+                                    error={form.errors.lessonTitle}
                                 />
                             </Box>
-                            <Paper hidden={active !== 1 ? true : false} withBorder pb={20} px={10}  pt={10} mt={20} radius={15}>
+                            <Paper hidden={active !== 1 ? true : false} withBorder pb={20} px={10} pt={10} mt={20} radius={15}>
                                 <Editor
                                     editorState={editorState}
                                     toolbarClassName="toolbarClassName"
@@ -109,10 +108,11 @@ const AddLessonModal = ({ open, onClose }: AddCourseData) => {
                                     Back
                                 </Button>
                                 <Button
-                                    onClick={nextClick}
-                                    rightIcon={active >= 3 ? <IconCheck /> : <IconArrowRight />}
+                                    onClick={nextStep}
+                                    rightIcon={active >=2 ? <IconCheck /> : <IconArrowRight />}
                                     color="dark"
-                                    type={active === 4 ? 'submit' : 'button'}
+                                    type={active === 3 ? 'submit' : 'button'}
+                                    loading={loading}
                                 >
                                     {nextText}
                                 </Button>

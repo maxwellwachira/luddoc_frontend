@@ -20,7 +20,7 @@ const CourseTable = ({data}: CourseData) => {
             <td>{element.courseTitle}</td>
             <td>{element.categoryName}</td>
             <td>{element.pricing}</td>
-            <td><TopicButton id={element.id} type="Topics" /></td>
+            <td><TopicButton courseId={element.id} type="Topics" /></td>
             <td>
                 <Group>
                     <EditButton id={element.id} type="course"/>

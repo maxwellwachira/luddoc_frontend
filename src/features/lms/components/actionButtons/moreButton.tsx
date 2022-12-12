@@ -2,11 +2,12 @@ import { useState } from "react";
 import { Text, UnstyledButton, Modal, Group, Badge, Container, Divider, Tabs, Center } from "@mantine/core";
 import axios from "axios";
 import Image from "next/image";
+import { IconBook, IconCalendar, IconCurrencyDollar, IconId, IconInfoSquare, IconMoneybag, IconPhoto, IconReceipt, IconVideo } from "@tabler/icons";
+import DOMPurify from "dompurify";
 
 import { colors } from "../../../../constants/colors";
 import { urls } from "../../../../constants/urls";
 import { useStyles } from './actionButtons.styles';
-import { IconBook, IconCalendar, IconCurrencyDollar, IconId, IconInfoSquare, IconMoneybag, IconPhoto, IconReceipt, IconVideo } from "@tabler/icons";
 
 interface ID {
     id: string;
@@ -43,21 +44,33 @@ interface TopicData {
     updatedAt: string;
 };
 
+interface LessonData {
+    id: string;
+    lessonTitle: string;
+    lessonContent: string;
+    CourseId: string;
+    TopicId: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
 const MoreButton = ({id, type}: ID) => {
     const { classes } = useStyles();
     const [openCourseModal, setOpenCourseModal] = useState(false);
     const [openCategoryModal, setOpenCategoryModal] = useState(false);
     const [openAddTopic, setOpenAddTopic] = useState(false);
+    const [openLessonModal, setOpenLessonModal] = useState(false);
     const [categoryData, setCategoryData] = useState<CategoryData | null>(null);
     const [courseData, setCourseData] = useState<CourseData | null>(null);
     const [topicData, setTopicData] = useState<TopicData | null>(null);
+    const [lessonData, setLessonData] = useState<LessonData | null>(null);
 
     const onClick = async() => {
-        type === 'course' ? setOpenCourseModal(true) :type === 'category' ?  setOpenCategoryModal(true) : setOpenAddTopic(true);
+        type === 'course' ? setOpenCourseModal(true) :type === 'category' ?  setOpenCategoryModal(true) : type === "topic" ? setOpenAddTopic(true) : setOpenLessonModal(true);
         try {
-            const urlPath =  type === "category" ? "category" : type === "course" ? "course" : "topic/single-topic";
+            const urlPath =  type === "category" ? "category" : type === "course" ? "course" : type ==="topic" ? "topic/single-topic" : "lesson/single-lesson";
             const { data } = await axios.get(`${urls.baseUrl}/${urlPath}/${id}`);
-            type === "category" ? setCategoryData(data) : type === "course" ? setCourseData(data) : setTopicData(data);
+            type === "category" ? setCategoryData(data) : type === "course" ? setCourseData(data) : type === "topic" ? setTopicData(data) : setLessonData(data);
             console.log(data)
         } catch (error) {
             console.log(error);
@@ -65,11 +78,18 @@ const MoreButton = ({id, type}: ID) => {
     } 
 
     const onClose = () => {
-        type === 'course' ? setOpenCourseModal(false) :type === 'category' ?  setOpenCategoryModal(false) : setOpenAddTopic(false);
+        type === 'course' ? setOpenCourseModal(false) :type === 'category' ?  setOpenCategoryModal(false) : type === "topic" ? setOpenAddTopic(false) : setOpenLessonModal(false);
     }
 
     const parseDate = (input: string) => {
         return new Date(input).toLocaleString();
+    }
+
+    const capitalizeFirsLetter = (sentence: string) => {
+        const words = sentence.split(" ");
+        return words.map(word => {
+            return word.charAt(0).toUpperCase() + word.slice(1);
+        }).join(" ");
     }
    
     return (
@@ -216,6 +236,49 @@ const MoreButton = ({id, type}: ID) => {
                         <Text><IconCalendar size={16} color={`${colors.secondaryColor}`}/> Updated At:  </Text>
                         <Badge color="dark" size="lg">{topicData ? parseDate(topicData.updatedAt): ""}</Badge>
                     </Group>
+                </Container>
+            </Modal>
+
+            <Modal
+                opened={openLessonModal}
+                onClose={onClose}
+                size="600px"
+                title={<Text weight={600} color={`${colors.secondaryColor}`} size={28} >{lessonData?.lessonTitle}</Text>}
+            >    
+                <Divider />
+                <Container>
+
+                    <Tabs defaultValue="basicInfo" color="teal">
+                        <Tabs.List>
+                            <Tabs.Tab value="basicInfo" icon={<IconInfoSquare size={14} />}>Basic Info</Tabs.Tab>
+                            <Tabs.Tab value="content" icon={<IconPhoto size={14} />}>Content</Tabs.Tab>
+                        </Tabs.List>
+                        <Tabs.Panel value="basicInfo" pt="xs"> 
+                            <Group mt="lg" position="apart">
+                                <Text><IconId size={16} color={`${colors.secondaryColor}`}/> Lesson Id: </Text>
+                                <Badge color="dark" size="lg">{lessonData?.id}</Badge>
+                            </Group>
+                            <Group mt="lg" position="apart">
+                                <Text><IconReceipt size={16} color={`${colors.secondaryColor}`}/> Lesson Title: </Text>
+                                <Badge color="dark" size="lg">{lessonData ? capitalizeFirsLetter(lessonData.lessonTitle) : '' }</Badge>
+                            </Group>
+                            <Group mt="lg" position="apart">
+                                <Text><IconCalendar size={16} color={`${colors.secondaryColor}`}/> Created At:  </Text>
+                                <Badge color="dark" size="lg">{lessonData ? parseDate(lessonData.createdAt): ""}</Badge>
+                            </Group>
+
+                            <Group mt="lg" mb="xl" position="apart">
+                                <Text><IconCalendar size={16} color={`${colors.secondaryColor}`}/> Updated At :  </Text>
+                                <Badge color="dark" size="lg">{lessonData ? parseDate(lessonData.updatedAt): ""}</Badge>
+                            </Group>
+                        </Tabs.Panel>
+                        <Tabs.Panel value="content" pt="xs"> 
+                            <Text mb="lg">Lesson Content: </Text>
+                            {lessonData ? 
+                                <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(lessonData.lessonContent)}}/> : ''
+                            }
+                        </Tabs.Panel>
+                    </Tabs>
                 </Container>
             </Modal>
         </>

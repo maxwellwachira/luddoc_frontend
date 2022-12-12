@@ -19,10 +19,13 @@ const DeleteButton = ({id, type}: ID) => {
             "Are you sure you want to delete this category? This will delete all courses in this category" : 
             type === "course" ?
             "Are you sure you want to delete this course?" :
-            "Are you sure you want to delete this topic?";
+            type === "topic" ?
+            "Are you sure you want to delete this topic?" :
+            "Are you sure you want to delete this lesson?";
+
         const confirmation = confirm(confirmMessage);
         if(confirmation){
-            const urlPath = type === "category" ? "category" : type === "course" ? "course" : "topic";
+            const urlPath = type === "category" ? "category" : type === "course" ? "course" : type === "topic" ? "topic" : "lesson";
             try {
                 await axios.delete(`${urls.baseUrl}/${urlPath}/${id}`);
                 toggleRefreshData();

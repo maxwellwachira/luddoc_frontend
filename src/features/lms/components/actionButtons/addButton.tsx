@@ -11,6 +11,8 @@ import AddLessonModal from '../addLessonModal/addLessonModal';
 interface UserID {
     id: number;
     type: string;
+    courseId?: string;
+    topicId?: string;
 }
 
 const selectData = [
@@ -21,7 +23,7 @@ const selectData = [
 ];
 
 
-const AddButton = ({id, type}: UserID) => {
+const AddButton = ({id, type, courseId, topicId}: UserID) => {
     const [openAddCourse, setOpenAddCourse] = useState(false);
     const [openAddCategory, setOpenAddCategory] = useState(false);
     const [openAddTopic, setOpenAddTopic] = useState(false);
@@ -48,7 +50,7 @@ const AddButton = ({id, type}: UserID) => {
             <AddCourseModal open={openAddCourse}  selectData={selectData} onClose={onClose}/>
             <AddCategoryModal  open={openAddCategory} onClose={onClose}/>
             <AddTopicModal  open={openAddTopic} onClose={onClose} id={id} />
-            <AddLessonModal open={openAddLesson} onClose={onClose}/>
+            <AddLessonModal open={openAddLesson} onClose={onClose} topicId={topicId} courseId={courseId}/>
         </>
     )
 }

@@ -10,11 +10,18 @@ interface LessonData {
    }[]
 };
 
+const capitalizeFirsLetter = (sentence: string) => {
+    const words = sentence.split(" ");
+    return words.map((word) => {
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    }).join(" ");
+}
+
 const LessonsTable = ({data}: LessonData) => {
     const rows =  data.map((element)=> (
         <tr key={element.lessonTitle}>
             <td>{element.count}</td>
-            <td>{element.lessonTitle}</td>
+            <td>{capitalizeFirsLetter(element.lessonTitle)}</td>
             <td>
                 <Group>
                     <EditButton id={element.id} type="lesson" />

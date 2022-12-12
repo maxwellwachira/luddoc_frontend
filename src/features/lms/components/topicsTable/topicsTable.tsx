@@ -7,6 +7,7 @@ interface TopicData {
     id: string;
     count: number;
     topicName: string;
+    courseId: string;
    }[]
 };
 
@@ -15,7 +16,7 @@ const TopicsTable = ({data}: TopicData) => {
         <tr key={element.topicName}>
             <td>{element.count}</td>
             <td>{element.topicName}</td>
-            <td><TopicButton id={element.id} type="Lessons"/></td>
+            <td><TopicButton type="Lessons" courseId={element.courseId} topicId={element.id}/></td>
             <td>
                 <Group>
                     <EditButton id={element.id} type="topic" />

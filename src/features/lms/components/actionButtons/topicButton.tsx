@@ -5,16 +5,18 @@ import { urls } from "../../../../constants/urls";
 import { useStyles } from './actionButtons.styles';
 
 interface ID {
-    id: string;
     type: string;
+    courseId: string;
+    topicId?: string;
+
 }
 
-const TopicButton = ({id, type}: ID) => {
+const TopicButton = ({courseId, topicId, type}: ID) => {
     const { classes } = useStyles();
     const router = useRouter();
     
     const onClick = () => {
-        router.push(`${urls.frontEnd}/topics/${id}${type === "lessons" ? "/lessons/1" : ''}`).then(() => router.reload());
+        router.push(`${urls.frontEnd}/topics/${courseId}${type === "Lessons" ? `/lessons/${topicId}` : ''}`).then(() => router.reload());
     }
     
     return (

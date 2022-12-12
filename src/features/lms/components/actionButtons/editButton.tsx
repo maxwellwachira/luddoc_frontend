@@ -1,12 +1,20 @@
 import { useState } from "react";
-import { Alert, Button, Container, Modal, Stack, Text, TextInput, UnstyledButton, Select, Radio, NumberInput, Stepper, Group, Box, Textarea, FileInput, Notification, Divider } from "@mantine/core";
+import { Alert, Button, Container, Modal, Stack, Text, TextInput, UnstyledButton, Select, Radio, NumberInput, Stepper, Group, Box, Textarea, FileInput, Notification, Divider, Paper } from "@mantine/core";
 import { IconAlertCircle, IconArrowLeft, IconArrowRight, IconCheck, IconCross, IconUpload, IconX } from "@tabler/icons";
+import { EditorProps } from 'react-draft-wysiwyg';
+import dynamic from 'next/dynamic';
+const Editor = dynamic<EditorProps>(
+    () => import('react-draft-wysiwyg').then((mod) => mod.Editor),
+    { ssr: false }
+);
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 import { useStyles } from './actionButtons.styles';
 import { colors } from "../../../../constants/colors";
 import { useEditCategory } from "../../hooks/useEditCategory";
 import { useEditCourse } from "../../hooks/useEditCourse";
 import { useEditTopic } from "../../hooks/useEditTopic";
+import { useEditLesson } from "../../hooks/useEditLesson";
 
 interface ID {
     id: string;
@@ -24,20 +32,23 @@ const EditButton = ({id, type}: ID) => {
     const [openEditCourse, setOpenEditCourse] = useState(false);
     const [openEditCategory, setOpenEditCategory] = useState(false);
     const [openEditTopic, setOpenEditTopic] = useState(false);
+    const [openEditLesson, setOpenEditLesson] = useState(false);
     const [file, setFile] = useState<File | null>(null);
     const {form, loading, response, handleSubmit } = useEditCategory(id, type);
     const { active, courseForm, nextText, courseResponse, nextClick, handleCourseSubmit, prevStep, setActive, categorySelectData} = useEditCourse(id, type);
     const {topicForm, topicLoading, topicResponse, topicHandleSubmit } = useEditTopic(id, type);
+    const { editorState, lessonActive, lessonForm, lessonNext, lessonloading, lessonresponse, lessonNextStep, lessonHandleSubmit, lessonPrevStep, setLessonActive, handleEditorChange } = useEditLesson(id, type);
 
     const onClick = async() => {
-        type === 'category' ? setOpenEditCategory(true) : type === "course" ? setOpenEditCourse(true) : setOpenEditTopic(true);
+        type === 'category' ? setOpenEditCategory(true) : type === "course" ? setOpenEditCourse(true) : type ==="topic" ? setOpenEditTopic(true) : setOpenEditLesson(true);
     } 
     const onClose = () => {
-        type === 'category' ? setOpenEditCategory(false) : type === "course" ? setOpenEditCourse(false) : setOpenEditTopic(false);
+        type === 'category' ? setOpenEditCategory(false) : type === "course" ? setOpenEditCourse(false) : type === "topic" ? setOpenEditTopic(false) : setOpenEditLesson(false);
     }
-    const pricingChange = () => {
-        if(courseForm.values.pricing === 'free') courseForm.setFieldValue('amount', 0);
-    }
+
+    
+
+    
     return (
         <>
             <UnstyledButton onClick={onClick} className={`${classes.button} ${classes.editButton}`}>
@@ -314,6 +325,88 @@ const EditButton = ({id, type}: ID) => {
                             >
                                 Edit Topic
                             </Button>
+                        </Stack>
+                    </form>
+                </Container>
+            </Modal>
+
+            <Modal
+                opened={openEditLesson}
+                onClose={onClose}
+                size="600"
+                title={<Text weight={600} color={`${colors.secondaryColor}`} size={28}>Edit Lesson</Text>}
+            >
+                <Divider mb="xl" />
+                <Container>
+
+                    <Stepper active={lessonActive} onStepClick={setLessonActive} breakpoint="sm" color="dark">
+                        <Stepper.Step label="First step" description="Lesson Title" allowStepSelect={lessonActive > 0}>
+                            <Text color={`${colors.secondaryColor}`} size={20}>Step 1 content: Lesson Title</Text>
+                        </Stepper.Step>
+                        <Stepper.Step label="Second step" description="Lesson Content" allowStepSelect={lessonActive > 1}>
+                            <Text color={`${colors.secondaryColor}`} size={20}>Step 2 content: Lesson Content</Text>
+                        </Stepper.Step>
+
+                        <Stepper.Completed>
+                            <Text color={`${colors.secondaryColor}`} size={20}> Click Submit to edit lesson </Text>
+                            {JSON.stringify(lessonForm.errors) === "{}" ? "" : (
+                                <Notification icon={<IconX size={18} />} color="red" title="Error">
+                                    <Text>{lessonForm.errors?.lessonTitle}</Text>
+                                </Notification>
+                            )}
+                            {lessonresponse === 'success' ? (
+                                <Alert icon={<IconCheck size={16} />} title="Success" color="green">
+                                    Lesson edited Successfully
+                                </Alert>
+                            ) : lessonresponse ? (
+                                <Alert icon={<IconAlertCircle size={16} />} title="Error!" color="red">
+                                    Reason: {lessonresponse} <br />
+                                </Alert>
+                            ) : ''}
+                        </Stepper.Completed>
+                    </Stepper>
+                    <form onSubmit={lessonForm.onSubmit(() => lessonHandleSubmit())}>
+                        <Stack>
+                            <Box hidden={lessonActive !== 0 ? true : false}>
+                                <TextInput
+                                    label="Lesson Title"
+                                    placeholder="Enter the title of the lesson"
+                                    value={lessonForm.values.lessonTitle}
+                                    onChange={(event) => lessonForm.setFieldValue('lessonTitle', event.currentTarget.value)}
+                                    mt="lg"
+                                    error={lessonForm.errors.lessonTitle}
+                                />
+                            </Box>
+                            <Paper hidden={lessonActive !== 1 ? true : false} withBorder pb={20} px={10} pt={10} mt={20} radius={15}>
+                                <Editor
+                                    editorState={editorState}
+                                    toolbarClassName="toolbarClassName"
+                                    wrapperClassName="wrapperClassName"
+                                    editorClassName="editorClassName"
+                                    onEditorStateChange={handleEditorChange}
+                                />
+                            </Paper>
+                            <Group position="center" my="xl">
+                                <Button
+                                    variant="outline"
+                                    onClick={lessonPrevStep}
+                                    type="button"
+                                    leftIcon={<IconArrowLeft />}
+                                    color="dark"
+                                    disabled={lessonActive === 0 ? true : false}
+                                >
+                                    Back
+                                </Button>
+                                <Button
+                                    onClick={lessonNextStep}
+                                    rightIcon={lessonActive >=2 ? <IconCheck /> : <IconArrowRight />}
+                                    color="dark"
+                                    type={lessonActive === 3 ? 'submit' : 'button'}
+                                    loading={lessonloading}
+                                >
+                                    {lessonNext}
+                                </Button>
+                            </Group>
                         </Stack>
                     </form>
                 </Container>
