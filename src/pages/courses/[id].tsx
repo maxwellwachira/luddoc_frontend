@@ -265,6 +265,13 @@ const SingleCourse: NextPage = (props: any) => {
         }
     }
 
+    const capitalizeFirsLetter = (sentence: string) => {
+        const words = sentence.split(" ");
+        return words.map((word) => {
+            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+        }).join(" ");
+    }
+
     useEffect(() => {
         isEnrolled();
         getCourseTopics();
@@ -360,7 +367,7 @@ const SingleCourse: NextPage = (props: any) => {
                                         {topicData?.topics.map((element: any) => (
                                             <Accordion.Item value={element.id} key={element.id}>
                                                 <Accordion.Control>
-                                                    {element.topicName}
+                                                    {capitalizeFirsLetter(element.topicName)}
                                                 </Accordion.Control>
                                             </Accordion.Item>
                                         ))}
