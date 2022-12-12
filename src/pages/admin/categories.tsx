@@ -23,6 +23,27 @@ interface CategoryData {
     }[]
 };
 
+interface CourseData {
+    totalCourses: number;
+    totalPages: number;
+    currentPage: number;
+    courses: {
+        id: string;
+        courseTitle: string;
+        CategoryId: string;
+        coursePricing: string;
+        courseDescriptionTitle: string;
+        courseDescriptionContent: string;
+        courseThumbnailUrl: string;
+        hasVideo: boolean;
+        videoSource: string;
+        videoUrl: string;
+        grannysId: string;
+        createdAt: string;
+        updatedAt: string;
+    }[]
+};
+
 interface TableData {
     id: string;
     count: number;
@@ -34,6 +55,7 @@ interface TableData {
 const Tutors: NextPage = () => { 
     const [activePage, setPage] = useState(1);
     const [categoryData, setCategoryData] = useState<CategoryData | null>(null);
+    const [courseData, setCourseData] = useState<CourseData | null>(null);
     const { refreshData} = useRefreshContext();
     const limit = 5;
 
@@ -47,6 +69,16 @@ const Tutors: NextPage = () => {
             console.log(error);
         }
     }
+
+    const getCourseCount = async(categoryId: string) => {
+        try {
+            const { data } = await axios.get(`${urls.baseUrl}/course/category/${categoryId}`);
+            setCourseData(data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    
 
     const tableData = () => {
         let data: TableData[] = [];
