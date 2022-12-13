@@ -165,7 +165,7 @@ const Lessons: NextPage = (props: any) => {
 
     const getTopicLessons = async () => {
         try {
-            const { data } = await axios.get(`${urls.baseUrl}/lesson/${topicId}?page=${activePage}&limit=${limit}`);
+            const { data } = await axios.get(`${urls.baseUrl}/lesson/topic/${topicId}?page=${activePage}&limit=${limit}`);
             setLessonData(data);
         } catch (error) {
             console.log("error", error);
