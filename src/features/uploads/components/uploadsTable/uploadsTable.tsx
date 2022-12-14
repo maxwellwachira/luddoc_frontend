@@ -29,7 +29,7 @@ const UploadsTable = ({data, type}: CategoryData) => {
                     <Box style={{display: type === 'student' ? 'none' : ''}}>
                         <EditButton id={element.id} type="category"/>
                     </Box>
-                    <Box style={{display: type === 'student' ? 'none' : ''}}>
+                    <Box style={{display: type !== 'admin' ? 'none' : ''}}>
                         <DeleteButton id={element.id} type="category" />
                     </Box>
                 </Group>
