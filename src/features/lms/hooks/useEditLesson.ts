@@ -1,17 +1,12 @@
 import { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
 import axios from "axios";
-import dynamic from 'next/dynamic';
-import { EditorState, convertFromHTML, ContentState } from 'draft-js';
-import { convertToHTML } from 'draft-convert';
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import htmlToDraft from 'html-to-draftjs';
+import draftToHtml from 'draftjs-to-html';
 
 import { urls } from "../../../constants/urls";
 import { useRefreshContext } from "../contexts/refreshDataContexProvider";
-// const ContentState = dynamic(
-//     () => import('react-draft-wysiwyg').then((mod) => mod.ContentState),
-//     { ssr: false }
-// );
-
 
 interface LessonData {
     id: string;
@@ -38,7 +33,7 @@ export const useEditLesson = (id: string, type: string) => {
     const [lessonresponse, setLessonResponse] = useState('');
     const [convertedContent, setConvertedContent] = useState('');
 
-    const blocks = convertFromHTML(lessonData.lessonContent);
+    const blocks = htmlToDraft(lessonData.lessonContent);
     const [editorState, setEditorState] = useState(() =>
         EditorState.createWithContent(ContentState.createFromBlockArray(blocks.contentBlocks, blocks.entityMap))
     );
@@ -53,7 +48,7 @@ export const useEditLesson = (id: string, type: string) => {
         convertContentToHTML();
     }
     const convertContentToHTML = () => {
-        let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
+        let currentContentAsHTML = draftToHtml(convertToRaw(editorState.getCurrentContent()));
         setConvertedContent(currentContentAsHTML);
     }
     
@@ -73,7 +68,7 @@ export const useEditLesson = (id: string, type: string) => {
             const { data } = await axios.get(`${urls.baseUrl}/lesson/single-lesson/${id}?page=${1}&limit=${1000}`);
             setLessonData(data);
             lessonForm.setFieldValue("lessonTitle", data.lessonTitle);
-            const htmlBlocks = convertFromHTML(data.lessonContent);
+            const htmlBlocks = htmlToDraft(data.lessonContent);
             setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(htmlBlocks.contentBlocks, htmlBlocks.entityMap)));
             console.log(data);
         } catch (error) {

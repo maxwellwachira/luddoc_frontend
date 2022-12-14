@@ -7,9 +7,9 @@ const Editor = dynamic<EditorProps>(
     () => import('react-draft-wysiwyg').then((mod) => mod.Editor),
     { ssr: false }
 );
-import { EditorState } from 'draft-js';
+import { EditorState, convertToRaw } from 'draft-js';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { convertToHTML } from 'draft-convert';
+import draftToHtml from 'draftjs-to-html';
 
 import { colors } from '../../../../constants/colors';
 import { useAddLesson } from '../../hooks/useAddLesson';
@@ -22,6 +22,7 @@ interface AddCourseData {
     topicId?: string;
 };
 
+
 const AddLessonModal = ({ open, onClose, courseId, topicId }: AddCourseData) => {
     const [editorState, setEditorState] = useState(() =>
         EditorState.createEmpty()
@@ -33,10 +34,13 @@ const AddLessonModal = ({ open, onClose, courseId, topicId }: AddCourseData) => 
         setEditorState(state);
         convertContentToHTML();
     }
+
     const convertContentToHTML = () => {
-        let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
+        let currentContentAsHTML = draftToHtml(convertToRaw(editorState.getCurrentContent()));
         setConvertedContent(currentContentAsHTML);
     }
+
+    console.log(convertedContent)
 
     return (
         <>
