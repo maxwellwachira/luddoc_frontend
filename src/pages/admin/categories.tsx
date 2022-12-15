@@ -48,7 +48,7 @@ interface TableData {
     id: string;
     count: number;
     categoryName: string;
-    numberOfCourses: number;
+    numberOfCourses: number | string;
 };
 
 
@@ -56,38 +56,54 @@ const Tutors: NextPage = () => {
     const [activePage, setPage] = useState(1);
     const [categoryData, setCategoryData] = useState<CategoryData | null>(null);
     const [courseData, setCourseData] = useState<CourseData | null>(null);
+    const [courseCountArr, setCourseCountArr] = useState<Array<number> | null>(null);
     const { refreshData} = useRefreshContext();
     const limit = 5;
+
+
+    const getCourseCount = async(categoryId: string) => {
+        try {
+            const { data } = await axios.get(`${urls.baseUrl}/course/category/${categoryId}`);
+            setCourseData(data);
+            return data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const getCourseCountArr = async (data: CategoryData) => {
+        let courseCountArr : Array<number> = [];
+        console.log(data)
+        if (data) {
+            console.log("first")
+            await Promise.all(data?.categories.map(async(el, index) => {
+                const courseData = await getCourseCount(el.id);
+                if (courseData) courseCountArr.push(courseData.totalCourses);
+            }))
+        }
+        console.log(courseCountArr)
+        setCourseCountArr(courseCountArr);
+    }
 
 
     const getAllCategories = async() => {
         try {
             const { data } = await axios.get(`${urls.baseUrl}/category?page=${activePage}&limit=${limit}`);
             setCategoryData(data);
-            console.log(data);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    const getCourseCount = async(categoryId: string) => {
-        try {
-            const { data } = await axios.get(`${urls.baseUrl}/course/category/${categoryId}`);
-            setCourseData(data);
+            await getCourseCountArr(data);
+            //console.log(data);
         } catch (error) {
             console.log(error);
         }
     }
     
-
     const tableData = () => {
         let data: TableData[] = [];
         categoryData?.categories.map((el, index) => {
             let categoryData = {
                 id: el.id,
+                numberOfCourses: courseCountArr && courseCountArr.length > 0 ? courseCountArr[index] : 'Loading...',
                 count: (activePage - 1) * limit + ++index,
                 categoryName: el.categoryName,
-                numberOfCourses: 2
             }
             data.push(categoryData);
         });

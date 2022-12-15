@@ -8,7 +8,7 @@ interface CategoryData {
     id: string;
     count: number;
     categoryName: string;
-    numberOfCourses: number;
+    numberOfCourses: number | string;
    }[]
 };
 
