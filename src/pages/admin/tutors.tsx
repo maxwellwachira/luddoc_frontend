@@ -12,6 +12,7 @@ import tutorImage from '../../assets/tutor.jpg';
 import axios from 'axios';
 import { urls } from '../../constants/urls';
 import { useRefreshContext } from '../../features/lms/contexts/refreshDataContexProvider';
+import { useAuthContext } from '../../features/authentication';
 
 interface TutorData {
     totalTutors: number;
@@ -46,6 +47,7 @@ const Tutors: NextPage = () => {
     const [tutorData, setTutorData] = useState<TutorData | null>(null);
     const { refreshData } = useRefreshContext();
     const router = useRouter();
+    const { auth, userMe } = useAuthContext();
 
     const limit = 10;
     const getAllTutors = async() => {
@@ -76,8 +78,11 @@ const Tutors: NextPage = () => {
     }
 
     useEffect(() => {
+        if(!auth || userMe.role !== "admin") router.push('/auth/logout');
         getAllTutors();
     }, [activePage, refreshData]);
+
+    if (!auth || userMe.role !== "admin") return <></>
  
     return (
         <>

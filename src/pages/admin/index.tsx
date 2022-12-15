@@ -100,12 +100,12 @@ interface TutorData {
 
 
 const Dashboard: NextPage = () => { 
-    const router = useRouter();
     const { classes } = useStyles();
     const [courseData, setCourseData] = useState<CourseData | null>(null);
     const [categoryData, setCategoryData] = useState<CategoryData | null>(null);
     const [studentData, setStudentData] = useState<StudentData | null>(null);
     const [tutorData, setTutorData] = useState<TutorData | null>(null);
+    const router = useRouter();
     const { auth, userMe } = useAuthContext();
 
     const getGreetings = () => {
@@ -160,14 +160,14 @@ const Dashboard: NextPage = () => {
     }
 
     useEffect(() =>{
-        //if(!auth || userMe.role !== "admin") router.push('/auth/sign-in');
+        if(!auth || userMe.role !== "admin") router.push('/auth/logout');
         getAllCourses();
         getAllCategories();
         getAllStudents();
         getAllTutors();
     }, []);
 
-    // if (!auth || userMe.role !== "admin") return <></>
+    if (!auth || userMe.role !== "admin") return <></>
     return (
         <>
             <Head>

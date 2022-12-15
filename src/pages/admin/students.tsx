@@ -11,6 +11,7 @@ import { colors } from '../../constants/colors';
 import axios from 'axios';
 import { urls } from '../../constants/urls';
 import { useRefreshContext } from '../../features/lms/contexts/refreshDataContexProvider';
+import { useAuthContext } from '../../features/authentication';
 
 
 interface StudentData {
@@ -47,6 +48,7 @@ const Students: NextPage = () => {
     const [studentData, setStudentData] = useState<StudentData | null>(null);
     const { refreshData } = useRefreshContext();
     const router = useRouter();
+    const { auth, userMe } = useAuthContext();
 
     const limit = 10;
     const getAllStudents = async() => {
@@ -77,8 +79,11 @@ const Students: NextPage = () => {
     }
 
     useEffect(() => {
+        if(!auth || userMe.role !== "admin") router.push('/auth/logout');
         getAllStudents();
     }, [activePage, refreshData]);
+
+    if (!auth || userMe.role !== "admin") return <></>
  
     return (
         <>

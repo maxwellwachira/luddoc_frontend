@@ -10,6 +10,8 @@ import { AddButton, CourseTable, ExcelButton, PdfButton, PrintButton } from '../
 import { colors } from '../../constants/colors';
 import { useRefreshContext } from '../../features/lms/contexts/refreshDataContexProvider';
 import { urls } from '../../constants/urls';
+import { useAuthContext } from '../../features/authentication';
+import { useRouter } from 'next/router';
 
 
 interface CategoryData {
@@ -50,7 +52,6 @@ interface TableData {
     count: number;
     courseTitle: string;
     categoryName: string;
-    enrolledStudents: string;
     pricing: string;
 };
 
@@ -60,13 +61,15 @@ const Tutors: NextPage = () => {
     const [courseData, setCourseData] = useState<CourseData | null>(null);
     const [categoryData, setCategoryData] = useState<CategoryData | null>(null);
     const { refreshData } = useRefreshContext();
+    const { auth, userMe } = useAuthContext();
+    const router = useRouter();
     const limit = 5;
 
     const getAllCourses = async() => {
         try {
             const { data } = await axios.get(`${urls.baseUrl}/course?page=${activePage}&limit=${limit}`);
             setCourseData(data);
-            console.log(data);
+            //console.log(data);
         } catch (error) {
             
         }
@@ -89,7 +92,6 @@ const Tutors: NextPage = () => {
                 count: (activePage - 1) * limit + ++index,
                 courseTitle: el.courseTitle,
                 categoryName: categoryData ? categoryData.categories.filter((element) => element.id === el.CategoryId)[0].categoryName : "",
-                enrolledStudents: '2',
                 pricing: el.coursePricing
             }
             data.push(courseData);
@@ -99,11 +101,13 @@ const Tutors: NextPage = () => {
     }
 
     useEffect(() => {
+        if(!auth || userMe.role !== "admin") router.push('/auth/logout');
         getAllCategories();
         getAllCourses();
        
     }, [activePage, refreshData]);
 
+    if (!auth || userMe.role !== "admin") return <></>
 
     return (
         <>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -9,6 +9,7 @@ import { AdminLayout } from '../../layouts/adminLayout/adminLayout';
 import { PaymentsTable, ExcelButton, PdfButton, PrintButton, SearchBar  } from '../../features/payments';
 import { colors } from '../../constants/colors';
 import moneyImage from '../../assets/money.jpg';
+import { useAuthContext } from '../../features/authentication';
 
 const data = [
     {
@@ -48,6 +49,13 @@ const data = [
 const Payments: NextPage = () => { 
     const [activePage, setPage] = useState(1);
     const router = useRouter();
+    const { auth, userMe } = useAuthContext();
+
+    useEffect(() =>{
+        if(!auth || userMe.role !== "admin") router.push('/auth/logout');
+    }, []);
+
+    if (!auth || userMe.role !== "admin") return <></>
  
     return (
         <>

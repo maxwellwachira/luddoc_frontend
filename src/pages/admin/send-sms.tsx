@@ -1,37 +1,46 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { Badge, Button, Center, Container, createStyles, Grid, Group, Paper, Radio, Text, Textarea, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 
 import { AdminLayout } from '../../layouts/adminLayout/adminLayout';
 import { colors } from '../../constants/colors';
+import { useAuthContext } from '../../features/authentication';
 
 
 const useStyles = createStyles((theme) => ({
     button: {
         background: `${colors.secondaryColor}`,
-
+        
         '&:hover': {
             background: `${colors.secondaryColor}`,
             opacity: 0.7
         }
     },
-
+    
 }));
 
-const Tutors: NextPage = () => { 
+const Tutors: NextPage = () => {
     const { classes } = useStyles();
+    const { auth, userMe } = useAuthContext();
+    const router = useRouter();
     const form = useForm({
         initialValues: {
-          recipients: '',
-          topic: '',
-          message: '',
+            recipients: '',
+            topic: '',
+            message: '',
         }
     });
 
- 
+    useEffect(() =>{
+        if(!auth || userMe.role !== "admin") router.push('/auth/logout');
+    }, []);
+
+    if (!auth || userMe.role !== "admin") return <></>
+
     return (
         <>
             <Head>
@@ -45,7 +54,7 @@ const Tutors: NextPage = () => {
                         <Grid>
                             <Grid.Col md={6}>
                                 <Center>
-                                    <Image 
+                                    <Image
                                         src='/SMS.gif'
                                         height={600}
                                         width={500}
@@ -58,7 +67,7 @@ const Tutors: NextPage = () => {
                                     <Text>Airtime Balance</Text>
                                     <Badge color='green' size='lg'>452.00 KES</Badge>
                                 </Group>
-                               <Radio.Group
+                                <Radio.Group
                                     name="recipients"
                                     orientation="vertical"
                                     label="Recipient(s)"
@@ -72,7 +81,7 @@ const Tutors: NextPage = () => {
                                     <Radio value="enterNumber" label="Enter Number" color='dark' />
                                 </Radio.Group>
 
-                                <form onSubmit={form.onSubmit(() => {})}>
+                                <form onSubmit={form.onSubmit(() => { })}>
                                     <TextInput
                                         required
                                         label="Subject"
@@ -93,7 +102,7 @@ const Tutors: NextPage = () => {
                                     </Center>
 
                                 </form>
-                               
+
                             </Grid.Col>
                         </Grid>
                     </Paper>

@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import { Button, Center, Container, Grid, Paper, Stack, Text } from '@mantine/core';
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 
 import { AdminLayout } from '../../layouts/adminLayout/adminLayout';
@@ -8,7 +10,8 @@ import { colors } from '../../constants/colors';
 import { useAuthContext } from '../../features/authentication';
 
 const LiveSession: NextPage = () => {
-    const { userMe } = useAuthContext();
+    const { auth, userMe } = useAuthContext();
+    const router = useRouter();
 
     const getGreetings = () => {
         const date = new Date();
@@ -21,6 +24,12 @@ const LiveSession: NextPage = () => {
 
         return greetings;
     }
+
+    useEffect(() =>{
+        if(!auth || userMe.role !== "admin") router.push('/auth/logout');
+    }, []);
+
+    if (!auth || userMe.role !== "admin") return <></>
 
     return (
         <>

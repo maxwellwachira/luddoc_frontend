@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Alert, Badge, Button, Center, Container, Divider, FileInput, Grid, Group, Modal, Pagination, Paper, Select, Stack, Text } from '@mantine/core';
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { useForm } from '@mantine/form';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -68,10 +69,11 @@ const Uploads: NextPage = () => {
     const [loading, setLoading] = useState(false);
     const [response, setResponse] = useState("");
     const { refreshData, toggleRefreshData } = useRefreshContext();
+    const router = useRouter();
 
     const limit = 12;
 
-    const { userMe } = useAuthContext();
+    const { auth, userMe } = useAuthContext();
 
     const form = useForm({
         initialValues: {
@@ -137,6 +139,7 @@ const Uploads: NextPage = () => {
     }
 
     useEffect(() => {
+        if(!auth || userMe.role !== "admin") router.push('/auth/logout');
         getAllCategories();
         getAllUploads();
         form.setFieldValue('UserId', userMe.id);
@@ -162,6 +165,8 @@ const Uploads: NextPage = () => {
             }
         }
     }
+
+    if (!auth || userMe.role !== "admin") return <></>
 
     return (
         <>

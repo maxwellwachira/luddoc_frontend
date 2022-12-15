@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import axios from 'axios';
 import { Badge, Center, Container, Grid, Group, Pagination, Paper, Text } from '@mantine/core';
 
@@ -10,6 +11,7 @@ import { AddButton, CategoriesTable, ExcelButton, PdfButton, PrintButton } from 
 import { colors } from '../../constants/colors';
 import { urls } from '../../constants/urls';
 import { useRefreshContext } from '../../features/lms/contexts/refreshDataContexProvider';
+import { useAuthContext } from '../../features/authentication';
 
 interface CategoryData {
     totalCategories: number;
@@ -52,50 +54,46 @@ interface TableData {
 };
 
 
-const Tutors: NextPage = () => { 
+const Tutors: NextPage = () => {
     const [activePage, setPage] = useState(1);
     const [categoryData, setCategoryData] = useState<CategoryData | null>(null);
-    const [courseData, setCourseData] = useState<CourseData | null>(null);
     const [courseCountArr, setCourseCountArr] = useState<Array<number> | null>(null);
-    const { refreshData} = useRefreshContext();
+    const { refreshData } = useRefreshContext();
+    const { auth, userMe } = useAuthContext();
+    const router = useRouter();
     const limit = 5;
 
 
-    const getCourseCount = async(categoryId: string) => {
+    const getCourseCount = async (categoryId: string) => {
         try {
             const { data } = await axios.get(`${urls.baseUrl}/course/category/${categoryId}`);
-            setCourseData(data);
-            return data
+            return data;
         } catch (error) {
             console.log(error);
         }
     }
     const getCourseCountArr = async (data: CategoryData) => {
-        let courseCountArr : Array<number> = [];
-        console.log(data)
+        let courseCountArr: Array<number> = [];
         if (data) {
-            console.log("first")
-            await Promise.all(data?.categories.map(async(el, index) => {
+            await Promise.all(data?.categories.map(async (el, index) => {
                 const courseData = await getCourseCount(el.id);
                 if (courseData) courseCountArr.push(courseData.totalCourses);
             }))
         }
-        console.log(courseCountArr)
         setCourseCountArr(courseCountArr);
     }
 
 
-    const getAllCategories = async() => {
+    const getAllCategories = async () => {
         try {
             const { data } = await axios.get(`${urls.baseUrl}/category?page=${activePage}&limit=${limit}`);
             setCategoryData(data);
             await getCourseCountArr(data);
-            //console.log(data);
         } catch (error) {
             console.log(error);
         }
     }
-    
+
     const tableData = () => {
         let data: TableData[] = [];
         categoryData?.categories.map((el, index) => {
@@ -110,11 +108,14 @@ const Tutors: NextPage = () => {
 
         return data;
     }
-    
+
 
     useEffect(() => {
+        if(!auth || userMe.role !== "admin") router.push('/auth/logout');
         getAllCategories();
     }, [activePage, refreshData]);
+
+    if (!auth || userMe.role !== "admin") return <></>
 
     return (
         <>
@@ -129,7 +130,7 @@ const Tutors: NextPage = () => {
                         <Grid>
                             <Grid.Col md={6}>
                                 <Center>
-                                    <Image 
+                                    <Image
                                         src='/categories.svg'
                                         height={350}
                                         width={400}
@@ -138,23 +139,23 @@ const Tutors: NextPage = () => {
                             </Grid.Col>
                             <Grid.Col md={6} p="xl">
                                 <Text size={28} color={`${colors.secondaryColor}`} weight={600} mt="lg" >Luddoc Courses Categories</Text>
-                                <Group position="apart" mt="lg"> 
+                                <Group position="apart" mt="lg">
                                     <Text>Total Categories</Text>
                                     <Badge color='dark' size='lg'>{categoryData?.totalCategories} categories</Badge>
                                 </Group>
-                                <Group position="apart" mt="lg"> 
+                                <Group position="apart" mt="lg">
                                     <Text>Categories Added this month</Text>
                                     <Badge color='dark' size='lg'>Loading ...</Badge>
                                 </Group>
-                                <Group position="apart" mt="lg"> 
+                                <Group position="apart" mt="lg">
                                     <Text>Category with highest enrollment</Text>
                                     <Badge color='dark' size='lg'>Loading ...</Badge>
                                 </Group>
-                               
+
                             </Grid.Col>
                         </Grid>
                     </Paper>
-                    <Paper mt={40}  p={10}>
+                    <Paper mt={40} p={10}>
                         <Grid>
                             <Grid.Col md={8}>
                                 <Group>
@@ -165,7 +166,7 @@ const Tutors: NextPage = () => {
                             </Grid.Col>
                             <Grid.Col md={4}>
                                 <Center>
-                                    <AddButton id={1} type="Category"/>
+                                    <AddButton id={1} type="Category" />
                                 </Center>
                             </Grid.Col>
                         </Grid>
@@ -173,8 +174,8 @@ const Tutors: NextPage = () => {
 
                     <Paper>
                         <CategoriesTable data={tableData()} />
-                        <Center mt="xl"> 
-                            <Pagination total={categoryData ? categoryData.totalPages : 2} color='gray' page={activePage} onChange={setPage}/>
+                        <Center mt="xl">
+                            <Pagination total={categoryData ? categoryData.totalPages : 2} color='gray' page={activePage} onChange={setPage} />
                         </Center>
                     </Paper>
 
