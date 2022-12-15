@@ -4,6 +4,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 import { colors } from '../../constants/colors';
 import { useAuthContext } from '../../features/authentication';
@@ -44,12 +45,13 @@ const Uploads: NextPage = () => {
     const [activePage, setPage] = useState(1);
     const [uploadData, setUploadData] = useState<UploadData | null>(null);
     const { refreshData } = useRefreshContext();
+    const router = useRouter();
 
     const limit = 12;
 
-    const { userMe } = useAuthContext();
+    const { auth } = useAuthContext();
 
-    const getAllUploads = async() => {
+    const getAllUploads = async () => {
         try {
             const { data } = await axios.get(`${urls.baseUrl}/upload`);
             setUploadData(data);
@@ -68,57 +70,59 @@ const Uploads: NextPage = () => {
                 fileName: el.fileName,
                 fileExtension: el.fileExtension,
                 type: el.fileType,
-                size: Number((el.fileSize / (10**6)).toFixed(2)),
+                size: Number((el.fileSize / (10 ** 6)).toFixed(2)),
                 createdAt: (new Date(el.createdAt)).toLocaleString()
             }
             data.push(upload);
         });
-        
+
         return data;
     }
 
     useEffect(() => {
+        if (!auth) router.push('/auth/logout');
         getAllUploads();
     }, [activePage, refreshData]);
 
+    if (!auth) return <></>
 
     return (
         <>
-         <Head>
-            <title>Luddoc | Students Uploads</title>
-            <meta name="description" content="Live session" />
-            <link rel="icon" href="/favicon.ico" />
-        </Head>
-        <StudentLayout>
-            <Container>
-                <Paper withBorder  mt='xl'>
-                    <Grid>
-                        <Grid.Col md={6}>
-                            <Center>
-                                <Image 
-                                    src='/upload.svg'
-                                    height={350}
-                                    width={400}
-                                />
-                            </Center>
-                        </Grid.Col>
-                        <Grid.Col md={6}>
-                            <Stack p='xl' style={{minHeight: 350}} justify="center" align="center">
-                            <Text size={28} color={`${colors.secondaryColor}`} weight={600} mt="lg" >Uploads</Text>
-                                <Group position='apart'>
-                                    <Text>Total Uploads:</Text>
-                                    <Badge color="dark">{uploadData?.totalUploads} Uploads</Badge>
-                                </Group>
-                            </Stack>
-                        </Grid.Col>
-                    </Grid>
-                </Paper>
-                <UploadsTable data={tableData()} type="student"/>
-                <Center mt="xl"> 
-                    <Pagination total={uploadData ? uploadData.totalPages : 2} color='gray' page={activePage} onChange={setPage}/>
-                </Center>
-            </Container>
-        </StudentLayout>
+            <Head>
+                <title>Luddoc | Students Uploads</title>
+                <meta name="description" content="Live session" />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+            <StudentLayout>
+                <Container>
+                    <Paper withBorder mt='xl'>
+                        <Grid>
+                            <Grid.Col md={6}>
+                                <Center>
+                                    <Image
+                                        src='/upload.svg'
+                                        height={350}
+                                        width={400}
+                                    />
+                                </Center>
+                            </Grid.Col>
+                            <Grid.Col md={6}>
+                                <Stack p='xl' style={{ minHeight: 350 }} justify="center" align="center">
+                                    <Text size={28} color={`${colors.secondaryColor}`} weight={600} mt="lg" >Uploads</Text>
+                                    <Group position='apart'>
+                                        <Text>Total Uploads:</Text>
+                                        <Badge color="dark">{uploadData?.totalUploads} Uploads</Badge>
+                                    </Group>
+                                </Stack>
+                            </Grid.Col>
+                        </Grid>
+                    </Paper>
+                    <UploadsTable data={tableData()} type="student" />
+                    <Center mt="xl">
+                        <Pagination total={uploadData ? uploadData.totalPages : 2} color='gray' page={activePage} onChange={setPage} />
+                    </Center>
+                </Container>
+            </StudentLayout>
         </>
     )
 

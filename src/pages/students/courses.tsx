@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ActionIcon, Badge, Button, Card, Center, Container, createStyles, Grid, Group, RingProgress, Stack, Text } from '@mantine/core';
+import { Button, Card, Center, Container, createStyles, Grid, RingProgress, Stack, Text } from '@mantine/core';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -8,15 +8,10 @@ import { getCookie } from 'cookies-next';
 
 import { StudentLayout } from '../../layouts/studentLayout/studentLayout';
 import { colors } from '../../constants/colors';
-import { courseThumbnail } from '../courses';
 import axios from 'axios';
 import { urls } from '../../constants/urls';
+import { useAuthContext } from '../../features/authentication';
 
-interface ApiData {
-    ID: number;
-    progress: number;
-    title: string;
-}
 
 interface Enrolments {
     totalEnrolments: number;
@@ -28,7 +23,7 @@ interface Enrolments {
         CourseId: string;
         progress: number;
         createdAt: string;
-        updatedAt:string;
+        updatedAt: string;
     }[];
 };
 
@@ -45,7 +40,7 @@ interface CourseData {
     videoUrl: string;
     grannysId: string;
     createdAt: string;
-    updatedAt:string;
+    updatedAt: string;
 };
 
 interface CompleteData extends CourseData {
@@ -75,18 +70,19 @@ const Certificates: NextPage = () => {
     const [buttonLoading, setButtonLoading] = useState(0);
     const [enrolments, setEnrolments] = useState<CompleteData[] | null>(null);
     const [courseData, setCourseData] = useState<CourseData | null>(null);
-
+    const router = useRouter();
+    const { auth, userMe } = useAuthContext();
     let token = getCookie('accessToken');
 
     const onClick = (id: number) => {
         setButtonLoading(id);
     }
 
-    const getEnrolmentAndCourseData =  async (enrols: Enrolments) => {
+    const getEnrolmentAndCourseData = async (enrols: Enrolments) => {
         let data: CompleteData[] = [];
-        enrols.enrolments.map(async(el) => {
+        enrols.enrolments.map(async (el) => {
             const courseInfo: CourseData = await getCourseById(el.CourseId);
-            const completeData = {...courseInfo, ...{progress: el.progress}};
+            const completeData = { ...courseInfo, ...{ progress: el.progress } };
             data.push(completeData);
         })
         return data;
@@ -94,8 +90,8 @@ const Certificates: NextPage = () => {
 
     const getEnrolments = async () => {
         try {
-            const { data } = await axios.get(`${urls.baseUrl}/enrolment/me`, {headers: {Authorization: `Bear ${token}`}});
-            const enrolmentData =  await getEnrolmentAndCourseData(data);
+            const { data } = await axios.get(`${urls.baseUrl}/enrolment/me`, { headers: { Authorization: `Bear ${token}` } });
+            const enrolmentData = await getEnrolmentAndCourseData(data);
             setEnrolments(enrolmentData);
         } catch (error) {
             console.log(error);
@@ -115,75 +111,78 @@ const Certificates: NextPage = () => {
     const item = enrolments?.map((element: CompleteData) => (
         <Grid.Col sm={6} md={4} key={element.id}>
             <Center>
-                <Card shadow="md" p="lg" radius="lg" withBorder style={{maxWidth: 300}}>
+                <Card shadow="md" p="lg" radius="lg" withBorder style={{ maxWidth: 300 }}>
                     <Card.Section>
-                    <Center>
-                            <Image 
-                                 src={`${urls.baseUrl}/image?filePath=public${element?.courseThumbnailUrl}`}
+                        <Center>
+                            <Image
+                                src={`${urls.baseUrl}/image?filePath=public${element?.courseThumbnailUrl}`}
                                 width="400"
                                 height="250"
                             />
-                    </Center>
+                        </Center>
                     </Card.Section>
 
                     <Stack justify="space-between" className={classes.cardHeight} align="center">
                         <Text mt="md">
                             {element.courseTitle}
                         </Text>
-                        <RingProgress 
+                        <RingProgress
                             sections={[{ value: Number(`${element.progress}`), color: 'green' }]}
                             label={
-                            <Text color="green" weight={700} align="center" size="xl">
-                                {element.progress}%
-                            </Text>
+                                <Text color="green" weight={700} align="center" size="xl">
+                                    {element.progress}%
+                                </Text>
                             }
                         />
 
-                        <Button 
-                            variant="light" 
-                            fullWidth  
-                            radius="md" 
+                        <Button
+                            variant="light"
+                            fullWidth
+                            radius="md"
                             className={classes.button}
                             component='a'
                             href={`/learn/${element.id}`}
-                            onClick ={() => onClick(Number(element.id))}
-                            loading = {buttonLoading === Number(element.id) ? true : false}
+                            onClick={() => onClick(Number(element.id))}
+                            loading={buttonLoading === Number(element.id) ? true : false}
                         >
-                            {element.progress === 0 ? "Start" : "continue"} Learning      
+                            {element.progress === 0 ? "Start" : "continue"} Learning
                         </Button>
                     </Stack>
                 </Card>
             </Center>
         </Grid.Col>
-  ));
+    ));
 
-  useEffect(() => {
-    getEnrolments();
-  }, []);
+    useEffect(() => {
+        if (!auth) router.push('/auth/logout');
+        getEnrolments();
+    }, [])
+
+    if (!auth) return <></>
 
 
     return (
         <>
-         <Head>
-            <title>Luddoc Skills For Life</title>
-            <meta name="description" content="Luddoc Skills For Life" />
-            <link rel="icon" href="/favicon.ico" />
-        </Head>
-        <StudentLayout>
-            <Container>
-                <Text
-                    my="xl" 
-                    weight={600} 
-                    size={25} 
-                    color={`${colors.secondaryColor}`}
-                >
-                    My Courses
-                </Text>
-                <Grid>
-                    {item}
-                </Grid>
-            </Container>
-        </StudentLayout>
+            <Head>
+                <title>Luddoc Skills For Life</title>
+                <meta name="description" content="Luddoc Skills For Life" />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+            <StudentLayout>
+                <Container>
+                    <Text
+                        my="xl"
+                        weight={600}
+                        size={25}
+                        color={`${colors.secondaryColor}`}
+                    >
+                        My Courses
+                    </Text>
+                    <Grid>
+                        {item}
+                    </Grid>
+                </Container>
+            </StudentLayout>
         </>
     )
 }
