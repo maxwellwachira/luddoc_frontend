@@ -7,6 +7,7 @@ import {
   IconCertificate,
   IconLogout,
   IconUpload,
+  IconSitemap,
 } from '@tabler/icons';
 import { useRouter } from 'next/router';
 
@@ -35,16 +36,16 @@ export function StudentLayout({children}: Props ) {
 
   const data = [
     { 
+      label: 'Main Page', 
+      icon: IconSitemap, 
+      link: '/', 
+      active: router.pathname === '/' ? true : false
+    },
+    { 
       label: 'Dashboard', 
       icon: IconGauge, 
       link: '/students', 
       active: router.pathname === '/students' ? true : false
-    },
-    { 
-      label: 'All Courses', 
-      icon: IconSchool, 
-      link: '/courses', 
-      active: router.pathname === '/courses' ? true : false
     },
     {
       label: 'My Courses',

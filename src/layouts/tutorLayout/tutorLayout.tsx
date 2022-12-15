@@ -2,6 +2,7 @@ import { useState, ReactNode } from 'react';
 import { Burger, Header, Navbar, Group, Code, MediaQuery, ScrollArea, Text, AppShell } from '@mantine/core';
 import {
   IconLogout,
+  IconSitemap,
   IconUpload,
   IconVideo,
 } from '@tabler/icons';
@@ -31,6 +32,12 @@ export function TutorLayout({children}: Props ) {
 
 
   const data = [
+    { 
+      label: 'Main Page', 
+      icon: IconSitemap, 
+      link: '/', 
+      active: router.pathname === '/' ? true : false
+    },
     {
       label: 'Live Session',
       icon: IconVideo,

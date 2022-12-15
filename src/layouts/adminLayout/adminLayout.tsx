@@ -3,13 +3,13 @@ import { Burger, Header, Navbar, Group, Code, MediaQuery, ScrollArea, Text, AppS
 import {
   IconGauge,
   IconMessage,
-  IconCoin,
   IconSchool,
   IconUsers,
   IconCertificate,
   IconLogout,
   IconVideo,
   IconUpload,
+  IconSitemap,
 } from '@tabler/icons';
 import { useRouter } from 'next/router';
 
@@ -36,6 +36,12 @@ export function AdminLayout({children}: Props ) {
   }
 
   const data = [
+    { 
+      label: 'Main Page', 
+      icon: IconSitemap, 
+      link: '/', 
+      active: router.pathname === '/' ? true : false
+    },
     { 
       label: 'Dashboard', 
       icon: IconGauge, 
