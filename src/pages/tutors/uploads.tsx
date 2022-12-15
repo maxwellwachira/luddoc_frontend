@@ -209,7 +209,7 @@ const Uploads: NextPage = () => {
                         </Grid.Col>
                     </Grid>
                 </Paper>
-                <UploadsTable data={tableData()}/>
+                <UploadsTable data={tableData()} type="tutor"/>
                 <Center mt="xl"> 
                     <Pagination total={uploadData ? uploadData.totalPages : 2} color='gray' page={activePage} onChange={setPage}/>
                 </Center>
