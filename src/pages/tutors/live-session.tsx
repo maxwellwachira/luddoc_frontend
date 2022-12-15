@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { Button, Center, Container, Grid, Stack, Text } from '@mantine/core';
 import type { NextPage } from 'next';
 import Head from 'next/head';
@@ -8,7 +10,8 @@ import { colors } from '../../constants/colors';
 import { useAuthContext } from '../../features/authentication';
 
 const LiveSession: NextPage = () => {
-    const { userMe } = useAuthContext();
+    const { auth, userMe } = useAuthContext();
+    const router = useRouter();
 
     const getGreetings = () => {
         const date = new Date();
@@ -21,6 +24,12 @@ const LiveSession: NextPage = () => {
 
         return greetings;
     }
+
+    useEffect(() =>{
+        if(!auth || userMe.role !== "tutor") router.push('/auth/logout');
+    }, []);
+
+    if (!auth || userMe.role !== "tutor") return <></>
 
     return (
         <>

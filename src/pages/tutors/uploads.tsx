@@ -6,6 +6,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import axios from 'axios';
 import { IconAlertCircle, IconCheck, IconUpload } from '@tabler/icons';
+import { useRouter } from 'next/router';
 
 import { TutorLayout } from '../../layouts/tutorLayout/tutorLayout';
 import { colors } from '../../constants/colors';
@@ -68,10 +69,10 @@ const Uploads: NextPage = () => {
     const [loading, setLoading] = useState(false);
     const [response, setResponse] = useState("");
     const { refreshData, toggleRefreshData } = useRefreshContext();
-
+    const router = useRouter();
     const limit = 12;
 
-    const { userMe } = useAuthContext();
+    const { auth, userMe } = useAuthContext();
 
     const form = useForm({
         initialValues: {
@@ -137,6 +138,7 @@ const Uploads: NextPage = () => {
     }
 
     useEffect(() => {
+        if(!auth || userMe.role !== "tutor") router.push('/auth/logout');
         getAllCategories();
         getAllUploads();
         form.setFieldValue('UserId', userMe.id);
@@ -162,6 +164,8 @@ const Uploads: NextPage = () => {
             }
         }
     }
+
+    if (!auth || userMe.role !== "tutor") return <></>
 
     return (
         <>
