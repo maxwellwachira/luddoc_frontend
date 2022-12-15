@@ -96,7 +96,7 @@ export function AdminLayout({children}: Props ) {
     { 
       label: 'Logout', 
       icon: IconLogout, 
-      link: '/auth/sign-in',  
+      link: '/auth/logout',  
       active: router.pathname === '/admin/logout' ? true : false,
     },
   ];
