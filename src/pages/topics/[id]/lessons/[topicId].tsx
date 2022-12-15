@@ -12,6 +12,7 @@ import { colors } from '../../../../constants/colors';
 import { PrintButton, ExcelButton, PdfButton, AddButton } from '../../../../features/lms';
 import { useRefreshContext } from '../../../../features/lms/contexts/refreshDataContexProvider';
 import LessonsTable from '../../../../features/lms/components/lessonsTable/lessonTable';
+import { useAuthContext } from '../../../../features/authentication';
 
 interface TopicData {
     totalTopics: number;
@@ -139,6 +140,7 @@ const Lessons: NextPage = (props: any) => {
     const [lessonData, setLessonData] = useState<LessonData | null>(null);
     const { refreshData } = useRefreshContext();
     const router = useRouter();
+    const { auth, userMe } = useAuthContext();
     const pathNameArr = router.asPath.split('/');
     const courseId = pathNameArr[2];
     const topicId = pathNameArr[pathNameArr.length - 1];
@@ -187,8 +189,11 @@ const Lessons: NextPage = (props: any) => {
     }
 
     useEffect(() => {
+        if(!auth || userMe.role !== "admin") router.push('/auth/logout');
         getTopicLessons();
     }, [activePage, refreshData]);
+
+    if (!auth || userMe.role !== "admin") return <></>
 
     return (
         <>

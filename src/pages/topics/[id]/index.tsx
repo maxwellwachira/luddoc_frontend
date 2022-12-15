@@ -12,6 +12,7 @@ import { urls } from '../../../constants/urls';
 import { PrintButton, ExcelButton, PdfButton, AddButton } from '../../../features/lms';
 import TopicsTable from '../../../features/lms/components/topicsTable/topicsTable';
 import { useRefreshContext } from '../../../features/lms/contexts/refreshDataContexProvider';
+import { useAuthContext } from '../../../features/authentication';
 
 interface TopicData {
     totalTopics: number;
@@ -95,6 +96,7 @@ const Topics: NextPage = (props: any) => {
     const [topicData, setTopicData] = useState<TopicData | null>(null);
     const { refreshData } = useRefreshContext();
     const router = useRouter();
+    const { auth, userMe } = useAuthContext();
     const pathNameArr = router.asPath.split('/');
     const courseId = pathNameArr[pathNameArr.length - 1];
     const limit = 10;
@@ -144,9 +146,11 @@ const Topics: NextPage = (props: any) => {
 
 
     useEffect(() => {
+        if(!auth || userMe.role !== "admin") router.push('/auth/logout');
         getCourseTopics();
     }, [activePage, refreshData]);
 
+    if (!auth || userMe.role !== "admin") return <></>
 
     return (
         <>
