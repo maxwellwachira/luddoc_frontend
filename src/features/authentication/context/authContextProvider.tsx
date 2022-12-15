@@ -1,6 +1,7 @@
 import {ReactNode, useState, useEffect, createContext, useContext} from 'react';
 import { getCookie, setCookie, deleteCookie } from 'cookies-next';
 import axios from "axios"
+import { useRouter } from 'next/router';
 
 import { urls } from '../../../constants/urls';
 
@@ -33,6 +34,7 @@ export const AuthContextProvider = ({children}: Props) => {
         role:'',
         id: ''
     });
+    const router = useRouter();
 
     const readTokenCookie = () => {
         let token = getCookie('accessToken');
@@ -56,6 +58,7 @@ export const AuthContextProvider = ({children}: Props) => {
         deleteCookie('accessToken', {path:'/'});
         deleteCookie('refreshToken', {path:'/'});
         setAuth(false);
+        router.push('/auth/sign-in');
     }
 
     const readUserMe = async () => {
