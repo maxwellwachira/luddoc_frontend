@@ -4,6 +4,7 @@ import axios from "axios";
 import { setCookie } from "cookies-next";
 
 import { urls } from "../../../constants/urls";
+import { useAuthContext } from "../context/authContextProvider";
 
 export const useLoginUser = () => {
     const [response, setResponse] = useState('');
@@ -13,6 +14,7 @@ export const useLoginUser = () => {
         firstName: '',
         lastName:''
     });
+    const { setAuth } = useAuthContext();
 
     const initialValues =  {
         email: '',
@@ -49,7 +51,8 @@ export const useLoginUser = () => {
                     setCookie('refreshToken', data.refreshToken);
                     userMe(data.accessToken);
                     setLoading(false);
-                    console.log(userMeData)
+                    setAuth(true);
+                    //console.log(userMeData)
 
                 }
             } catch (error: any) {

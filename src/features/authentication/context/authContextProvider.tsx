@@ -19,6 +19,7 @@ type AuthContextType = {
         disabled?: boolean;
     };
     logout: () => void;
+    setAuth: any;
 }
 
 interface Props {
@@ -84,7 +85,7 @@ export const AuthContextProvider = ({children}: Props) => {
     }, [auth]);
 
     return (
-        <AuthContext.Provider value = {{auth, userMe, logout}}>
+        <AuthContext.Provider value = {{auth, userMe, logout, setAuth}}>
             {children}
         </AuthContext.Provider>
     );
