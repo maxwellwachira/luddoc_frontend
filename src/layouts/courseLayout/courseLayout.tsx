@@ -13,7 +13,7 @@ interface LinksGroupProps {
   label: string;
   initiallyOpened?: boolean;
   active?: boolean;
-  links: { label: string; link: string, topicId: string, lessonId: string; courseId: string, content: string; active: boolean, onClick: () => void }[];
+  links: { label: string; link: string, disabled: boolean, topicId: string, lessonId: string; courseId: string, content: string; active: boolean, onClick: () => void }[];
 }
 
 type Props = {
@@ -47,6 +47,8 @@ const GetLinks = (data: LinksGroupProps | null) => {
       key={arrlink.lessonId}
       // href={`/learn/${arrlink.courseId}${arrlink.link}`}
       onClick={() => arrlink.onClick()}
+      disabled={arrlink.disabled}
+      style = {{cursor: arrlink.disabled ? "not-allowed" : "pointer"}}
     >
       {arrlink.label}
     </UnstyledButton>

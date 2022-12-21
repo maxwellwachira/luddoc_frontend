@@ -57,6 +57,15 @@ interface Topic {
     updatedAt: string;
 }
 
+interface EnrolmentData {
+    id: string;
+    progress: number;
+    CourseId: string;
+    UserId: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
 
 const capitalizeFirsLetter = (sentence: string) => {
     const words = sentence.split(" ");
@@ -107,6 +116,7 @@ const Learn: NextPage = () => {
     const [topicData, setTopicData] = useState<TopicData | null>(null);
     const [lessonData, setLessonData] = useState<LessonData | null>(null);
     const [topicLessonData, setTopicLessonData] = useState<TopicLessonData[] | null>(null);
+    const [enrolmentData, seEnrolmentData] = useState<EnrolmentData | null>(null);
     const [topic, setTopic] = useState(0);
     const [lesson, setLesson] = useState(1);
 
@@ -120,6 +130,8 @@ const Learn: NextPage = () => {
             const { data } = await axios.get(`${urls.baseUrl}/enrolment/course/${courseId}/user/${userMe.id}`);
             if (data.exists) {
                 setEnrolled(true);
+                seEnrolmentData(data.data);
+                return data.data;
             } else {
                 setEnrolled(false);
             }
@@ -137,6 +149,31 @@ const Learn: NextPage = () => {
         }
     }
 
+    const setTopicAndLessonIds = async(topicData: TopicData, topicLessonData: TopicLessonData[]) => {
+        setLoading(true);
+        try {
+            const { data } = await axios.get(`${urls.baseUrl}/lesson/${courseId}?page=1&limit=10000`);
+            
+            const enrolmentData = await isEnrolled();
+            const position = Math.floor((enrolmentData.progress * data.totalLessons / 100) -1);
+            const lessonId = data.lessons[position].id;
+            const realTopicId = data.lessons[position].TopicId;
+            const topicInfo = topicData.topics.filter(topic => {
+                return topic.id === realTopicId
+            });
+            const topicId = topicLessonData.findIndex(object => {
+                return object.topicTitle === topicInfo[0].topicName
+            });
+            setLesson(Number(lessonId));
+            setTopic(topicId);
+            setLoading(false);
+        } catch (error) {
+            setLoading(false);
+            console.log(error);
+        }
+    }
+
+
     const getCourseTopics = async () => {
         const lessonTopicData: TopicLessonData[] = [];
         ; try {
@@ -151,6 +188,7 @@ const Learn: NextPage = () => {
                 lessonTopicData.push(topicLessonData);
             }));
             setTopicLessonData(lessonTopicData);
+            await setTopicAndLessonIds(data, lessonTopicData);
         } catch (error) {
             console.log("error", error);
         }
@@ -170,6 +208,7 @@ const Learn: NextPage = () => {
                 topicId: index.toString(),
                 content: el.lessonContent,
                 courseId: courseId,
+                disabled: Number(el.id) > lesson ? true : false,
                 active: (topic === index && Number(el.id) === lesson) ? true : false,
                 onClick: () => {
                     setLesson(Number(el.id));
@@ -193,10 +232,34 @@ const Learn: NextPage = () => {
         return data;
     }
 
-    useEffect(() => {
-        getCourseTopics();
-    }, []);
+    const updateProgress = async(progress: number) => {
+        try {
+            const { data } = await axios.put(`${urls.baseUrl}/enrolment/${enrolmentData?.id}`, { progress });
+            if (data.message === "success"){
+                await isEnrolled();
+                return true;
+            };
+            return false;
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
+    const computeProgress = async() => {
+        setLoading(true);
+        try {
+            const { data } = await axios.get(`${urls.baseUrl}/lesson/${courseId}?page=1&limit=10000`);
+            const position = data.lessons.findIndex((object: any) => {
+                return Number(object.id) === lesson;
+            });
+            const calcProgress = Math.floor((position + 1) * 100 / data.totalLessons);
+            if (enrolmentData && calcProgress > enrolmentData.progress) await updateProgress(calcProgress);
+            setLoading(false);
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    }
 
     const goBack = () => {
         const topicData = topicLessonData ? topicLessonData[topic] : null;
@@ -218,13 +281,14 @@ const Learn: NextPage = () => {
         }
     }
 
-    const markComplete = () => {
+    const markComplete = async() => {
         const topicData = topicLessonData ? topicLessonData[topic] : null;
         if (topicData) {
             const position = topicData.topicLessons.findIndex(object => {
                 return Number(object.id) === lesson
             })
             if (position >= 0) {
+                await computeProgress();
                 if (topicData.topicLessons.length > position + 1) {
                     const lessonId = Number(topicData.topicLessons[position + 1].id);
                     setLesson(lessonId);
@@ -239,6 +303,12 @@ const Learn: NextPage = () => {
             }
         }
     }
+
+  
+    useEffect(() => {
+        isEnrolled();
+        getCourseTopics();
+    }, []);
 
     return (
         <>
