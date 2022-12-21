@@ -7,24 +7,33 @@ import { UserButton } from '../../components/userButton/userButton';
 import { useStyles } from './courseLayout.styles';
 import { colors } from '../../constants/colors';
 import { useAuthContext } from '../../features/authentication';
+import PageLoader from '../../components/pageLoader/pageLoader';
 
 interface LinksGroupProps {
   label: string;
   initiallyOpened?: boolean;
-  links: { label: string; link: string, id: string, courseId: string, active: boolean}[];
+  active?: boolean;
+  links: { label: string; link: string, topicId: string, lessonId: string; courseId: string, content: string; active: boolean, onClick: () => void }[];
 }
 
 type Props = {
   children: ReactNode;
-  data: LinksGroupProps[];
+  data: LinksGroupProps[] | null;
 }
 
-const GetLinks = (data: LinksGroupProps) => {
+const GetLinks = (data: LinksGroupProps | null) => {
   const router = useRouter();
   const { classes, theme } = useStyles();
+
+
+  if (!data) {
+    return (
+      <PageLoader />
+    )
+  }
   const hasLinks = Array.isArray(data.links);
   const [opened, setOpened] = useState(data.initiallyOpened || false);
-  
+
   const ChevronIcon = theme.dir === 'ltr' ? IconChevronRight : IconChevronLeft;
 
   const onClick = () => {
@@ -32,25 +41,25 @@ const GetLinks = (data: LinksGroupProps) => {
   }
 
   const items = (hasLinks ? data.links : []).map((arrlink) => (
-    <Text<'a'>
-      component="a"
+    <UnstyledButton
+      // component='a'
       className={`${classes.link} ${arrlink.active ? classes.activeGroupLink : ""}`}
-      href={arrlink.link}
-      key={arrlink.id}
-      onClick={() => router.push(`/learn/${arrlink.courseId}#${arrlink.id}`).then(()=> router.reload())}
+      key={arrlink.lessonId}
+      // href={`/learn/${arrlink.courseId}${arrlink.link}`}
+      onClick={() => arrlink.onClick()}
     >
       {arrlink.label}
-    </Text>
+    </UnstyledButton>
   ));
 
   return (
     <>
-      <UnstyledButton onClick={onClick} className={`${classes.control}`} >
+      <UnstyledButton onClick={onClick} className={`${classes.control} ${data.active ? classes.active : ""}`} >
         <Group position="apart" spacing={0}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            {hasLinks ? 
+            {hasLinks ?
               (<Box ml="md">{data.label}</Box>) : ""}
-            
+
           </Box>
           {hasLinks && (
             <ChevronIcon
@@ -71,7 +80,7 @@ const GetLinks = (data: LinksGroupProps) => {
 
 
 
-export function CourseLayout({children, data}: Props, ) {
+export function CourseLayout({ children, data }: Props,) {
   const router = useRouter();
   const [opened, setOpened] = useState(false);
   const { classes, theme } = useStyles();
@@ -83,14 +92,14 @@ export function CourseLayout({children, data}: Props, ) {
     return initials.toUpperCase();
   }
 
-  
 
-  const navlinks = data.map((item: any) => <GetLinks {...item} key={item.topicId} />);
+
+  const navlinks = data?.map((item: any) => <GetLinks {...item} key={item.topicId} />);
 
   return (
-      <AppShell
-        header={
-         <Header height={50} p="md" style={{background: 'black'}}>
+    <AppShell
+      header={
+        <Header height={50} p="md" style={{ background: 'black' }}>
           <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
             <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
               <Burger
@@ -103,31 +112,31 @@ export function CourseLayout({children, data}: Props, ) {
             </MediaQuery>
 
             <Group position="apart" className={classes.header}>
-                <Text weight={600} size={25}>Luddoc</Text>
-                <Code sx={{ fontWeight: 700 }}>S.F.L</Code>
+              <Text weight={600} size={25}>Luddoc</Text>
+              <Code sx={{ fontWeight: 700 }}>S.F.L</Code>
             </Group>
           </div>
         </Header>
-        }
-        navbar = {
-          <Navbar height={`cal(100vh - 50px)`} hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 300, lg: 400 }} p="sm" className={classes.navbar} >
-            <Navbar.Section grow className={classes.links} component={ScrollArea}>
-                <div className={classes.linksInner}>{navlinks}</div>
-            </Navbar.Section>
+      }
+      navbar={
+        <Navbar height={`cal(100vh - 50px)`} hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 300, lg: 410 }} p="sm" className={classes.navbar} >
+          <Navbar.Section grow className={classes.links} component={ScrollArea}>
+            <div className={classes.linksInner}>{navlinks}</div>
+          </Navbar.Section>
 
-            <Navbar.Section className={classes.footer}>
-              <UserButton
-                  initials={getInitials(`${userMe.firstName} ${userMe.lastName}`)}
-                  name={`${userMe.firstName} ${userMe.lastName}`}
-                  email={`${userMe.email}`}
-                />
-            </Navbar.Section>   
+          <Navbar.Section className={classes.footer}>
+            <UserButton
+              initials={getInitials(`${userMe.firstName} ${userMe.lastName}`)}
+              name={`${userMe.firstName} ${userMe.lastName}`}
+              email={`${userMe.email}`}
+            />
+          </Navbar.Section>
         </Navbar>
-        }
-      >
-        {children}
-      </AppShell>
-    
+      }
+    >
+      {children}
+    </AppShell>
+
   );
 }
 
