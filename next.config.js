@@ -15,6 +15,6 @@ module.exports = {
     ignoreDuringBuilds: true,
   },
   images: {
-    domains: ['mygrannyslove.com', 'localhost', 'luddoc-institute.com', 'backend.luddoc-institute.com'],
+    domains: ['mygrannyslove.com', 'localhost', 'luddoc-institute.com', 'backend.luddoc-institute.com', 'player.vimeo.com', 'vimeo.com'],
   }
 }
