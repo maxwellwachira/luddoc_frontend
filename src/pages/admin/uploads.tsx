@@ -139,11 +139,14 @@ const Uploads: NextPage = () => {
     }
 
     useEffect(() => {
-        if(!auth || userMe.role !== "admin") router.push('/auth/logout');
-        getAllCategories();
-        getAllUploads();
-        form.setFieldValue('UserId', userMe.id);
-    }, [activePage, refreshData]);
+        if(!auth) router.push('/auth/logout');
+        if(userMe.role){
+            if(userMe.role !== "admin") router.push('/403');
+            getAllCategories();
+            getAllUploads();
+            form.setFieldValue('UserId', userMe.id);
+        }
+    }, [activePage, refreshData, userMe]);
 
 
     const handleSubmit = async() => {
@@ -166,7 +169,7 @@ const Uploads: NextPage = () => {
         }
     }
 
-    if (!auth || userMe.role !== "admin") return <></>
+    if (!auth) return <></>
 
     return (
         <>
