@@ -13,6 +13,7 @@ import { colors } from '../../constants/colors';
 import { urls } from '../../constants/urls';
 import { IconArrowLeft, IconBook, IconCheck, IconClipboard, IconDashboard, IconPlus, IconQuestionMark } from '@tabler/icons';
 import { useAuthContext } from '../../features/authentication';
+import { truncate } from 'fs';
 
 interface TopicData {
     totalTopics: number;
@@ -75,8 +76,22 @@ const capitalizeFirsLetter = (sentence: string) => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
+    const getInitialLessonId = async() => {
+        try {
+            const response = await fetch(`${urls.baseUrl}/lesson/${params?.id}?page=1&limit=10000`);
+            const data = await response.json();
+            const lessonId = Number(data.lessons[0].id);
+            return lessonId
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const initialLessonId = await getInitialLessonId();
     return {
-        props: {}
+        props: {
+            initialLessonId
+        }
     }
 }
 
@@ -109,16 +124,16 @@ export const getStaticPaths: GetStaticPaths = async () => {
     }
 }
 
-const Learn: NextPage = () => {
+const Learn: NextPage = (props : any) => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
-    const [enrolled, setEnrolled] = useState(false);
+    const [enrolled, setEnrolled] = useState(true);
     const [topicData, setTopicData] = useState<TopicData | null>(null);
     const [lessonData, setLessonData] = useState<LessonData | null>(null);
     const [topicLessonData, setTopicLessonData] = useState<TopicLessonData[] | null>(null);
     const [enrolmentData, seEnrolmentData] = useState<EnrolmentData | null>(null);
     const [topic, setTopic] = useState(0);
-    const [lesson, setLesson] = useState(1);
+    const [lesson, setLesson] = useState(props.initialLessonId);
 
     const { auth, userMe } = useAuthContext();
 
@@ -155,7 +170,8 @@ const Learn: NextPage = () => {
             const { data } = await axios.get(`${urls.baseUrl}/lesson/${courseId}?page=1&limit=10000`);
             
             const enrolmentData = await isEnrolled();
-            const position = Math.floor((enrolmentData.progress * data.totalLessons / 100) -1);
+            let position = Math.floor((enrolmentData.progress * data.totalLessons / 100) -1);
+            if (position < 0) position = 0;
             const lessonId = data.lessons[position].id;
             const realTopicId = data.lessons[position].TopicId;
             const topicInfo = topicData.topics.filter(topic => {
@@ -176,7 +192,7 @@ const Learn: NextPage = () => {
 
     const getCourseTopics = async () => {
         const lessonTopicData: TopicLessonData[] = [];
-        ; try {
+        try {
             const { data } = await axios.get(`${urls.baseUrl}/topic/${courseId}?page=1&limit=1000`);
             setTopicData(data);
             await Promise.all(data.topics.map(async (topic: Topic) => {
@@ -306,9 +322,28 @@ const Learn: NextPage = () => {
 
   
     useEffect(() => {
-        isEnrolled();
-        getCourseTopics();
-    }, []);
+        if(!userMe.id){
+            setLoading(true);
+        }else {
+            setLoading(false);
+            isEnrolled();
+            getCourseTopics();
+        }
+       
+    }, [userMe]);
+
+    if(!enrolled) {
+        setTimeout(() => {
+            router.push(`/courses/${courseId}`);
+        }, 3000);
+        return(
+            <Container mt={70}>
+                <Text align="center" color={colors.primaryColor} weight={600}>You have not enrolled in this particular course course</Text>
+                <Text align="center"  color={colors.primaryColor} weight={600}>Redirect you to course enrol page</Text>
+            </Container>
+        );
+    }
+
 
     return (
         <>
@@ -381,10 +416,12 @@ const Learn: NextPage = () => {
                             <Tabs.Tab value="curriculum" icon={<IconQuestionMark size={14} />}>Exercise Files</Tabs.Tab>
                         </Tabs.List>
                         <Tabs.Panel value="courseInfo" pt="xs">
-                            <Group>
-                                <LoadingOverlay visible={loading} overlayBlur={2} />
-                                <div dangerouslySetInnerHTML={{ __html: content()[0].lessonContent }} />
-                            </Group>
+                            <Grid >
+                                <Grid.Col md={12} sm={12}>
+                                    <LoadingOverlay visible={loading} overlayBlur={2} />
+                                    <div dangerouslySetInnerHTML={{ __html: content()[0].lessonContent }} />
+                                </Grid.Col>
+                            </Grid>
                         </Tabs.Panel>
                         <Tabs.Panel value="curriculum" pt="xs">
                         </Tabs.Panel>
