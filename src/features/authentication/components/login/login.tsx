@@ -73,6 +73,9 @@ const Login = (props: PaperProps) => {
   }, [userMe]);
 
 
+  if(auth) return <></>
+
+
   return (
     <Paper radius="md" p="xl" withBorder {...props} className={classes.wrapper} >
       <Grid>
