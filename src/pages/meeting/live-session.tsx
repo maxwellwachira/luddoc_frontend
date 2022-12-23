@@ -84,7 +84,7 @@ const ClientMeeting: NextPage = () => {
         if(auth){
             startMeeting();
         }else {
-            router.push('/auth/sign-in');
+            router.push('/auth/logout');
         }
     }, []);
     if(!auth) return <></>;
