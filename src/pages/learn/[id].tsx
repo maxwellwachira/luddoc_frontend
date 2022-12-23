@@ -7,13 +7,11 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
-
 import { CourseLayout } from '../../layouts/courseLayout/courseLayout';
 import { colors } from '../../constants/colors';
 import { urls } from '../../constants/urls';
 import { IconArrowLeft, IconBook, IconCheck, IconClipboard, IconDashboard, IconPlus, IconQuestionMark } from '@tabler/icons';
 import { useAuthContext } from '../../features/authentication';
-import { truncate } from 'fs';
 
 interface TopicData {
     totalTopics: number;
@@ -80,8 +78,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         try {
             const response = await fetch(`${urls.baseUrl}/lesson/${params?.id}?page=1&limit=10000`);
             const data = await response.json();
-            const lessonId = Number(data.lessons[0].id);
-            return lessonId
+            if (data.totalLessons > 0){
+                const lessonId = Number(data.lessons[0].id);
+                return lessonId
+            }
+            return false;
         } catch (error) {
             console.log(error);
         }
@@ -90,7 +91,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     const initialLessonId = await getInitialLessonId();
     return {
         props: {
-            initialLessonId
+            initialLessonId: initialLessonId ? initialLessonId : 1
         }
     }
 }
