@@ -29,10 +29,10 @@ export const footerData = [
     {
         title: 'Social Links',
         links: [
-            { id: 0, link: '', label: 'Twitter' },
-            { id: 1, link: '', label: 'LinkedIn' },
-            { id: 2, link: '', label: 'Instagram' },
-            { id: 3, link: '', label: 'Facebook' }
+            { id: 0, link: 'https://www.youtube.com/@GrannysLoveLtd', label: 'YouTube' },
+            { id: 1, link: 'https://www.linkedin.com/company/grannyslovelimited/', label: 'LinkedIn' },
+            { id: 2, link: 'https://www.instagram.com/mygrannyslove/', label: 'Instagram' },
+            { id: 3, link: 'https://www.facebook.com/mygrannyslove?mibextid=ZbWKwL', label: 'Facebook' }
         ]
     },
 ];

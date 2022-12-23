@@ -1,5 +1,5 @@
 import { Text, Container, ActionIcon, Group } from '@mantine/core';
-import { IconBrandTwitter, IconBrandYoutube, IconBrandInstagram } from '@tabler/icons';
+import { IconBrandYoutube, IconBrandInstagram, IconBrandFacebook } from '@tabler/icons';
 import Image from 'next/image';
 
 import { useStyles } from './footer.styles';
@@ -13,7 +13,7 @@ interface FooterLinksProps {
   }[];
 }
 
- function FooterLinks({ data }: FooterLinksProps) {
+function FooterLinks({ data }: FooterLinksProps) {
   const { classes } = useStyles();
 
   const groups = data.map((group) => {
@@ -40,7 +40,7 @@ interface FooterLinksProps {
     <footer className={classes.footer}>
       <Container className={classes.inner}>
         <div className={classes.logo}>
-          <Image 
+          <Image
             src={logo}
             width={130}
             height={130}
@@ -58,13 +58,25 @@ interface FooterLinksProps {
         </Text>
 
         <Group spacing={0} className={classes.social} position="right" noWrap>
-          <ActionIcon size="lg">
-            <IconBrandTwitter size={18} stroke={1.5} />
+          <ActionIcon
+            component='a'
+            href='https://www.facebook.com/mygrannyslove?mibextid=ZbWKwL'
+            size="lg"
+          >
+            <IconBrandFacebook size={18} stroke={1.5} />
           </ActionIcon>
-          <ActionIcon size="lg">
+          <ActionIcon
+            component='a'
+            href='https://www.youtube.com/@GrannysLoveLtd'
+            size="lg"
+          >
             <IconBrandYoutube size={18} stroke={1.5} />
           </ActionIcon>
-          <ActionIcon size="lg">
+          <ActionIcon
+            component='a'
+            href='https://www.instagram.com/mygrannyslove/'
+            size="lg"
+          >
             <IconBrandInstagram size={18} stroke={1.5} />
           </ActionIcon>
         </Group>
