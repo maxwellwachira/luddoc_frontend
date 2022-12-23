@@ -146,11 +146,14 @@ const Topics: NextPage = (props: any) => {
 
 
     useEffect(() => {
-        if(!auth || userMe.role !== "admin") router.push('/auth/logout');
-        getCourseTopics();
-    }, [activePage, refreshData]);
+        if(!auth) router.push('/auth/logout');
+        if(userMe.role){
+            if(userMe.role !== "admin") router.push('/403');
+            getCourseTopics();
+        }
+    }, [activePage, refreshData, userMe]);
 
-    if (!auth || userMe.role !== "admin") return <></>
+    if (!auth) return <></>
 
     return (
         <>
