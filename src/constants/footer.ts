@@ -11,10 +11,10 @@ export const footerData = [
     {
         title: 'Courses', 
         links: [
-            { id: 0, link: '/courses/59260', label: 'Dementia Care' },
-            { id: 1, link: '/courses/58949', label: 'First Aid' },
-            { id: 2, link: '/courses/59655', label: 'Emotional Intelligence' },
-            { id: 3, link: '/courses/60199', label: 'Mindful Meditation' }
+            { id: 0, link: '/courses/1', label: 'Dementia Care' },
+            { id: 1, link: '/courses/2', label: 'First Aid' },
+            { id: 2, link: '/courses/4', label: 'Emotional Intelligence' },
+            { id: 3, link: '/courses/12', label: 'Mindful Meditation' }
         ]
     },
     {
