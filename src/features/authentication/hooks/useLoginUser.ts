@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useForm } from "@mantine/form";
 import axios from "axios";
 import { setCookie } from "cookies-next";
+import { useRouter } from "next/router";
 
 import { urls } from "../../../constants/urls";
 import { useAuthContext } from "../context/authContextProvider";
@@ -9,12 +10,14 @@ import { useAuthContext } from "../context/authContextProvider";
 export const useLoginUser = () => {
     const [response, setResponse] = useState('');
     const [loading, setLoading] = useState(false);
+    const [enrolled, setEnrolled] = useState(false);
     const [userMeData, setUserMeData] = useState({
         role: '',
         firstName: '',
         lastName:''
     });
     const { setAuth } = useAuthContext();
+    const router = useRouter();
 
     const initialValues =  {
         email: '',
@@ -39,6 +42,21 @@ export const useLoginUser = () => {
         }
     }
 
+    const isEnrolled = async (token: string) => {
+        try {
+            const { data } = await axios.get(`${urls.baseUrl}/enrolment/me`, { headers: { Authorization: `Bear ${token}` } });
+            if (data.exists) {
+                setEnrolled(true);
+                return true;
+            } else {
+                setEnrolled(false);
+                return false;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const handleSubmit = async() => {
         if(JSON.stringify(form.errors) === "{}"){
             setLoading(true);
@@ -53,7 +71,26 @@ export const useLoginUser = () => {
                     setLoading(false);
                     setAuth(true);
                     //console.log(userMeData)
-
+                }
+                if (data.message === "success") {
+                    const userMeData = await userMe(data.accessToken);
+                    console.log(userMeData);
+                    switch (userMeData?.role) {
+                      case 'student':
+                        isEnrolled(data.accessToken).then((res) => {
+                            if (res) return router.push('/students').then(() => router.reload());
+                            router.push('/courses').then(() => router.reload());
+                        });               
+                        break;
+                      case 'admin':
+                        router.push('/admin').then(() => router.reload());
+                        break;
+                      case 'tutor':
+                        router.push('/tutor/uploads').then(() => router.reload());
+                        break;
+                      default:
+                        break;
+                    }
                 }
             } catch (error: any) {
                 console.log(error);
