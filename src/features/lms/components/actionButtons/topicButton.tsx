@@ -1,4 +1,5 @@
-import { Text, UnstyledButton } from "@mantine/core";
+import { useState } from "react";
+import { Group, Loader, Text, UnstyledButton } from "@mantine/core";
 import { useRouter } from "next/router";
 
 import { urls } from "../../../../constants/urls";
@@ -14,14 +15,23 @@ interface ID {
 const TopicButton = ({courseId, topicId, type}: ID) => {
     const { classes } = useStyles();
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
     
     const onClick = () => {
-        router.push(`${urls.frontEnd}/topics/${courseId}${type === "Lessons" ? `/lessons/${topicId}` : ''}`).then(() => router.reload());
+        setLoading(true);
+        router.push(`${urls.frontEnd}/topics/${courseId}${type === "Lessons" ? `/lessons/${topicId}` : ''}`).then(() => setLoading(false));
     }
     
     return (
-        <UnstyledButton  className={`${classes.button} ${classes.topicButton}`} onClick={onClick}>
-            <Text size="sm">{type}</Text>
+        <UnstyledButton  className={`${classes.button} ${classes.topicButton}`} onClick={onClick} disabled={loading} style={{cursor: loading ? "not-allowed" : "pointer"}}>
+            {loading ?
+                <Group>
+                    <Loader size="xs" />
+                    <Text size="sm">{type}</Text>
+                </Group>
+                :
+                <Text size="sm">{type}</Text>
+            }
         </UnstyledButton>
     )
 }
