@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import type { NextPage } from "next";
+import dynamic from "next/dynamic";
 import axios from "axios";
 import { useRouter } from "next/router";
+// const ZoomMtg = dynamic(
+//     () => import('@zoomus/websdk').then((mod) => mod.ZoomMtg),
+//     { ssr: false}
+// );
 
 import { useAuthContext } from "../../features/authentication";
 import { urls } from "../../constants/urls";
@@ -32,67 +37,71 @@ const ClientMeeting: NextPage = () => {
             console.log(error)
         }
     }
-    
-    const startMeeting = async() => {
-        const ZoomMtg = (await import('@zoomus/websdk')).ZoomMtg
-        //configurations
-        ZoomMtg.setZoomJSLib('https://source.zoom.us/2.8.0/lib', '/av');
+
+    const startMeeting = async (ZoomMtg: any) => {
+        ZoomMtg.setZoomJSLib('https://source.zoom.us/2.9.5/lib', '/av');
+
         ZoomMtg.preLoadWasm();
         ZoomMtg.prepareWebSDK();
         // loads language files, also passes any error messages to the ui
         ZoomMtg.i18n.load('en-US');
         ZoomMtg.i18n.reload('en-US');
 
-        if(userMe.role !== "student") getZAK();
+        if (userMe.role !== "student") getZAK();
+        
         document.getElementById('zmmtg-root')!.style.display = 'block';
 
         const signature = await getSignature();
 
         ZoomMtg.init({
-            leaveUrl: '/meeting/leaveUrl',
+            leaveUrl: 'https://luddoc-institute.com/meeting/leaveUrl',
             meetingInfo: [
                 'topic',
                 'host',
             ],
             success: (success: any) => {
-            console.log(success);
-    
-            ZoomMtg.join({
-                userEmail: `${userMe.email}`,
-                sdkKey: '2KD9UYPENeYPXWPWX7JSNJm3803E7u6IGRAY',
-                signature: signature,
-                meetingNumber: '3196494041',
-                passWord: 'udg1Fu',
-                userName: `${userMe.firstName} ${userMe.lastName}`,
-                zak: userMe.role === "student" ? undefined : zak, 
-                success: (success: any) => {
-                    console.log(success)
-                },
-                error: (error: any) => {
-                    console.log(error)
-                }
-            })
-    
+                console.log(success);
+
+                ZoomMtg.join({
+                    userEmail: `${userMe.email}`,
+                    sdkKey: '2KD9UYPENeYPXWPWX7JSNJm3803E7u6IGRAY',
+                    signature: signature,
+                    meetingNumber: '3196494041',
+                    passWord: 'udg1Fu',
+                    userName: `${userMe.firstName} ${userMe.lastName}`,
+                    zak: userMe.role === "student" ? undefined : zak,
+                    success: (success: any) => {
+                        //console.log(success)
+                    },
+                    error: (error: any) => {
+                        console.log(error)
+                    }
+                })
+
             },
             error: (error: any) => {
                 console.log(error)
             }
         })
     }
-
-    useEffect(() => {
-        if(auth){
-            startMeeting();
-        }else {
-            router.push('/auth/logout');
-        }
+    useEffect(() => {(
+        async () => {
+            if (auth) {
+                if(typeof window !== "undefined"){ 
+                    const ZoomMtg = (await import('@zoomus/websdk')).ZoomMtg;
+                    startMeeting(ZoomMtg);
+                }
+            } else {
+                router.push('/auth/logout');
+            }
+        })()
     }, []);
-    if(!auth) return <></>;
+    if (!auth) return <></>;
     return (
         <div>
             <h1>Luddoc Live Session meeting loading ...</h1>
         </div>
-    ) 
+    )
 
 }
 
