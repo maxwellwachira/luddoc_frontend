@@ -106,7 +106,7 @@ const Home: NextPage = () => {
           <Container>
             <Grid >
               <Grid.Col md={4}>
-                <Text className={classes.heading}><span className={classes.goldText}>L</span>uddoc <span className={classes.goldText}>S</span>kills <span className={classes.goldText}>F</span>or <span className={classes.goldText}>L</span>ife Technical Institue</Text>
+                <Text className={classes.heading}><span className={classes.goldText}>L</span>uddoc <span className={classes.goldText}>S</span>kills <span className={classes.goldText}>F</span>or <span className={classes.goldText}>L</span>ife Technical Institute</Text>
                 <Text mt="md">Are you interseted in Care Giving and Self Development Skills? </Text>
                 <Text mt="md">Luddoc Skills For Life Technical Institute is a modern training facility offering locally and internationally accredited courses in Care Giving, Self Development and so much more. </Text>
                 <Text mt="md">Don't wait, enrol today to better your life!</Text>
