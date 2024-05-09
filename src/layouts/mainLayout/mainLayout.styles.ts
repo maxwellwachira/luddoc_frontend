@@ -87,10 +87,10 @@ export const useStyles = createStyles((theme) => ({
     signin: {
         backgroundColor: "transaparent",
         border: `2px solid ${colors.secondaryColor}`,
-        display: "inline-block",
         padding: "1px 10px",
         textAlign: "center",
         color:  `${colors.secondaryColor}`,
+        borderRadius: 7,
 
         [theme.fn.smallerThan("md")]: {
           width: '100px',
@@ -107,10 +107,10 @@ export const useStyles = createStyles((theme) => ({
     signup: {
         backgroundColor: 'transaparent',
         border: `2px solid ${colors.primaryColor}`,
-        display: "inline-block",
         padding: "1px 10px",
         textAlign: "center",
         color:  theme.colorScheme === 'light' ? theme.colors.dark[7] : theme.colors.gray[0] ,
+        borderRadius: 7,
         [theme.fn.smallerThan("md")]: {
             width: '100px',
             margin: '7px 7px'
