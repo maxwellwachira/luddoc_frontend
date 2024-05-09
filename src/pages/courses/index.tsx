@@ -12,7 +12,7 @@ import { colors } from '../../constants/colors';
 import { urls } from '../../constants/urls';
 
 export const courseThumbnail = (ID: number) => {
-    const imageBaseUrl = 'http://mygrannyslove.com/wp-content/uploads/2021';
+    const imageBaseUrl = 'http://15.197.148.33/wp-content/uploads/2021';
     let imageUrl = '';
     switch (ID) {
         case 59260:

@@ -80,10 +80,10 @@ const MainLayout = ({ children }: Props) => {
             <div className={classes.links}>
               <Anchor className={`${classes.navitem} ${router.pathname === "/" ? classes.active : "" }`} href="/">Home</Anchor>
               <Anchor className={`${classes.navitem} ${router.pathname === "/about" ? classes.active : "" }`} href="/about">About</Anchor>
-              <Anchor className={`${classes.navitem} ${router.pathname.includes("/courses") ? classes.active : "" }`} href="/courses">Courses</Anchor>
+              {/* <Anchor className={`${classes.navitem} ${router.pathname.includes("/courses") ? classes.active : "" }`} href="/courses">Courses</Anchor> */}
               <Anchor className={`${classes.navitem} ${router.pathname === "/faq" ? classes.active : "" }`} href="/faq">FAQ</Anchor>
               <Anchor className={`${classes.navitem} ${router.pathname === "/contact" ? classes.active : "" }`} href="/contact">Contact Us</Anchor>
-              <Anchor className={`${classes.navitem}`} href="https://mygrannyslove.com/" target="_blank">Granny's Love</Anchor>
+              {/* <Anchor className={`${classes.navitem}`} href="https://mygrannyslove.com/" target="_blank">Granny's Love</Anchor> */}
               {auth ? <Anchor  className={classes.navitem} href={userMe.role === "student" ? "/students" : "/admin"}>Dashboard</Anchor> :
                 <>
                    <Anchor className={`${classes.navitem} ${classes.signin} ${router.pathname === "/auth/sign-in" ? classes.activeSignIn : "" }`} href="/auth/sign-in">Sign In</Anchor>
@@ -110,10 +110,10 @@ const MainLayout = ({ children }: Props) => {
         >
           <Anchor className={`${classes.navitem} ${router.pathname === "/" ? classes.active : "" }`} href="/">Home</Anchor>
           <Anchor className={`${classes.navitem} ${router.pathname === "/about" ? classes.active : "" }`} href="/about">About</Anchor>
-          <Anchor className={`${classes.navitem} ${router.pathname.includes("/courses") ? classes.active : "" }`} href="/courses">Courses</Anchor>
+          {/* <Anchor className={`${classes.navitem} ${router.pathname.includes("/courses") ? classes.active : "" }`} href="/courses">Courses</Anchor> */}
           <Anchor className={`${classes.navitem} ${router.pathname === "/faq" ? classes.active : "" }`} href="/faq">FAQ</Anchor>
           <Anchor className={`${classes.navitem} ${router.pathname === "/contact" ? classes.active : "" }`} href="/contact">Contact Us</Anchor>
-          <Anchor className={`${classes.navitem}`} href="https://mygrannyslove.com/" target="_blank">Granny's Love</Anchor>
+          {/* <Anchor className={`${classes.navitem}`} href="https://mygrannyslove.com/" target="_blank">Granny's Love</Anchor> */}
           <Anchor className={`${classes.navitem} ${classes.signin} ${router.pathname === "/auth/sign-in" ? classes.activeSignIn : "" } `} href="/auth/sign-in">Sign In</Anchor>
           <Anchor className={`${classes.navitem} ${classes.signup} ${router.pathname === "/auth/sign-up" ? classes.activeSignUp : "" }`} href="/auth/sign-up">Sign Up</Anchor>
         </Navbar>
