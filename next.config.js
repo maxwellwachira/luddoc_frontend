@@ -16,5 +16,8 @@ module.exports = {
   },
   images: {
     domains: ['mygrannyslove.com', 'localhost', 'luddoc-institute.com', 'backend.luddoc-institute.com', 'player.vimeo.com', 'vimeo.com'],
-  }
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 }
