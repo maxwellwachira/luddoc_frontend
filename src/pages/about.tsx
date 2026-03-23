@@ -9,14 +9,14 @@ import {
 } from '@mantine/core';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
+
 import {
   IconArrowRight,
   IconAward,
   IconBulb,
   IconHandRock,
   IconHeart,
-  IconPhone,
+
   IconSchool,
   IconStar,
   IconTarget,
@@ -27,8 +27,7 @@ import MainLayout from '../layouts/mainLayout/mainLayout';
 import FooterLinks from '../components/footer/footer';
 import { footerData } from '../constants/footer';
 import { colors } from '../constants/colors';
-import missionImage from '../assets/mission.jpg';
-import visionImage from '../assets/vision.jpg';
+
 
 
 const useStyles = createStyles((theme) => ({
@@ -37,70 +36,87 @@ const useStyles = createStyles((theme) => ({
     background: theme.colorScheme === 'light'
       ? `linear-gradient(165deg, #FFFFFF 0%, ${colors.secondaryColorLight} 100%)`
       : theme.colors.dark[7],
-    padding: '100px 0 80px',
+    padding: '120px 0 100px',
     position: 'relative' as const,
     overflow: 'hidden',
+    textAlign: 'center' as const,
     '&::before': {
       content: '""',
       position: 'absolute',
-      top: -150,
-      right: -150,
-      width: 500,
-      height: 500,
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: 600,
+      height: 600,
       borderRadius: '50%',
-      background: 'radial-gradient(circle, rgba(206,160,40,0.12) 0%, transparent 70%)',
+      background: `radial-gradient(circle, rgba(206,160,40,0.08) 0%, transparent 70%)`,
     },
     '&::after': {
       content: '""',
       position: 'absolute',
-      bottom: -100,
-      left: -100,
-      width: 400,
-      height: 400,
-      borderRadius: '50%',
-      background: 'radial-gradient(circle, rgba(206,160,40,0.08) 0%, transparent 70%)',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      height: 1,
+      background: `linear-gradient(90deg, transparent, ${colors.secondaryColor}, transparent)`,
+      opacity: 0.3,
     },
     [theme.fn.smallerThan('md')]: {
-      padding: '60px 0 50px',
+      padding: '80px 0 60px',
     },
   },
   heroEyebrow: {
-    color: colors.secondaryColorDark,
-    fontSize: 12,
+    color: colors.secondaryColor,
+    fontSize: 13,
     fontWeight: 700,
-    letterSpacing: 4,
+    letterSpacing: 5,
     textTransform: 'uppercase' as const,
-    marginBottom: 20,
+    marginBottom: 28,
     display: 'flex',
     alignItems: 'center',
-    gap: 12,
-    '&::before': {
+    justifyContent: 'center',
+    gap: 14,
+    '&::before, &::after': {
       content: '""',
       display: 'inline-block',
-      width: 40,
-      height: 2,
+      width: 32,
+      height: 1,
       backgroundColor: colors.secondaryColor,
+      opacity: 0.5,
     },
   },
   heroTitle: {
-    fontSize: 52,
+    fontSize: 56,
     fontWeight: 800,
     color: theme.colorScheme === 'light' ? colors.primaryColor : theme.white,
-    lineHeight: 1.1,
-    marginBottom: 20,
-    [theme.fn.smallerThan('lg')]: { fontSize: 42 },
-    [theme.fn.smallerThan('md')]: { fontSize: 34 },
+    lineHeight: 1.15,
+    marginBottom: 24,
+    maxWidth: 700,
+    margin: '0 auto 24px',
+    [theme.fn.smallerThan('lg')]: { fontSize: 44 },
+    [theme.fn.smallerThan('md')]: { fontSize: 36 },
     [theme.fn.smallerThan('sm')]: { fontSize: 28 },
   },
   heroGold: {
-    color: colors.secondaryColor,
+    background: `linear-gradient(135deg, ${colors.secondaryColor}, ${colors.goldGradientEnd})`,
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text',
   },
   heroText: {
     color: theme.colorScheme === 'light' ? theme.colors.gray[7] : theme.colors.gray[4],
-    fontSize: 16,
+    fontSize: 17,
     lineHeight: 1.8,
-    maxWidth: 680,
+    maxWidth: 580,
+    margin: '0 auto',
     [theme.fn.smallerThan('md')]: { fontSize: 15 },
+  },
+  heroDivider: {
+    width: 50,
+    height: 3,
+    backgroundColor: colors.secondaryColor,
+    margin: '32px auto 0',
+    borderRadius: 2,
   },
 
   // ── Section shared ──
@@ -153,65 +169,69 @@ const useStyles = createStyles((theme) => ({
   },
 
   // ── Mission / Vision ──
-  missionSection: {
+  mvSection: {
     backgroundColor: theme.colorScheme === 'light' ? theme.colors.gray[0] : theme.colors.dark[8],
     padding: '80px 0',
     [theme.fn.smallerThan('md')]: { padding: '50px 0' },
   },
-  visionSection: {
-    backgroundColor: theme.colorScheme === 'light' ? theme.white : theme.colors.dark[7],
-    padding: '80px 0',
-    [theme.fn.smallerThan('md')]: { padding: '50px 0' },
-  },
-  mvImageWrapper: {
-    borderRadius: 16,
+  mvCard: {
+    backgroundColor: theme.colorScheme === 'light' ? theme.white : theme.colors.dark[6],
+    borderRadius: 20,
+    padding: '40px 36px',
+    height: '100%',
+    border: `1px solid ${theme.colorScheme === 'light' ? theme.colors.gray[2] : theme.colors.dark[4]}`,
+    position: 'relative' as const,
     overflow: 'hidden',
-    maxWidth: 420,
-    [theme.fn.smallerThan('md')]: {
-      maxWidth: 340,
-      margin: '0 auto',
-    },
-  },
-  mvLabel: {
-    color: colors.secondaryColorDark,
-    fontSize: 12,
-    fontWeight: 700,
-    letterSpacing: 4,
-    textTransform: 'uppercase' as const,
-    marginBottom: 12,
-    display: 'flex',
-    alignItems: 'center',
-    gap: 12,
+    transition: 'all 0.35s ease',
     '&::before': {
       content: '""',
-      display: 'inline-block',
-      width: 30,
-      height: 2,
-      backgroundColor: colors.secondaryColor,
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      height: 4,
+      borderRadius: '20px 20px 0 0',
+    },
+    '&:hover': {
+      transform: 'translateY(-4px)',
+      borderColor: colors.secondaryColor,
+    },
+    [theme.fn.smallerThan('md')]: {
+      padding: '32px 24px',
     },
   },
-  mvTitle: {
-    fontSize: 34,
-    fontWeight: 800,
-    color: theme.colorScheme === 'light' ? colors.primaryColor : theme.white,
-    lineHeight: 1.2,
-    marginBottom: 20,
-    [theme.fn.smallerThan('md')]: { fontSize: 26 },
+  mvCardMission: {
+    '&::before': {
+      background: `linear-gradient(90deg, ${colors.secondaryColor}, ${colors.goldGradientEnd})`,
+    },
   },
-  mvText: {
-    fontSize: 16,
-    color: theme.colorScheme === 'light' ? theme.colors.gray[7] : theme.colors.gray[4],
-    lineHeight: 1.8,
+  mvCardVision: {
+    '&::before': {
+      background: `linear-gradient(90deg, ${colors.goldGradientEnd}, ${colors.secondaryColor})`,
+    },
   },
   mvIconBox: {
-    width: 56,
-    height: 56,
+    width: 60,
+    height: 60,
     borderRadius: 16,
-    backgroundColor: colors.secondaryColorLight,
+    background: `linear-gradient(135deg, ${colors.secondaryColor}, ${colors.goldGradientEnd})`,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 20,
+    marginBottom: 24,
+  },
+  mvTitle: {
+    fontSize: 26,
+    fontWeight: 800,
+    color: theme.colorScheme === 'light' ? colors.primaryColor : theme.white,
+    lineHeight: 1.2,
+    marginBottom: 16,
+    [theme.fn.smallerThan('md')]: { fontSize: 22 },
+  },
+  mvText: {
+    fontSize: 15,
+    color: theme.colorScheme === 'light' ? theme.colors.gray[7] : theme.colors.gray[4],
+    lineHeight: 1.8,
   },
 
   // ── Values ──
@@ -258,8 +278,8 @@ const useStyles = createStyles((theme) => ({
 
   // ── Tagline Banner ──
   taglineSection: {
-    background: `linear-gradient(160deg, ${colors.secondaryColorDark} 0%, ${colors.secondaryColor} 40%, ${colors.goldGradientEnd} 100%)`,
-    padding: '80px 0',
+    backgroundColor: theme.colorScheme === 'light' ? colors.primaryColor : theme.colors.dark[8],
+    padding: '90px 0',
     position: 'relative' as const,
     overflow: 'hidden',
     '&::before': {
@@ -268,87 +288,30 @@ const useStyles = createStyles((theme) => ({
       top: 0,
       left: 0,
       right: 0,
-      bottom: 0,
-      opacity: 0.35,
-      backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E")`,
-      backgroundSize: '150px 150px',
-      mixBlendMode: 'overlay' as const,
+      height: 1,
+      background: `linear-gradient(90deg, transparent, ${colors.secondaryColor}, transparent)`,
+      opacity: 0.3,
     },
     '&::after': {
       content: '""',
       position: 'absolute',
-      top: -120,
-      right: -80,
-      width: 400,
-      height: 400,
-      borderRadius: '50%',
-      background: 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)',
-    },
-    [theme.fn.smallerThan('md')]: { padding: '50px 0' },
-  },
-  taglineContent: {
-    position: 'relative' as const,
-    zIndex: 1,
-    textAlign: 'center' as const,
-  },
-  taglineText: {
-    fontSize: 48,
-    fontWeight: 800,
-    color: theme.white,
-    letterSpacing: 6,
-    textShadow: '0 2px 20px rgba(0,0,0,0.2)',
-    [theme.fn.smallerThan('md')]: { fontSize: 32, letterSpacing: 4 },
-    [theme.fn.smallerThan('sm')]: { fontSize: 24, letterSpacing: 2 },
-  },
-  taglineSubtext: {
-    fontSize: 16,
-    color: 'rgba(255,255,255,0.8)',
-    marginTop: 16,
-    fontWeight: 500,
-    letterSpacing: 1,
-  },
-
-  // ── CTA ──
-  ctaSection: {
-    backgroundColor: theme.colorScheme === 'light' ? theme.white : theme.colors.dark[7],
-    padding: '80px 0',
-    [theme.fn.smallerThan('md')]: { padding: '50px 0' },
-  },
-  ctaCard: {
-    backgroundColor: 'rgba(0,0,0,0.9)',
-    borderRadius: 28,
-    padding: '72px 56px',
-    position: 'relative' as const,
-    overflow: 'hidden',
-    boxShadow: '0 30px 60px rgba(0,0,0,0.2)',
-    '&::before': {
-      content: '""',
-      position: 'absolute',
-      top: 0,
-      left: '50%',
-      transform: 'translateX(-50%)',
-      width: 120,
-      height: 3,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      height: 1,
       background: `linear-gradient(90deg, transparent, ${colors.secondaryColor}, transparent)`,
-      borderRadius: 2,
+      opacity: 0.3,
     },
-    [theme.fn.smallerThan('md')]: {
-      padding: '44px 24px',
-      borderRadius: 20,
-    },
+    [theme.fn.smallerThan('md')]: { padding: '60px 0' },
   },
-  ctaCardContent: {
-    textAlign: 'center' as const,
-    position: 'relative' as const,
-    zIndex: 1,
-  },
-  ctaLabel: {
+  taglineLabel: {
     fontSize: 12,
     fontWeight: 700,
-    letterSpacing: 4,
+    letterSpacing: 5,
     textTransform: 'uppercase' as const,
     color: colors.secondaryColor,
-    marginBottom: 24,
+    textAlign: 'center' as const,
+    marginBottom: 48,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -362,69 +325,138 @@ const useStyles = createStyles((theme) => ({
       opacity: 0.4,
     },
   },
-  ctaTitle: {
-    fontSize: 44,
-    fontWeight: 800,
-    color: theme.white,
-    lineHeight: 1.2,
-    [theme.fn.smallerThan('md')]: { fontSize: 28 },
+  taglinePillars: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: 0,
+    [theme.fn.smallerThan('sm')]: {
+      flexDirection: 'column' as const,
+      alignItems: 'center',
+      gap: 40,
+    },
   },
-  ctaHighlight: {
+  taglinePillar: {
+    flex: 1,
+    maxWidth: 280,
+    textAlign: 'center' as const,
+    padding: '0 32px',
+    position: 'relative' as const,
+    '&:not(:last-child)::after': {
+      content: '""',
+      position: 'absolute',
+      top: '10%',
+      right: 0,
+      height: '80%',
+      width: 1,
+      background: `linear-gradient(180deg, transparent, rgba(206,160,40,0.3), transparent)`,
+    },
+    [theme.fn.smallerThan('sm')]: {
+      padding: 0,
+      '&:not(:last-child)::after': {
+        display: 'none',
+      },
+    },
+  },
+  taglineWord: {
+    fontSize: 32,
+    fontWeight: 800,
     background: `linear-gradient(135deg, ${colors.secondaryColor}, ${colors.goldGradientEnd})`,
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
     backgroundClip: 'text',
+    letterSpacing: 3,
+    marginBottom: 12,
+    [theme.fn.smallerThan('md')]: { fontSize: 26 },
+  },
+  taglineTranslation: {
+    fontSize: 15,
+    fontWeight: 600,
+    color: theme.white,
+    marginBottom: 8,
+  },
+  taglineDesc: {
+    fontSize: 13,
+    color: theme.colors.gray[5],
+    lineHeight: 1.6,
+  },
+
+  // ── CTA ──
+  ctaSection: {
+    background: `linear-gradient(135deg, ${colors.secondaryColor} 0%, ${colors.goldGradientEnd} 50%, ${colors.secondaryColor} 100%)`,
+    padding: '100px 0',
+    textAlign: 'center' as const,
+    position: 'relative' as const,
+    overflow: 'hidden',
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.06\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+    },
+    '&::after': {
+      content: '""',
+      position: 'absolute',
+      top: -100,
+      right: -100,
+      width: 350,
+      height: 350,
+      borderRadius: '50%',
+      background: 'rgba(255,255,255,0.1)',
+    },
+    [theme.fn.smallerThan('md')]: {
+      padding: '60px 0',
+    },
+  },
+  ctaInner: {
+    position: 'relative' as const,
+    zIndex: 1,
+  },
+  ctaLabel: {
+    fontSize: 12,
+    fontWeight: 700,
+    letterSpacing: 4,
+    textTransform: 'uppercase' as const,
+    color: 'rgba(0,0,0,0.4)',
+    marginBottom: 16,
+  },
+  ctaTitle: {
+    fontSize: 44,
+    fontWeight: 800,
+    color: theme.white,
+    lineHeight: 1.15,
+    textShadow: '0 2px 15px rgba(0,0,0,0.1)',
+    [theme.fn.smallerThan('md')]: { fontSize: 30 },
+    [theme.fn.smallerThan('sm')]: { fontSize: 24 },
   },
   ctaSubtext: {
-    color: theme.colors.gray[5],
-    fontSize: 16,
-    lineHeight: 1.8,
-    maxWidth: 480,
-    margin: '24px auto 40px',
-    [theme.fn.smallerThan('md')]: { fontSize: 15 },
+    color: 'rgba(255,255,255,0.85)',
+    fontSize: 18,
+    lineHeight: 1.7,
+    maxWidth: 500,
+    margin: '20px auto 40px',
+    [theme.fn.smallerThan('md')]: { fontSize: 16 },
+    [theme.fn.smallerThan('sm')]: { fontSize: 14, margin: '16px auto 32px' },
   },
-  ctaButtons: {
-    display: 'flex',
-    justifyContent: 'center',
-    gap: 16,
-    flexWrap: 'wrap' as const,
-  },
-  ctaButtonPrimary: {
-    backgroundColor: colors.secondaryColor,
+  ctaButton: {
+    backgroundColor: colors.primaryColor,
     borderRadius: 30,
-    padding: '16px 44px',
-    fontSize: 16,
-    fontWeight: 700,
+    padding: '14px 36px',
+    fontSize: 15,
+    fontWeight: 600,
     color: theme.white,
     border: 'none',
     transition: 'all 0.3s ease',
-    boxShadow: '0 4px 20px rgba(206,160,40,0.35)',
+    boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
     display: 'inline-flex',
     alignItems: 'center',
-    gap: 10,
+    gap: 8,
     '&:hover': {
-      backgroundColor: colors.goldGradientEnd,
-      transform: 'translateY(-3px)',
-      boxShadow: '0 8px 30px rgba(206,160,40,0.45)',
-      textDecoration: 'none',
-    },
-  },
-  ctaButtonSecondary: {
-    backgroundColor: 'transparent',
-    borderRadius: 30,
-    padding: '16px 44px',
-    fontSize: 16,
-    fontWeight: 600,
-    color: theme.colors.gray[4],
-    border: `1.5px solid ${theme.colors.gray[7]}`,
-    transition: 'all 0.3s ease',
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: 10,
-    '&:hover': {
-      borderColor: colors.secondaryColor,
-      color: colors.secondaryColor,
-      transform: 'translateY(-3px)',
+      backgroundColor: colors.primaryColorLight,
+      transform: 'translateY(-2px)',
+      boxShadow: '0 6px 25px rgba(0,0,0,0.3)',
       textDecoration: 'none',
     },
   },
@@ -476,10 +508,10 @@ const About: NextPage = () => {
       <MainLayout>
         {/* ── Hero ── */}
         <Box className={classes.heroSection}>
-          <Container size="lg">
+          <Container size="md">
             <Text className={classes.heroEyebrow}>About Us</Text>
             <Text className={classes.heroTitle}>
-              Empowering Lives{' '}
+              Empowering Lives<br />
               <span className={classes.heroGold}>Through Skills</span>
             </Text>
             <Text className={classes.heroText}>
@@ -488,6 +520,7 @@ const About: NextPage = () => {
               sector, equipping students with refined skills and knowledge to uplift their
               living standards and improve community well-being.
             </Text>
+            <div className={classes.heroDivider} />
           </Container>
         </Box>
 
@@ -514,70 +547,44 @@ const About: NextPage = () => {
           </Container>
         </Box>
 
-        {/* ── Mission ── */}
-        <Box className={classes.missionSection}>
+        {/* ── Mission & Vision ── */}
+        <Box className={classes.mvSection}>
           <Container size="lg">
-            <Grid align="center" gutter={40}>
-              <Grid.Col md={6}>
-                <div className={classes.mvImageWrapper}>
-                  <Image
-                    src={missionImage}
-                    height={260}
-                    width={420}
-                    alt="Luddoc's mission in action"
-                    placeholder="blur"
-                    style={{ objectFit: 'cover', borderRadius: 16 }}
-                  />
-                </div>
-              </Grid.Col>
-              <Grid.Col md={6}>
-                <div className={classes.mvIconBox}>
-                  <IconTarget size={28} color={colors.secondaryColor} stroke={1.8} />
-                </div>
-                <Text className={classes.mvLabel}>Our Purpose</Text>
-                <Text className={classes.mvTitle}>
-                  Our <span style={{ color: colors.secondaryColor }}>Mission</span>
-                </Text>
-                <Text className={classes.mvText}>
-                  To create awareness and empower the informal skills within our society that
-                  uplifts and educates students to thrive and earn a living through the services
-                  offered. This is achieved through a modern approach to learning, state-of-the-art
-                  facilities, a licensed and qualified team of institution management, and accredited
-                  courses and programmes.
-                </Text>
-              </Grid.Col>
-            </Grid>
-          </Container>
-        </Box>
+            <Text className={classes.sectionHeading}>
+              What <span style={{ color: colors.secondaryColor }}>Drives Us</span>
+            </Text>
+            <div className={classes.headingUnderline} />
+            <Text className={classes.sectionSubheading}>
+              Our mission and vision guide every decision we make at Luddoc Skills For Life.
+            </Text>
 
-        {/* ── Vision ── */}
-        <Box className={classes.visionSection}>
-          <Container size="lg">
-            <Grid align="center" gutter={40}>
+            <Grid mt={48} gutter={24}>
               <Grid.Col md={6}>
-                <div className={classes.mvIconBox}>
-                  <IconAward size={28} color={colors.secondaryColor} stroke={1.8} />
+                <div className={`${classes.mvCard} ${classes.mvCardMission}`}>
+                  <div className={classes.mvIconBox}>
+                    <IconTarget size={26} color="white" stroke={1.8} />
+                  </div>
+                  <Text className={classes.mvTitle}>Our Mission</Text>
+                  <Text className={classes.mvText}>
+                    To create awareness and empower the informal skills within our society that
+                    uplifts and educates students to thrive and earn a living through the services
+                    offered. This is achieved through a modern approach to learning, state-of-the-art
+                    facilities, a licensed and qualified team of institution management, and accredited
+                    courses and programmes.
+                  </Text>
                 </div>
-                <Text className={classes.mvLabel}>Our Direction</Text>
-                <Text className={classes.mvTitle}>
-                  Our <span style={{ color: colors.secondaryColor }}>Vision</span>
-                </Text>
-                <Text className={classes.mvText}>
-                  To be the pioneers of change we want to see in the community, through teaching
-                  and demonstrating skills for life that brings out happiness and well-being in the
-                  society.
-                </Text>
               </Grid.Col>
               <Grid.Col md={6}>
-                <div className={classes.mvImageWrapper}>
-                  <Image
-                    src={visionImage}
-                    height={260}
-                    width={420}
-                    alt="Luddoc's vision for the future"
-                    placeholder="blur"
-                    style={{ objectFit: 'cover', borderRadius: 16 }}
-                  />
+                <div className={`${classes.mvCard} ${classes.mvCardVision}`}>
+                  <div className={classes.mvIconBox}>
+                    <IconAward size={26} color="white" stroke={1.8} />
+                  </div>
+                  <Text className={classes.mvTitle}>Our Vision</Text>
+                  <Text className={classes.mvText}>
+                    To be the pioneers of change we want to see in the community, through teaching
+                    and demonstrating skills for life that brings out happiness and well-being in the
+                    society.
+                  </Text>
                 </div>
               </Grid.Col>
             </Grid>
@@ -587,13 +594,29 @@ const About: NextPage = () => {
         {/* ── Tagline Banner ── */}
         <Box className={classes.taglineSection}>
           <Container size="md">
-            <div className={classes.taglineContent}>
-              <Text className={classes.taglineText}>
-                JIJENGE, JIAMINI, JIENJOY
-              </Text>
-              <Text className={classes.taglineSubtext}>
-                Build Yourself, Believe in Yourself, Enjoy Yourself
-              </Text>
+            <Text className={classes.taglineLabel}>Our Motto</Text>
+            <div className={classes.taglinePillars}>
+              <div className={classes.taglinePillar}>
+                <Text className={classes.taglineWord}>JIJENGE</Text>
+                <Text className={classes.taglineTranslation}>Build Yourself</Text>
+                <Text className={classes.taglineDesc}>
+                  Develop your skills, invest in your growth, and lay the foundation for a better future.
+                </Text>
+              </div>
+              <div className={classes.taglinePillar}>
+                <Text className={classes.taglineWord}>JIAMINI</Text>
+                <Text className={classes.taglineTranslation}>Believe in Yourself</Text>
+                <Text className={classes.taglineDesc}>
+                  Trust your ability, embrace your potential, and have confidence in who you are becoming.
+                </Text>
+              </div>
+              <div className={classes.taglinePillar}>
+                <Text className={classes.taglineWord}>JIENJOY</Text>
+                <Text className={classes.taglineTranslation}>Enjoy Yourself</Text>
+                <Text className={classes.taglineDesc}>
+                  Celebrate every milestone, find joy in learning, and live a fulfilling life.
+                </Text>
+              </div>
             </div>
           </Container>
         </Box>
@@ -627,28 +650,17 @@ const About: NextPage = () => {
 
         {/* ── CTA ── */}
         <Box className={classes.ctaSection}>
-          <Container size="md">
-            <div className={classes.ctaCard}>
-              <div className={classes.ctaCardContent}>
-                <Text className={classes.ctaLabel}>Join Our Community</Text>
-                <Text className={classes.ctaTitle}>
-                  Ready to Build<br />
-                  <span className={classes.ctaHighlight}>Your Future</span>?
-                </Text>
-                <Text className={classes.ctaSubtext}>
-                  Join hundreds of students already building better futures with accredited,
-                  expert-led training. Take the first step today.
-                </Text>
-                <div className={classes.ctaButtons}>
-                  <Anchor href="/auth/sign-up" className={classes.ctaButtonPrimary}>
-                    Enrol Today <IconArrowRight size={20} />
-                  </Anchor>
-                  <Anchor href="/contact" className={classes.ctaButtonSecondary}>
-                    <IconPhone size={18} /> Contact Us
-                  </Anchor>
-                </div>
-              </div>
-            </div>
+          <Container size="sm" className={classes.ctaInner}>
+            <Text className={classes.ctaLabel}>Don't Wait</Text>
+            <Text className={classes.ctaTitle}>
+              Ready to Transform<br />Your Career?
+            </Text>
+            <Text className={classes.ctaSubtext}>
+              Join hundreds of students already building better futures. Enrol in an accredited course and take the first step today.
+            </Text>
+            <Anchor href="/auth/sign-up" className={classes.ctaButton}>
+              Enrol Today <IconArrowRight size={18} />
+            </Anchor>
           </Container>
         </Box>
 
