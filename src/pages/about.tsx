@@ -1,7 +1,7 @@
 import {
   Anchor,
   Box,
-  Center,
+
   Container,
   createStyles,
   Grid,
@@ -14,15 +14,12 @@ import {
   IconArrowRight,
   IconAward,
   IconBulb,
-  IconCertificate,
   IconHandRock,
   IconHeart,
   IconPhone,
   IconSchool,
-  IconShieldCheck,
   IconStar,
   IconTarget,
-  IconUserCheck,
   IconUsers,
 } from '@tabler/icons';
 
@@ -32,7 +29,7 @@ import { footerData } from '../constants/footer';
 import { colors } from '../constants/colors';
 import missionImage from '../assets/mission.jpg';
 import visionImage from '../assets/vision.jpg';
-import successImage from '../assets/success.jpg';
+
 
 const useStyles = createStyles((theme) => ({
   // ── Hero ──
@@ -102,68 +99,8 @@ const useStyles = createStyles((theme) => ({
     color: theme.colorScheme === 'light' ? theme.colors.gray[7] : theme.colors.gray[4],
     fontSize: 16,
     lineHeight: 1.8,
-    maxWidth: 520,
+    maxWidth: 680,
     [theme.fn.smallerThan('md')]: { fontSize: 15 },
-  },
-  heroImageWrapper: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative' as const,
-    '&::before': {
-      content: '""',
-      position: 'absolute',
-      top: -20,
-      right: -20,
-      width: 200,
-      height: 200,
-      borderRadius: '50%',
-      background: `radial-gradient(circle, rgba(206,160,40,0.15) 0%, transparent 70%)`,
-      zIndex: 0,
-    },
-  },
-  heroImage: {
-    borderRadius: 20,
-    overflow: 'hidden',
-    position: 'relative' as const,
-    zIndex: 1,
-    boxShadow: '0 20px 60px rgba(0,0,0,0.1)',
-  },
-
-  // ── Stats ──
-  statsSection: {
-    background: `linear-gradient(135deg, ${colors.secondaryColor} 0%, ${colors.goldGradientEnd} 100%)`,
-    padding: '52px 0',
-    position: 'relative' as const,
-    '&::before': {
-      content: '""',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      height: 1,
-      background: 'rgba(255,255,255,0.3)',
-    },
-  },
-  statItem: {
-    textAlign: 'center' as const,
-    padding: '8px 0',
-  },
-  statNumber: {
-    fontSize: 44,
-    fontWeight: 800,
-    color: theme.white,
-    lineHeight: 1,
-    textShadow: '0 2px 10px rgba(0,0,0,0.15)',
-    [theme.fn.smallerThan('sm')]: { fontSize: 34 },
-  },
-  statLabel: {
-    fontSize: 13,
-    fontWeight: 600,
-    color: 'rgba(0,0,0,0.6)',
-    marginTop: 6,
-    textTransform: 'uppercase' as const,
-    letterSpacing: 1.5,
   },
 
   // ── Section shared ──
@@ -193,8 +130,8 @@ const useStyles = createStyles((theme) => ({
   // ── Story Section ──
   storySection: {
     backgroundColor: theme.colorScheme === 'light' ? theme.white : theme.colors.dark[7],
-    padding: '100px 0',
-    [theme.fn.smallerThan('md')]: { padding: '60px 0' },
+    padding: '80px 0',
+    [theme.fn.smallerThan('md')]: { padding: '50px 0' },
   },
   storyContent: {
     maxWidth: 640,
@@ -218,27 +155,21 @@ const useStyles = createStyles((theme) => ({
   // ── Mission / Vision ──
   missionSection: {
     backgroundColor: theme.colorScheme === 'light' ? theme.colors.gray[0] : theme.colors.dark[8],
-    padding: '100px 0',
-    [theme.fn.smallerThan('md')]: { padding: '60px 0' },
+    padding: '80px 0',
+    [theme.fn.smallerThan('md')]: { padding: '50px 0' },
   },
   visionSection: {
     backgroundColor: theme.colorScheme === 'light' ? theme.white : theme.colors.dark[7],
-    padding: '100px 0',
-    [theme.fn.smallerThan('md')]: { padding: '60px 0' },
+    padding: '80px 0',
+    [theme.fn.smallerThan('md')]: { padding: '50px 0' },
   },
   mvImageWrapper: {
-    borderRadius: 20,
+    borderRadius: 16,
     overflow: 'hidden',
-    boxShadow: '0 16px 50px rgba(0,0,0,0.08)',
-    position: 'relative' as const,
-    '&::after': {
-      content: '""',
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      right: 0,
-      height: '30%',
-      background: 'linear-gradient(to top, rgba(0,0,0,0.05), transparent)',
+    maxWidth: 420,
+    [theme.fn.smallerThan('md')]: {
+      maxWidth: 340,
+      margin: '0 auto',
     },
   },
   mvLabel: {
@@ -286,8 +217,8 @@ const useStyles = createStyles((theme) => ({
   // ── Values ──
   valuesSection: {
     backgroundColor: theme.colorScheme === 'light' ? theme.colors.gray[0] : theme.colors.dark[8],
-    padding: '100px 0',
-    [theme.fn.smallerThan('md')]: { padding: '60px 0' },
+    padding: '80px 0',
+    [theme.fn.smallerThan('md')]: { padding: '50px 0' },
   },
   valueCard: {
     backgroundColor: theme.colorScheme === 'light' ? theme.white : theme.colors.dark[6],
@@ -380,8 +311,8 @@ const useStyles = createStyles((theme) => ({
   // ── CTA ──
   ctaSection: {
     backgroundColor: theme.colorScheme === 'light' ? theme.white : theme.colors.dark[7],
-    padding: '100px 0',
-    [theme.fn.smallerThan('md')]: { padding: '60px 0' },
+    padding: '80px 0',
+    [theme.fn.smallerThan('md')]: { padding: '50px 0' },
   },
   ctaCard: {
     backgroundColor: 'rgba(0,0,0,0.9)',
@@ -499,13 +430,6 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const stats = [
-  { number: '500+', label: 'Students Trained' },
-  { number: '6+', label: 'Courses Offered' },
-  { number: '5+', label: 'Years Experience' },
-  { number: '100%', label: 'Accredited' },
-];
-
 const coreValues = [
   {
     icon: IconStar,
@@ -553,50 +477,17 @@ const About: NextPage = () => {
         {/* ── Hero ── */}
         <Box className={classes.heroSection}>
           <Container size="lg">
-            <Grid align="center" gutter={60}>
-              <Grid.Col md={6}>
-                <Text className={classes.heroEyebrow}>About Us</Text>
-                <Text className={classes.heroTitle}>
-                  Empowering Lives{' '}
-                  <span className={classes.heroGold}>Through Skills</span>
-                </Text>
-                <Text className={classes.heroText}>
-                  Luddoc Skills For Life Technical Institute is a modern training facility offering
-                  locally and internationally accredited courses. We focus on tapping the informal
-                  sector, equipping students with refined skills and knowledge to uplift their
-                  living standards and improve community well-being.
-                </Text>
-              </Grid.Col>
-              <Grid.Col md={6}>
-                <div className={classes.heroImageWrapper}>
-                  <div className={classes.heroImage}>
-                    <Image
-                      src={successImage}
-                      height={400}
-                      width={500}
-                      alt="Students celebrating success at Luddoc"
-                      placeholder="blur"
-                    />
-                  </div>
-                </div>
-              </Grid.Col>
-            </Grid>
-          </Container>
-        </Box>
-
-        {/* ── Stats Bar ── */}
-        <Box className={classes.statsSection}>
-          <Container size="lg">
-            <Grid>
-              {stats.map((stat) => (
-                <Grid.Col xs={6} md={3} key={stat.label}>
-                  <div className={classes.statItem}>
-                    <Text className={classes.statNumber}>{stat.number}</Text>
-                    <Text className={classes.statLabel}>{stat.label}</Text>
-                  </div>
-                </Grid.Col>
-              ))}
-            </Grid>
+            <Text className={classes.heroEyebrow}>About Us</Text>
+            <Text className={classes.heroTitle}>
+              Empowering Lives{' '}
+              <span className={classes.heroGold}>Through Skills</span>
+            </Text>
+            <Text className={classes.heroText}>
+              Luddoc Skills For Life Technical Institute is a modern training facility offering
+              locally and internationally accredited courses. We focus on tapping the informal
+              sector, equipping students with refined skills and knowledge to uplift their
+              living standards and improve community well-being.
+            </Text>
           </Container>
         </Box>
 
@@ -626,15 +517,16 @@ const About: NextPage = () => {
         {/* ── Mission ── */}
         <Box className={classes.missionSection}>
           <Container size="lg">
-            <Grid align="center" gutter={60}>
+            <Grid align="center" gutter={40}>
               <Grid.Col md={6}>
                 <div className={classes.mvImageWrapper}>
                   <Image
                     src={missionImage}
-                    height={380}
-                    width={520}
+                    height={260}
+                    width={420}
                     alt="Luddoc's mission in action"
                     placeholder="blur"
+                    style={{ objectFit: 'cover', borderRadius: 16 }}
                   />
                 </div>
               </Grid.Col>
@@ -661,7 +553,7 @@ const About: NextPage = () => {
         {/* ── Vision ── */}
         <Box className={classes.visionSection}>
           <Container size="lg">
-            <Grid align="center" gutter={60}>
+            <Grid align="center" gutter={40}>
               <Grid.Col md={6}>
                 <div className={classes.mvIconBox}>
                   <IconAward size={28} color={colors.secondaryColor} stroke={1.8} />
@@ -680,10 +572,11 @@ const About: NextPage = () => {
                 <div className={classes.mvImageWrapper}>
                   <Image
                     src={visionImage}
-                    height={380}
-                    width={520}
+                    height={260}
+                    width={420}
                     alt="Luddoc's vision for the future"
                     placeholder="blur"
+                    style={{ objectFit: 'cover', borderRadius: 16 }}
                   />
                 </div>
               </Grid.Col>

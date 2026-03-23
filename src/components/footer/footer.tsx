@@ -1,5 +1,5 @@
 import { Text, Container, ActionIcon, Group } from '@mantine/core';
-import { IconBrandYoutube, IconBrandInstagram, IconBrandFacebook } from '@tabler/icons';
+import { IconBrandYoutube, IconBrandInstagram, IconBrandFacebook, IconBrandLinkedin } from '@tabler/icons';
 import Image from 'next/image';
 
 import { useStyles } from './footer.styles';
@@ -38,23 +38,25 @@ function FooterLinks({ data }: FooterLinksProps) {
 
   return (
     <footer className={classes.footer}>
-      <Container className={classes.inner}>
+      <Container size="xl" className={classes.inner}>
         <div className={classes.logo}>
-          <Image
-            src={logo}
-            width={130}
-            height={130}
-            alt='logo'
-          />
-          <Text size="xs" color="dimmed" className={classes.description}>
-            Don't wait, enroll today
+          <div className={classes.logoImage}>
+            <Image
+              src={logo}
+              width={80}
+              height={90}
+              alt='Luddoc Skills For Life'
+            />
+          </div>
+          <Text className={classes.description}>
+            Accredited training that transforms lives. Don't wait, enrol today.
           </Text>
         </div>
         <div className={classes.groups}>{groups}</div>
       </Container>
-      <Container className={classes.afterFooter}>
-        <Text color="dimmed" size="sm">
-          © {new Date().getFullYear()} Luddoc S.F.L. All rights reserved.
+      <Container size="xl" className={classes.afterFooter}>
+        <Text className={classes.copyright}>
+          © {new Date().getFullYear()} Luddoc Skills For Life. All rights reserved.
         </Text>
 
         <Group spacing={0} className={classes.social} position="right" noWrap>
@@ -63,21 +65,28 @@ function FooterLinks({ data }: FooterLinksProps) {
             href='https://www.facebook.com/mygrannyslove?mibextid=ZbWKwL'
             size="lg"
           >
-            <IconBrandFacebook size={24} stroke={1.5} />
+            <IconBrandFacebook size={20} stroke={1.5} />
           </ActionIcon>
           <ActionIcon
             component='a'
             href='https://www.youtube.com/@GrannysLoveLtd'
             size="lg"
           >
-            <IconBrandYoutube size={24} stroke={1.5} />
+            <IconBrandYoutube size={20} stroke={1.5} />
           </ActionIcon>
           <ActionIcon
             component='a'
             href='https://www.instagram.com/mygrannyslove/'
             size="lg"
           >
-            <IconBrandInstagram size={24} stroke={1.5} />
+            <IconBrandInstagram size={20} stroke={1.5} />
+          </ActionIcon>
+          <ActionIcon
+            component='a'
+            href='https://www.linkedin.com/company/grannyslovelimited/'
+            size="lg"
+          >
+            <IconBrandLinkedin size={20} stroke={1.5} />
           </ActionIcon>
         </Group>
       </Container>

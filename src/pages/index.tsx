@@ -21,11 +21,8 @@ import {
   IconClock,
   IconDeviceDesktop,
   IconHeart,
-  IconMail,
-  IconPhone,
   IconShieldCheck,
   IconStethoscope,
-  IconUserCheck,
   IconWorld,
 } from '@tabler/icons';
 
@@ -99,7 +96,7 @@ const useStyles = createStyles((theme) => ({
       fontSize: 34,
     },
     [theme.fn.smallerThan('sm')]: {
-      fontSize: 28,
+      fontSize: 24,
     },
   },
   heroGold: {
@@ -128,6 +125,10 @@ const useStyles = createStyles((theme) => ({
     [theme.fn.smallerThan('md')]: {
       fontSize: 15,
     },
+    [theme.fn.smallerThan('sm')]: {
+      fontSize: 14,
+      maxWidth: '100%',
+    },
   },
   heroButtons: {
     display: 'flex',
@@ -154,6 +155,10 @@ const useStyles = createStyles((theme) => ({
       boxShadow: '0 6px 20px rgba(206, 160, 40, 0.4)',
       textDecoration: 'none',
     },
+    [theme.fn.smallerThan('sm')]: {
+      padding: '12px 28px',
+      fontSize: 14,
+    },
   },
   btnOutline: {
     backgroundColor: 'transparent',
@@ -173,11 +178,18 @@ const useStyles = createStyles((theme) => ({
       transform: 'translateY(-2px)',
       textDecoration: 'none',
     },
+    [theme.fn.smallerThan('sm')]: {
+      padding: '12px 28px',
+      fontSize: 14,
+    },
   },
   heroImageWrapper: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    [theme.fn.smallerThan('md')]: {
+      marginTop: 24,
+    },
   },
 
   // ── Stats Section ──
@@ -227,6 +239,9 @@ const useStyles = createStyles((theme) => ({
     [theme.fn.smallerThan('md')]: {
       fontSize: 28,
     },
+    [theme.fn.smallerThan('sm')]: {
+      fontSize: 24,
+    },
   },
   sectionSubheading: {
     fontSize: 16,
@@ -266,6 +281,13 @@ const useStyles = createStyles((theme) => ({
   valueProp: {
     textAlign: 'center' as const,
     maxWidth: 220,
+    [theme.fn.smallerThan('sm')]: {
+      maxWidth: '100%',
+      width: '45%',
+    },
+    [theme.fn.smallerThan('xs')]: {
+      width: '100%',
+    },
   },
   valuePropIcon: {
     width: 56,
@@ -341,6 +363,9 @@ const useStyles = createStyles((theme) => ({
     textAlign: 'center' as const,
     [theme.fn.smallerThan('md')]: {
       fontSize: 28,
+    },
+    [theme.fn.smallerThan('sm')]: {
+      fontSize: 24,
     },
   },
   howToJoinUnderline: {
@@ -490,6 +515,9 @@ const useStyles = createStyles((theme) => ({
     [theme.fn.smallerThan('md')]: {
       fontSize: 30,
     },
+    [theme.fn.smallerThan('sm')]: {
+      fontSize: 24,
+    },
   },
   ctaSubtext: {
     color: 'rgba(255,255,255,0.85)',
@@ -499,6 +527,10 @@ const useStyles = createStyles((theme) => ({
     margin: '20px auto 40px',
     [theme.fn.smallerThan('md')]: {
       fontSize: 16,
+    },
+    [theme.fn.smallerThan('sm')]: {
+      fontSize: 14,
+      margin: '16px auto 32px',
     },
   },
 }));
@@ -587,11 +619,10 @@ const Home: NextPage = () => {
               </Grid.Col>
               <Grid.Col md={6}>
                 <div className={classes.heroImageWrapper}>
-                  <Image
+                  <img
                     src="/hero2.svg"
-                    height={460}
-                    width={560}
                     alt="Students learning online"
+                    style={{ width: '100%', maxWidth: 560, height: 'auto' }}
                   />
                 </div>
               </Grid.Col>
@@ -650,7 +681,7 @@ const Home: NextPage = () => {
             </Center>
             <Grid gutter={20}>
               {courses.map((course) => (
-                <Grid.Col sm={6} md={4} key={course.name}>
+                <Grid.Col xs={12} sm={6} md={4} key={course.name}>
                   <div className={classes.courseCard}>
                     <div className={classes.courseIconWrapper}>
                       <course.icon size={24} color="white" stroke={1.8} />
@@ -684,7 +715,7 @@ const Home: NextPage = () => {
               <div className={classes.stepsConnector} />
               <Grid gutter={24}>
                 {steps.map((step) => (
-                  <Grid.Col md={4} key={step.number}>
+                  <Grid.Col xs={12} sm={6} md={4} key={step.number}>
                     <div className={classes.stepCard}>
                       <div className={classes.stepNumberRing}>
                         <div className={classes.stepNumberInner}>{step.number}</div>
