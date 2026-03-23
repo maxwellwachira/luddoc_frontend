@@ -1,6 +1,5 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import MainLayout from '../../layouts/mainLayout/mainLayout';
 import { ForgotPassword } from '../../features/authentication';
 
 const ForgotPass: NextPage = () => {
@@ -8,12 +7,10 @@ const ForgotPass: NextPage = () => {
     <>
       <Head>
         <title>Luddoc | Forgot Password</title>
-        <meta name="description" content="SForgot password Luddoc" />
+        <meta name="description" content="Reset your Luddoc account password" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <MainLayout>
-        <ForgotPassword />
-      </MainLayout>
+      <ForgotPassword />
     </>
   );
 }

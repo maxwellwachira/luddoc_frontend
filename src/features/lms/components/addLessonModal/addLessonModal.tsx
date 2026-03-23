@@ -2,9 +2,12 @@ import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Modal, TextInput, Stack, Button, Container, Text, Stepper, Group, Box, Notification, Divider, Paper, Alert } from '@mantine/core';
 import { IconAlertCircle, IconArrowLeft, IconArrowRight, IconCheck, IconUpload, IconX } from '@tabler/icons';
-import { EditorProps } from 'react-draft-wysiwyg'
-import { Editor } from "react-draft-wysiwyg";
 import { EditorState, convertToRaw } from 'draft-js';
+
+const Editor = dynamic(
+  () => import('react-draft-wysiwyg').then((mod) => mod.Editor),
+  { ssr: false }
+);
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import draftToHtml from 'draftjs-to-html';
 

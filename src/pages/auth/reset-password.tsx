@@ -1,6 +1,5 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import MainLayout from '../../layouts/mainLayout/mainLayout';
 import { ResetPassword } from '../../features/authentication';
 
 const ResetPage: NextPage = () => {
@@ -8,12 +7,10 @@ const ResetPage: NextPage = () => {
     <>
       <Head>
         <title>Luddoc | Reset Password</title>
-        <meta name="description" content="Reset password Luddoc" />
+        <meta name="description" content="Set a new password for your Luddoc account" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <MainLayout>
-        <ResetPassword />
-      </MainLayout>
+      <ResetPassword />
     </>
   );
 }

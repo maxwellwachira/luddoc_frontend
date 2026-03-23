@@ -1,20 +1,16 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import MainLayout from '../../layouts/mainLayout/mainLayout';
 import { Login } from '../../features/authentication';
-
 
 const SignIn: NextPage = () => {
   return (
     <>
       <Head>
         <title>Luddoc | Sign In</title>
-        <meta name="description" content="Sign in / Login to Luddoc" />
+        <meta name="description" content="Sign in to Luddoc Skills For Life Technical Institute" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <MainLayout>
-        <Login />
-      </MainLayout>
+      <Login />
     </>
   );
 }

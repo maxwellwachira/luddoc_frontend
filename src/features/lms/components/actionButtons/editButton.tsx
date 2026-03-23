@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Alert, Button, Container, Modal, Stack, Text, TextInput, UnstyledButton, Select, Radio, NumberInput, Stepper, Group, Box, Textarea, FileInput, Notification, Divider, Paper } from "@mantine/core";
 import { IconAlertCircle, IconArrowLeft, IconArrowRight, IconCheck, IconCross, IconUpload, IconX } from "@tabler/icons";
-import { EditorProps } from 'react-draft-wysiwyg';
 import dynamic from 'next/dynamic';
-import { Editor } from "react-draft-wysiwyg";
+
+const Editor = dynamic(
+  () => import('react-draft-wysiwyg').then((mod) => mod.Editor),
+  { ssr: false }
+);
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 import { useStyles } from './actionButtons.styles';
