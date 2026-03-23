@@ -434,9 +434,13 @@ const Contact: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Luddoc | Contact Us</title>
-        <meta name="description" content="Get in touch with Luddoc Skills For Life Technical Institute. Located at Githurai, Mumbi Rd, Silicon Gem Apartments, Nairobi." />
-        <link rel="icon" href="/favicon.ico" />
+        <title>Contact Us | Luddoc Skills For Life Technical Institute</title>
+        <meta name="description" content="Get in touch with Luddoc Skills For Life Technical Institute. Located at Githurai, Mumbi Rd, Silicon Gem Apartments, Nairobi, Kenya." />
+        <meta name="keywords" content="Luddoc, contact, Nairobi, Githurai, technical institute, phone, email" />
+        <meta property="og:title" content="Contact Us | Luddoc Skills For Life" />
+        <meta property="og:description" content="Get in touch with Luddoc Skills For Life Technical Institute in Nairobi, Kenya." />
+        <meta property="og:url" content="https://luddoc-institute.com/contact" />
+        <link rel="canonical" href="https://luddoc-institute.com/contact" />
       </Head>
       <MainLayout>
         {/* ── Hero ── */}

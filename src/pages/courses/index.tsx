@@ -176,9 +176,13 @@ const Courses: NextPage = () => {
     return (
         <>
             <Head>
-                <title>Luddoc | Courses</title>
-                <meta name="description" content="Courses Page" />
-                <link rel="icon" href="/favicon.ico" />
+                <title>Courses | Luddoc Skills For Life Technical Institute</title>
+                <meta name="description" content="Browse accredited courses at Luddoc Skills For Life — Care Giving, Counseling Psychology, Community Development, Front Office, Computer Packages, and more." />
+                <meta name="keywords" content="Luddoc, courses, care giving, counseling psychology, community development, front office, computer packages, accredited" />
+                <meta property="og:title" content="Courses | Luddoc Skills For Life" />
+                <meta property="og:description" content="Browse accredited courses — Care Giving, Counseling Psychology, Community Development, and more." />
+                <meta property="og:url" content="https://luddoc-institute.com/courses" />
+                <link rel="canonical" href="https://luddoc-institute.com/courses" />
             </Head>
             <MainLayout>
                 <Container mt="md">

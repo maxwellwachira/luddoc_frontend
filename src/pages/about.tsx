@@ -501,9 +501,13 @@ const About: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Luddoc | About Us</title>
-        <meta name="description" content="Learn about Luddoc Skills For Life Technical Institute — our mission, vision, and commitment to empowering students through accredited training." />
-        <link rel="icon" href="/favicon.ico" />
+        <title>About Us | Luddoc Skills For Life Technical Institute</title>
+        <meta name="description" content="Learn about Luddoc Skills For Life Technical Institute — our mission, vision, and commitment to empowering students through accredited training in Kenya." />
+        <meta name="keywords" content="Luddoc, about, mission, vision, technical institute, Kenya, accredited training" />
+        <meta property="og:title" content="About Us | Luddoc Skills For Life" />
+        <meta property="og:description" content="Our mission, vision, and commitment to empowering students through accredited training." />
+        <meta property="og:url" content="https://luddoc-institute.com/about" />
+        <link rel="canonical" href="https://luddoc-institute.com/about" />
       </Head>
       <MainLayout>
         {/* ── Hero ── */}

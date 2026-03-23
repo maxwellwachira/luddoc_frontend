@@ -368,9 +368,13 @@ const Faq: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Luddoc | FAQ</title>
-        <meta name="description" content="Frequently asked questions about Luddoc Skills For Life Technical Institute — enrolment, courses, certificates, and more." />
-        <link rel="icon" href="/favicon.ico" />
+        <title>FAQ | Luddoc Skills For Life Technical Institute</title>
+        <meta name="description" content="Frequently asked questions about Luddoc Skills For Life Technical Institute — enrolment, courses, certificates, fees, and more." />
+        <meta name="keywords" content="Luddoc, FAQ, frequently asked questions, enrolment, courses, certificates, fees" />
+        <meta property="og:title" content="FAQ | Luddoc Skills For Life" />
+        <meta property="og:description" content="Frequently asked questions about enrolment, courses, certificates, and more." />
+        <meta property="og:url" content="https://luddoc-institute.com/faq" />
+        <link rel="canonical" href="https://luddoc-institute.com/faq" />
       </Head>
       <MainLayout>
         {/* ── Hero ── */}

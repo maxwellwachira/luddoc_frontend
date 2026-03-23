@@ -585,9 +585,22 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Luddoc Skills For Life | Accredited Training Institute</title>
-        <meta name="description" content="Luddoc Skills For Life Technical Institute — accredited courses in Care Giving, Counseling Psychology, and more. Enrol today." />
-        <link rel="icon" href="/favicon.ico" />
+        <title>Luddoc Skills For Life | Accredited Training Institute in Kenya</title>
+        <meta name="description" content="Luddoc Skills For Life Technical Institute offers accredited courses in Care Giving, Counseling Psychology, Community Development, and more. Flexible learning with nationally recognised certifications. Enrol today." />
+        <meta name="keywords" content="Luddoc, Skills For Life, technical institute, accredited courses, care giving, counseling psychology, community development, front office, computer packages, Kenya, training, certification" />
+
+        {/* Open Graph */}
+        <meta property="og:title" content="Luddoc Skills For Life | Accredited Training Institute" />
+        <meta property="og:description" content="Accredited courses in Care Giving, Counseling Psychology, Community Development, and more. Flexible learning with nationally recognised certifications." />
+        <meta property="og:url" content="https://luddoc-institute.com" />
+        <meta property="og:image" content="https://luddoc-institute.com/hero2.svg" />
+
+        {/* Twitter */}
+        <meta name="twitter:title" content="Luddoc Skills For Life | Accredited Training Institute" />
+        <meta name="twitter:description" content="Accredited courses in Care Giving, Counseling Psychology, Community Development, and more. Enrol today." />
+        <meta name="twitter:image" content="https://luddoc-institute.com/hero2.svg" />
+
+        <link rel="canonical" href="https://luddoc-institute.com" />
       </Head>
       <MainLayout>
         {/* ── Hero Section ── */}
