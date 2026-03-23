@@ -4,135 +4,154 @@ import { colors } from '../../constants/colors';
 
 export const useStyles = createStyles((theme) => ({
     active: {
-       textDecoration: 'underline',
-       textDecorationColor: `${colors.secondaryColor}`,
-       textDecorationThickness: '4px'
+       textDecoration: 'none',
+       color: `${colors.secondaryColor} !important`,
     },
 
     activeSignIn: {
         backgroundColor: `${colors.secondaryColor}`,
-        color: theme.colors.gray[0] 
+        color: `${theme.colors.gray[0]} !important`,
     },
 
-
     activeSignUp: {
-        backgroundColor: `${colors.primaryColor}`,
-        color:  theme.colors.gray[0] 
+        backgroundColor: `${colors.secondaryColor}`,
+        color: `${theme.colors.gray[0]} !important`,
     },
 
     bodyBackground: {
-        background: theme.colorScheme === 'light' ?  theme.colors.gray[0] : theme.colors.dark[7],
-        margin: "0"
+        background: theme.colorScheme === 'light' ? theme.colors.gray[0] : theme.colors.dark[7],
+        margin: 0,
     },
 
     burger: {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        height: "60px"
-    },
-    darkBackground: {
-        background: theme.colors.dark[7],
-        color: 'white'
+        height: 70,
+        padding: '0 16px',
     },
 
-    goldText: {
-        color: `${colors.secondaryColor}`
+    burgerText: {
+        color: colors.secondaryColor,
+        fontWeight: 700,
+        fontSize: 16,
+        '&:hover': {
+            textDecoration: 'none',
+        },
     },
 
     header: {
-        display:"flex",
+        display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        height: "100px"
+        height: 80,
     },
 
     headerBackground: {
-        background: 'transparent'
+        background: colors.primaryColor,
+        borderBottom: `1px solid rgba(206, 160, 40, 0.15)`,
     },
 
     links: {
-        margin: "0 25px",
         display: "flex",
+        alignItems: 'center',
+        gap: 4,
         [theme.fn.smallerThan("md")]: {
             display: "none"
         }
     },
 
     logo: {
-        margin: "0 20px",
+        margin: "0 8px",
         [theme.fn.smallerThan("md")]: {
             display: "none"
         }
     },
 
     navbar: {
+        backgroundColor: colors.primaryColor,
+        borderRight: 'none',
+        padding: '8px 0',
         [theme.fn.largerThan("md")]: {
           display: "none"
         },
-
     },
-    
+
     navitem: {
-        margin: "0 15px",
-        color: theme.colorScheme === 'dark' ?  theme.colors.gray[5] : theme.colors.dark[5],
+        margin: "0 10px",
+        padding: '6px 12px',
+        borderRadius: 6,
+        fontSize: 14,
+        fontWeight: 500,
+        color: theme.colors.gray[4],
+        transition: 'all 0.2s ease',
 
         '&:hover': {
-            textDecoration: 'underline',
-            textDecorationColor: `${colors.secondaryColor}`,
-            textDecorationThickness: '4px'
+            textDecoration: 'none',
+            color: colors.secondaryColor,
+            backgroundColor: 'rgba(206, 160, 40, 0.08)',
         }
     },
 
     signin: {
-        backgroundColor: "transaparent",
+        backgroundColor: 'transparent',
         border: `2px solid ${colors.secondaryColor}`,
-        padding: "1px 10px",
-        textAlign: "center",
-        color:  `${colors.secondaryColor}`,
-        borderRadius: 7,
+        padding: '8px 28px',
+        textAlign: 'center',
+        color: colors.secondaryColor,
+        borderRadius: 30,
+        fontWeight: 600,
+        fontSize: 14,
+        letterSpacing: 0.5,
+        transition: 'all 0.3s ease',
+        marginLeft: 12,
 
         [theme.fn.smallerThan("md")]: {
-          width: '100px',
-          margin: '7px 7px'
+          width: '130px',
+          margin: '8px 10px',
+          textAlign: 'center',
         },
         '&:hover': {
-            backgroundColor: `${colors.secondaryColor}`,
-            color:  theme.colors.gray[0],
-            
-        }
-    
+            backgroundColor: colors.secondaryColor,
+            color: theme.white,
+            textDecoration: 'none',
+            transform: 'translateY(-2px)',
+            boxShadow: '0 4px 15px rgba(206, 160, 40, 0.3)',
+        },
     },
 
     signup: {
-        backgroundColor: 'transaparent',
-        border: `2px solid ${colors.primaryColor}`,
-        padding: "1px 10px",
-        textAlign: "center",
-        color:  theme.colorScheme === 'light' ? theme.colors.dark[7] : theme.colors.gray[0] ,
-        borderRadius: 7,
-        [theme.fn.smallerThan("md")]: {
-            width: '100px',
-            margin: '7px 7px'
-        },
+        backgroundColor: colors.secondaryColor,
+        border: `2px solid ${colors.secondaryColor}`,
+        padding: '8px 28px',
+        textAlign: 'center',
+        color: theme.white,
+        borderRadius: 30,
+        fontWeight: 700,
+        fontSize: 14,
+        letterSpacing: 0.5,
+        transition: 'all 0.3s ease',
+        boxShadow: '0 0 20px rgba(206, 160, 40, 0.35)',
+        marginLeft: 6,
 
+        [theme.fn.smallerThan("md")]: {
+            width: '130px',
+            margin: '8px 10px',
+            textAlign: 'center',
+        },
         '&:hover': {
-            backgroundColor: `${colors.primaryColor}`,
-            color: theme.colorScheme === 'light' ?  theme.colors.gray[0] : theme.colors.dark[7],
-            textDecoration: 'none'
-        }, 
+            backgroundColor: colors.secondaryColorDark,
+            borderColor: colors.secondaryColorDark,
+            textDecoration: 'none',
+            transform: 'translateY(-2px)',
+            boxShadow: '0 4px 15px rgba(206, 160, 40, 0.4)',
+        },
     },
 
     wrapper: {
-        position: 'absolute',
-        zIndex: 100,
-        top: 0,
-        left: 0,
-        height:950,
-        [theme.fn.largerThan(1700)]: {
-            height:1050
-        },
-        
+        position: 'relative',
+        width: '100%',
+        minHeight: '100vh',
     }
 
 }))

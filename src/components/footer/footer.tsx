@@ -54,7 +54,7 @@ function FooterLinks({ data }: FooterLinksProps) {
       </Container>
       <Container className={classes.afterFooter}>
         <Text color="dimmed" size="sm">
-          © 2022 Luddoc S.F.L. All rights reserved.
+          © {new Date().getFullYear()} Luddoc S.F.L. All rights reserved.
         </Text>
 
         <Group spacing={0} className={classes.social} position="right" noWrap>
@@ -63,21 +63,21 @@ function FooterLinks({ data }: FooterLinksProps) {
             href='https://www.facebook.com/mygrannyslove?mibextid=ZbWKwL'
             size="lg"
           >
-            <IconBrandFacebook size={18} stroke={1.5} />
+            <IconBrandFacebook size={24} stroke={1.5} />
           </ActionIcon>
           <ActionIcon
             component='a'
             href='https://www.youtube.com/@GrannysLoveLtd'
             size="lg"
           >
-            <IconBrandYoutube size={18} stroke={1.5} />
+            <IconBrandYoutube size={24} stroke={1.5} />
           </ActionIcon>
           <ActionIcon
             component='a'
             href='https://www.instagram.com/mygrannyslove/'
             size="lg"
           >
-            <IconBrandInstagram size={18} stroke={1.5} />
+            <IconBrandInstagram size={24} stroke={1.5} />
           </ActionIcon>
         </Group>
       </Container>

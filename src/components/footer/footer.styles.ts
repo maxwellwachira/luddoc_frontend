@@ -3,7 +3,7 @@ import { createStyles } from "@mantine/core";
 import { colors } from "../../constants/colors";
 export const useStyles = createStyles((theme) => ({
     footer: {
-      marginTop: 120,
+      marginTop: 0,
       paddingTop: theme.spacing.xl * 2,
       paddingBottom: theme.spacing.xl * 2,
       backgroundColor: `${colors.primaryColor}`,
@@ -56,13 +56,15 @@ export const useStyles = createStyles((theme) => ({
   
     link: {
       display: 'block',
-      color: theme.colorScheme === 'dark' ? theme.colors.dark[1] : theme.colors.gray[6],
-      fontSize: theme.fontSizes.sm,
-      paddingTop: 3,
-      paddingBottom: 3,
-  
+      color: theme.colorScheme === 'dark' ? theme.colors.dark[1] : theme.colors.gray[5],
+      fontSize: theme.fontSizes.md,
+      paddingTop: 4,
+      paddingBottom: 4,
+      transition: 'color 0.2s ease',
+
       '&:hover': {
-        textDecoration: 'underline',
+        textDecoration: 'none',
+        color: colors.secondaryColor,
       },
     },
   
@@ -91,8 +93,16 @@ export const useStyles = createStyles((theme) => ({
     },
   
     social: {
+      gap: 8,
       [theme.fn.smallerThan('sm')]: {
         marginTop: theme.spacing.xs,
+      },
+      '& .mantine-ActionIcon-root': {
+        transition: 'all 0.2s ease',
+        '&:hover': {
+          backgroundColor: colors.secondaryColor,
+          borderRadius: '50%',
+        },
       },
     },
   }));
