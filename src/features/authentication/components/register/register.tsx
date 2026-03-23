@@ -3,126 +3,119 @@ import {
   TextInput,
   PasswordInput,
   Text,
-  Paper,
-  Group,
-  PaperProps,
   Button,
-  Divider,
   Checkbox,
   Anchor,
   Stack,
   Grid,
-  Notification
+  Notification,
+  Box,
+  Center,
 } from '@mantine/core';
-import { useStyles } from './register.styles';
-import Image from 'next/image';
 import { IconCheck, IconX } from '@tabler/icons';
 
-import  { useRegisterUser } from '../../hooks/useRegisterUser';
+import { useStyles } from './register.styles';
+import { useRegisterUser } from '../../hooks/useRegisterUser';
 
-const Register = (props: PaperProps) => {
+const Register = () => {
   const { classes } = useStyles();
   const { form, response, loading, handleSubmit, clearResponse } = useRegisterUser();
 
   return (
-    <Paper radius="md" p="xl" withBorder {...props} className={classes.wrapper}>
-      <Grid>
-        <Grid.Col md={6}>
-          <Image
-            src="/register1.svg"
-            height={550}
-            width={450}
-          />
-          </Grid.Col>
-          <Grid.Col md={6}>
-            <Text size="lg" weight={500}>
-              Register to Luddoc,
-            </Text>
-            {response === 'success' ? (
-                <Notification icon={<IconCheck size={18} />} color="teal" title="Registration Successful" onClose={clearResponse}>
-                  Check email to activate your account
-                </Notification>
-            ): response ? (
-              <Notification icon={<IconX size={18} />} color="red" title="Error" onClose={clearResponse}>
-                {response}
-              </Notification>
-            ): ''}
-            <Divider label="register" labelPosition="center" my="lg" />
+    <Box className={classes.wrapper}>
+      <div className={classes.card}>
+        <Text className={classes.title}>
+          Create Your <span className={classes.goldText}>Account</span>
+        </Text>
+        <Text className={classes.subtitle}>
+          Join Luddoc and start your learning journey today
+        </Text>
 
-            <form onSubmit={form.onSubmit(() => handleSubmit())}>
-              <Stack>
-                  <Grid>
-                    <Grid.Col md = {6}>
-                      <TextInput
-                        required
-                        label="First Name"
-                        placeholder="Your first name"
-                        value={form.values.firstName}
-                        onChange={(event) => form.setFieldValue('firstName', event.currentTarget.value)}
-                      />
-                    </Grid.Col>
-                    <Grid.Col md={6}>
-                      <TextInput
-                        required
-                        label="Last Name"
-                        placeholder="Your last name"
-                        value={form.values.lastName}
-                        onChange={(event) => form.setFieldValue('lastName', event.currentTarget.value)}
-                      />
-                    </Grid.Col>
-                  </Grid>
+        {response === 'success' ? (
+          <Notification icon={<IconCheck size={18} />} color="teal" title="Registration Successful" onClose={clearResponse} mb="lg">
+            Check your email to activate your account
+          </Notification>
+        ) : response ? (
+          <Notification icon={<IconX size={18} />} color="red" title="Error" onClose={clearResponse} mb="lg">
+            {response}
+          </Notification>
+        ) : null}
 
+        <form onSubmit={form.onSubmit(() => handleSubmit())}>
+          <Stack spacing="md">
+            <Grid gutter="md">
+              <Grid.Col sm={6}>
                 <TextInput
                   required
-                  label="Email"
-                  placeholder="hello@gmail.com"
-                  value={form.values.email}
-                  onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
-                  error={form.errors.email && 'Invalid email'}
+                  label="First Name"
+                  placeholder="John"
+                  value={form.values.firstName}
+                  onChange={(event) => form.setFieldValue('firstName', event.currentTarget.value)}
+                  className={classes.input}
                 />
-
+              </Grid.Col>
+              <Grid.Col sm={6}>
                 <TextInput
                   required
-                  label="Phone Number"
-                  placeholder="254703519593"
-                  value={form.values.phoneNumber}
-                  onChange={(event) => form.setFieldValue('phoneNumber', event.currentTarget.value)}
+                  label="Last Name"
+                  placeholder="Doe"
+                  value={form.values.lastName}
+                  onChange={(event) => form.setFieldValue('lastName', event.currentTarget.value)}
+                  className={classes.input}
                 />
+              </Grid.Col>
+            </Grid>
 
-                <PasswordInput
-                  required
-                  label="Password"
-                  placeholder="Your password"
-                  value={form.values.password}
-                  onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
-                  error={form.errors.password && 'Password should include at least 6 characters'}
-                />
+            <TextInput
+              required
+              label="Email"
+              placeholder="you@example.com"
+              value={form.values.email}
+              onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
+              error={form.errors.email && 'Invalid email'}
+              className={classes.input}
+            />
 
+            <TextInput
+              required
+              label="Phone Number"
+              placeholder="0712 345 678"
+              value={form.values.phoneNumber}
+              onChange={(event) => form.setFieldValue('phoneNumber', event.currentTarget.value)}
+              className={classes.input}
+            />
 
-                  <Checkbox
-                    label="I accept terms and conditions"
-                    checked={form.values.terms}
-                    disabled
-                    onChange={(event) => form.setFieldValue('terms', event.currentTarget.checked)}
-                  />
-              </Stack>
+            <PasswordInput
+              required
+              label="Password"
+              placeholder="At least 6 characters"
+              value={form.values.password}
+              onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
+              error={form.errors.password && 'Password should include at least 6 characters'}
+              className={classes.input}
+            />
 
-              <Group position="apart" mt="xl">
-                <Anchor
-                  href='/auth/sign-in'
-                  color="dimmed"
-                  size="xs"
-                >        
-                    Already have an account? Login
-                </Anchor>
-                <Button type="submit" className={classes.button} loading={loading}>Register</Button>
-              </Group>
-            </form>
-          </Grid.Col>
-      </Grid>
-      
-    </Paper>
-  )
-}
+            <Checkbox
+              label="I accept terms and conditions"
+              checked={form.values.terms}
+              disabled
+              onChange={(event) => form.setFieldValue('terms', event.currentTarget.checked)}
+            />
+          </Stack>
+
+          <Button type="submit" className={classes.button} loading={loading} fullWidth mt="xl">
+            Create Account
+          </Button>
+
+          <Center mt="lg">
+            <Anchor href="/auth/sign-in" className={classes.link}>
+              Already have an account? <span style={{ fontWeight: 600 }}>Sign In</span>
+            </Anchor>
+          </Center>
+        </form>
+      </div>
+    </Box>
+  );
+};
 
 export default Register;

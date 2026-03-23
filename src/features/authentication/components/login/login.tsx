@@ -4,35 +4,29 @@ import {
   TextInput,
   PasswordInput,
   Text,
-  Paper,
-  Group,
-  PaperProps,
   Button,
-  Divider,
   Anchor,
   Stack,
-  Grid,
-  Notification
+  Notification,
+  Box,
+  Center,
 } from '@mantine/core';
 import { IconCheck, IconX } from '@tabler/icons';
 import { getCookie } from 'cookies-next';
 import axios from 'axios';
-import Image from 'next/image';
 
-import { GoogleButton, TwitterButton } from '../../../../components/socialButtons/socialButtons';
 import { useStyles } from './login.styles';
 import { useLoginUser } from '../../hooks/useLoginUser';
 import { useAuthContext } from '../../context/authContextProvider';
 import { urls } from '../../../../constants/urls';
 
 
-const Login = (props: PaperProps) => {
+const Login = () => {
   const { classes } = useStyles();
   const [enrolled, setEnrolled] = useState(false);
   const { form, handleSubmit, clearResponse, response, loading } = useLoginUser();
   const { auth, userMe } = useAuthContext();
   const router = useRouter();
-
 
   const isEnrolled = async () => {
     const token = getCookie('accessToken');
@@ -67,93 +61,73 @@ const Login = (props: PaperProps) => {
           break;
         default:
           break;
-
       }
     }
   }, [userMe]);
 
-
-  if(auth) return <></>
-
+  if (auth) return <></>;
 
   return (
-    <Paper radius="md" p="xl" withBorder {...props} className={classes.wrapper} >
-      <Grid>
-        <Grid.Col md={6}>
-          <Image
-            src="/login.svg"
-            height={450}
-            width={400}
-          />
-        </Grid.Col>
-        <Grid.Col md={6}>
-          <Text size="lg" weight={500} style={{ marginTop: 20 }}>
-            Welcome to Luddoc
-          </Text>
+    <Box className={classes.wrapper}>
+      <div className={classes.card}>
+        <Text className={classes.title}>
+          Welcome <span className={classes.goldText}>Back</span>
+        </Text>
+        <Text className={classes.subtitle}>
+          Sign in to continue your learning journey
+        </Text>
 
-          {/* <Group grow mb="md" mt="md">
-            <GoogleButton radius="xl">Google</GoogleButton>
-            <TwitterButton radius="xl">Twitter</TwitterButton>
-          </Group> */}
+        {response === "success" ? (
+          <Notification icon={<IconCheck size={18} />} color="teal" title="Login Successful" onClose={clearResponse} mb="lg">
+            Redirecting ...
+          </Notification>
+        ) : response ? (
+          <Notification icon={<IconX size={18} />} color="red" title="Error" onClose={clearResponse} mb="lg">
+            {response}
+          </Notification>
+        ) : null}
 
-          <Divider label="Login with email" labelPosition="center" my="lg" />
+        <form onSubmit={form.onSubmit(() => handleSubmit())}>
+          <Stack spacing="md">
+            <TextInput
+              required
+              label="Email"
+              placeholder="you@example.com"
+              value={form.values.email}
+              onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
+              error={form.errors.email && 'Invalid email'}
+              className={classes.input}
+            />
+            <PasswordInput
+              required
+              label="Password"
+              placeholder="Your password"
+              value={form.values.password}
+              onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
+              error={form.errors.password && 'Password should include at least 6 characters'}
+              className={classes.input}
+            />
+          </Stack>
 
-          {response === "success" ?
-            <Notification icon={<IconCheck size={18} />} color="teal" title="Login Successful" onClose={clearResponse}>
-              Redirecting ...
-            </Notification>
-            : response ? (
-              <Notification icon={<IconX size={18} />} color="red" title="Error" onClose={clearResponse}>
-                {response}
-              </Notification>
-            ) : ""}
-
-          <form onSubmit={form.onSubmit(() => handleSubmit())}>
-            <Stack>
-
-              <TextInput
-                required
-                label="Email"
-                placeholder="hello@gmail.com"
-                value={form.values.email}
-                onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
-                error={form.errors.email && 'Invalid email'}
-              />
-
-              <PasswordInput
-                required
-                label="Password"
-                placeholder="Your password"
-                value={form.values.password}
-                onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
-                error={form.errors.password && 'Password should include at least 6 characters'}
-              />
-
-            </Stack>
-
-            <Group position="apart" mt="xl">
-              <Anchor
-                href='sign-up'
-                color="dimmed"
-                size="xs"
-              >
-                Don't have an account? Register
-              </Anchor>
-              <Button type="submit" className={classes.button} loading={loading}>Login</Button>
-            </Group>
-            <Anchor
-              href='forgot-password'
-              color="dimmed"
-              size="xs"
-            >
-              Forgot Password?
+          <Center mt="xs">
+            <Anchor href="forgot-password" className={classes.link}>
+              Forgot password?
             </Anchor>
-          </form>
-        </Grid.Col>
-      </Grid>
+          </Center>
 
-    </Paper>
-  )
-}
+          <Button type="submit" className={classes.button} loading={loading} fullWidth mt="xl">
+            Sign In
+          </Button>
 
-export default Login
+          <Center mt="lg">
+            <Anchor href="sign-up" className={classes.link}>
+              Don't have an account? <span style={{ fontWeight: 600 }}>Register</span>
+            </Anchor>
+          </Center>
+        </form>
+      </div>
+    </Box>
+  );
+};
+
+export default Login;

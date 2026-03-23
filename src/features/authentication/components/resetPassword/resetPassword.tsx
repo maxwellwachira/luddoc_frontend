@@ -1,80 +1,69 @@
 import React from 'react';
-import Image from 'next/image';
 import {
   PasswordInput,
   Text,
-  Paper,
-  Group,
-  PaperProps,
   Button,
-  Divider,
   Stack,
-  Grid,
-  Notification
+  Notification,
+  Box,
 } from '@mantine/core';
-import { IconCheck, IconX } from '@tabler/icons';
+import { IconCheck, IconShieldLock, IconX } from '@tabler/icons';
 
 import { useStyles } from './resetPassword.styles';
 import { usePasswordReset } from '../../hooks/usePasswordReset';
 
-const ResetPassword = (props: PaperProps) => {
+const ResetPassword = () => {
   const { classes } = useStyles();
-  const { response, form, handleSubmit, clearResponse  } = usePasswordReset();
-    
+  const { response, form, handleSubmit, clearResponse } = usePasswordReset();
+
   return (
-    <Paper radius="md" p="xl" withBorder {...props} className={classes.wrapper}>
-      <Grid>
-          <Grid.Col md={6}>
-            <Text size="lg" weight={500} mt="xl">
-             Reset your password
-            </Text>
+    <Box className={classes.wrapper}>
+      <div className={classes.card}>
+        <div className={classes.iconBox}>
+          <IconShieldLock size={28} color="white" stroke={1.8} />
+        </div>
+        <Text className={classes.title}>
+          Reset <span className={classes.goldText}>Password</span>
+        </Text>
+        <Text className={classes.subtitle}>
+          Choose a strong new password for your account.
+        </Text>
 
-            <Divider my="xl" />
-            {response === 'success' ? (
-                <Notification icon={<IconCheck size={18} />} color="teal" title="Password Reset Successful" onClose={clearResponse} my="lg">
-                 You can now log in with your new password
-                </Notification>
-              ): response ? (
-                <Notification icon={<IconX size={18} />} color="red" title="Error" onClose={clearResponse} my="lg">
-                  {response}
-                </Notification>
-              ): ''
-            }
-            <form onSubmit={form.onSubmit(() => handleSubmit())}>
-              <Stack my="xl">
+        {response === 'success' ? (
+          <Notification icon={<IconCheck size={18} />} color="teal" title="Password Reset Successful" onClose={clearResponse} mb="lg">
+            You can now sign in with your new password
+          </Notification>
+        ) : response ? (
+          <Notification icon={<IconX size={18} />} color="red" title="Error" onClose={clearResponse} mb="lg">
+            {response}
+          </Notification>
+        ) : null}
 
-                <PasswordInput
-                  required
-                  label="Password"
-                  placeholder="Your password"
-                  {...form.getInputProps('password')}
-                />
-
-                <PasswordInput
-                  required
-                  label="Confirm Password"
-                  placeholder="Confirm password"
-                  {...form.getInputProps('confirmPassword')}
-                />
-
-              </Stack>
-
-              <Group position="apart" mt="xl">
-                <Button type="submit" className={classes.button}>Reset Password</Button>
-              </Group>
-            </form>
-          </Grid.Col>
-          <Grid.Col md={6}>
-            <Image
-                src="/resetpassword.svg"
-                height={400}
-                width={400}
+        <form onSubmit={form.onSubmit(() => handleSubmit())}>
+          <Stack spacing="md">
+            <PasswordInput
+              required
+              label="New Password"
+              placeholder="At least 6 characters"
+              {...form.getInputProps('password')}
+              className={classes.input}
             />
-          </Grid.Col>
-      </Grid>
-      
-    </Paper>
-  )
-}
+            <PasswordInput
+              required
+              label="Confirm Password"
+              placeholder="Repeat your password"
+              {...form.getInputProps('confirmPassword')}
+              className={classes.input}
+            />
+          </Stack>
+
+          <Button type="submit" className={classes.button} fullWidth mt="xl">
+            Reset Password
+          </Button>
+        </form>
+      </div>
+    </Box>
+  );
+};
 
 export default ResetPassword;
