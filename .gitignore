@@ -35,8 +35,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-#lock file
-yarn.lock
-
 #environment variables
 .env
